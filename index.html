@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anitoono</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom CSS for Anitoono Theme (Red and Black) */
@@ -157,7 +158,7 @@
             color: #f9fafb; /* white */
         }
 
-        /* History List Styles */
+         /* History List Styles */
         #history-list {
             list-style: none;
             padding: 0;
@@ -175,13 +176,54 @@
             margin-bottom: 0;
         }
 
+        /* Notification Button Styling */
+        #notification-button {
+            background: none;
+            border: none;
+            color: #d1d5db; /* gray-300 */
+            cursor: pointer;
+            padding: 0;
+            font-size: 1.25rem; /* Adjust size as needed */
+            transition: color 0.3s ease;
+            display: flex; /* Use flex to align icon */
+            align-items: center;
+            justify-content: center;
+        }
+
+        #notification-button:hover {
+            color: #f9fafb; /* white */
+        }
+
+        /* Notification List Styling */
+        #notification-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        #notification-list li {
+            background-color: #374151;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+            color: #d1d5db;
+             /* Add some basic styling for different notification types if needed */
+        }
+
+        #notification-list li:last-child {
+            margin-bottom: 0;
+        }
+
+
     </style>
 </head>
 <body class="bg-gray-900 text-white">
     <header class="bg-gray-800 py-4 flex justify-between items-center shadow-md sticky top-0 z-10 rounded-md">
         <div class="logo text-red-500 text-2xl font-semibold ml-4">Anitoono</div>
-        <div id="auth-section" class="mr-4 flex items-center space-x-4">
-            <img id="header-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3Gfmx2W2t2Gr1G2qm6WNam39xD3oTVn1GUHBHGLxUkUEgxE8hws9Nq_Ae4D3pyNWEd9maJw4GOwrujsL-7aRWc2IjHfV0KzHV5Izgx7S2xVcXElhe1sWfQ6TMsZp0F9DdMpJfhgcEoqFxEzicuhZDY5Qz9TrS0PU1Jrr0d7gbBSQAQn5vDcXE2NTuLQ0V/s320/20241020_215136%20(1).png" alt="Header Image" class="w-8 h-8 rounded-full hidden">
+        <div class="mr-4 flex items-center space-x-4">
+             <button id="notification-button">
+                 <i class="fas fa-bell"></i> </button>
             <div id="login-icon" class="auth-icon hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -316,6 +358,25 @@
              <div id="history-message" class="text-center mt-4 text-green-500" style="display: none;"></div> </div>
     </div>
 
+    <div id="notification-modal" class="modal hidden">
+        <div class="modal-content max-w-sm">
+            <span class="modal-close-button" onclick="closeModal('notification-modal')">&times;</span>
+            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Notifications</h2>
+            <ul id="notification-list" class="space-y-3">
+                 <li class="bg-gray-700 p-3 rounded-md text-gray-300">
+                    New episode of "Awesome Anime" is available!
+                </li>
+                <li class="bg-gray-700 p-3 rounded-md text-gray-300">
+                    Your favorite show "Cool Series" updated.
+                </li>
+                <li class="bg-gray-700 p-3 rounded-md text-gray-300">
+                    Welcome to Anitoono!
+                </li>
+            </ul>
+            <button onclick="closeModal('notification-modal')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full mt-6">Close</button>
+        </div>
+    </div>
+
 
     <div id="reset-passcode-modal" class="modal hidden">
         <div class="modal-content">
@@ -346,35 +407,40 @@
     <script>
         // Data for initial posts (before search)
         const initialPosts = [
-            { id: 1, title: "Anime Title 1", content: "Anime description 1.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime1" },
-            { id: 2, title: "Anime Title 2", content: "Anime description 2.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime2" },
-            { id: 3, title: "Anime Title 3", content: "Anime description 3.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime3" },
-            { id: 4, title: "Anime Title 4", content: "Anime description 4.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime4" },
-            { id: 5, title: "Anime Title 5", content: "Anime description 5.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime5" },
-            { id: 6, title: "Anime Title 6", content: "Anime description 6.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime6" },
-            { id: 7, title: "Anime Title 7", content: "Anime description 7.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime7" },
-            { id: 8, title: "Anime Title 8", content: "Anime description 8.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime8" },
-            { id: 9, title: "Anime Title 9", content: "Anime description 9.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime9" },
-            { id: 10, title: "Anime Title 10", content: "Anime description 10.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime10" },
+            { id: 1, title: "Anime Title 1", content: "Anime description 1.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=1" },
+            { id: 2, title: "Anime Title 2", content: "Anime description 2.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=2" },
+            { id: 3, title: "Anime Title 3", content: "Anime description 3.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=3" },
+            { id: 4, title: "Anime Title 4", content: "Anime description 4.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=4" },
+            { id: 5, title: "Anime Title 5", content: "Anime description 5.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=5" },
+            { id: 6, title: "Anime Title 6", content: "Anime description 6.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=6" },
+            { id: 7, title: "Anime Title 7", content: "Anime description 7.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=7" },
+            { id: 8, title: "Anime Title 8", content: "Anime description 8.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=8" },
+            { id: 9, title: "Anime Title 9", content: "Anime description 9.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=9" },
+            { id: 10, title: "Anime Title 10", content: "Anime description 10.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=10" },
+            // Add your new posts here, like this:
+            // { id: 11, title: "New Anime Title 1", content: "Description for new anime.", imageUrl: "URL_OF_YOUR_IMAGE", url: "watch.html?id=11" },
+            // { id: 12, title: "New Anime Title 2", content: "Another great show.", imageUrl: "URL_OF_ANOTHER_IMAGE", url: "watch.html?id=12" },
         ];
 
         const avatarImages = [
             "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjjXN0Bpdhj1_h9DlhuWzNEe3YTNtlszbxSmVPJW_r6qgd7gayt8DFCct7Sx8DgwAbcWv1jJc2LpB1HbcpnUrjAUHbqYZQwVlBiyACPWRqmmiej278Qi30ohOejsqUmntWcanAy26k6McmKMRrqIjpq3KpakAJsaY3Jh29zMnoqzgEf0sBk8NuvdDzWdGT_/s320/images%20(11).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh_ca_A9wrVuMNYNAdMBEAmVr38Yjmag2WlX0UUf5N_WxpNAGw4qb9dNUfCxLwM1rBM0l1QOxUmETHQAdqiOHFfUEQMg9aXBIthMj7K1AA8s4Tz9iW6n4jTLJ9rA_BgmJjWLljrdzH5QBlrhILastYFv-xqUGaX2Qb3tGZlSUDu9KIkqoTukabVotXeerZB/s320/images%20(12).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh_ca_A9wrVuMNYNAdMBEAmVr38Yjmag2WlX0UUf5N_WxpNAGw4qb9dNUfCxLwM1rBM0l1QOxUmETHQAdqiOHFfUEQMg9aXBIthMj7K1AA8s4Tz9iW6n4jTLJ9rA_BgmJjWLljrd3H5QBlrhILastYFv-xqUGaX2Qb3tGZlSUDu9KIkqoTukabVotXeerZB/s320/images%20(12).jpeg",
             "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7dygklswYc8euWmkj5gl3PwWXBYTidDFe-Eb78Qq_tlWLJjNy6G_vT_C91JHPMqO_keRuG-e8j3GQlWbGkkJcXLXiNUOSfDOssSFXvUN_L62kFV46HjBR_Z5gCCJRV-9RTPSG52ghMoBwgRg7Ydfu4wih6eMlHOgL5FBbd6JV44qBkeNBm60aIZnIDvaM/s320/images%20(2).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiywFGA_HPG1WMjbBbHXgT-x8kc7tK6u3mDbBJ_0Y6Tk2SgDnDmz1kkQAMl8x5rXOkK9T0mFKbQgueWDcPIAg64JYrWqQLzfswLsJwbnfabzeD17KbXmyBx7iizcakESTrYYQp92uDQ7LoND9T_OZrr8WlAulzSqrxw1VevxwzQtHpEvMMK-nyTruARC_hq/s320/images%20(4).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLM-ti-aScUyS-v3KTGwBDfZGCbbsbahabulW-pIAUl1yaKdWlMGh9-QAJ0kzf1mHOgoGw6Ili7JqYZaT47eMKV5XBXU3HaPD_4xXqqlenM4uqtB6tCpC12vNFKVNssgBLZFcMvFvEGT6nVPDkboS2LDhTjUw7sBmEhd2w00eKh20QlcwyV15E_sNaAgRc/s320/images%20(5).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPuIhfOIPGLjBNw-qE93Owjc_hyAg-79lANsiVmEdali5NYQLgQWJcgJmfQZWdBzipx4lEr7kjUM0Go9ZggtflGwwPrka27l4W10Tlpayp8FrIp7nK2YB2TAqKwS478TNPg1q5_IZnIKrxaV9FmWLEe_i6q9yO_kf3i68E3aY5gtS4jpgSqFNe6qw_zPBG/s320/images%20(6).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiywFGA_HPG1WMjbBbHXgT-x8kc7tK6u3mDbBJ_0Y6Tk2SgDnDmz1kkQAMl8x5rXOkK9T0mFKbQgueWDcPIAg64JYrWqQLzfswLsJwbnfabzeD17KbC12vNFKVNssbBLZFcMvFvEGT6nVPDkboS2LDhTjUw7sBmEhd2w00eKh20QlcwyV15E_sNaAgRc/s320/images%20(4).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLM-ti-aScUyS-v3KTGwBDfZGCbbsbahabulW-pIAUl1yaKdWlMGh9-QAJ0kzf1mHOgoGw6Ili7JqYZaT47eMKV5XBXU3HaPD_4xXqqlenM4uqtB6tCpC12vNFKVNssbBLZFcMvFvEGT6nVPDkboS2LDhTjUw7sBmEhd2w00eKh20QlcwyV15E_sNaAgRc/s320/images%20(5).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPuIhfOIPGLjBNw-qE93Owjc_hyAg-79lANsiVmEdali5NYQLgQWJcgJmfQZWdBzipx4lEr7kjUM0Go9ZggtflGwwPrka27l4W10Tlpayp8FrIp7nK2YB2TAqKwS478TNPg1q5_IZnIKrxaV9FmWLEe_i6q9yO_kf3i68E3aY5gtS4jpgSqNe6qw_zPBG/s320/images%20(6).jpeg",
             "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj3RUILnexM3-LOZcpxURjSaNN0ulbmNIWZEqSHG5zUaJMhIU8SyDc2NrEQ5VvQSO4oHZ9NdEDW38N820BAUpyDgYd36Gudje2Lq34BynZsVMibKd2AX9x4mQHmhcJzKMdGSFUIrrLGyOwjIuUOSzSdo4sgEAQH9c_IzjnzRR8mkuBCmL7s_w-LnITQMoav/s320/images%20(7).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhC3iaFiq2kDWhA5v4XKdP7t99L8oYZWUsGUHDb-9ZtlcB4wpW38iHYSnediTX3ysnCy8XDIvDsDYDbw_c0pWfcYv7BTDStC2gVOFBuH4O8lH2qf5FRmG6OizIQKMob5mD0MCKRmFJs4OdWAzBRy-XwZpYQWEXv7DbPQf46baXhBb_37gVAsScmbG0dXy_V/s320/images%20(8).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhC3iaFiq2kDWhA5v4XKdP7t99L8oYZWUsGUHDb-9ZtlcB4wpW38iHYSnediTX3ysnCy8X4XDiVdsDYDbw_c0pWfcYv7BTdStC2gVOFBuH4O8lH2qf5FRmG6OizIQKMob5mD0MCKRmFJs4OdWAzBRy-XwZpYQWEXv7DbPQf46baXhBb_37gVAsGcmbG0dXy_V/s320/images%20(8).jpeg",
              "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5jB-drCHGhZrnl7I7hH7XYC8o0vkcYjz4ULNK_QXZTcfaOvrK8PkkuyR-p6Kqh321kGkcNcHduhzYN-5YAlaJljz6sz12tv-A5kLpdmiletSq0agRQWd9YNa07sidMpiMOhHhz73gRyQoTHX8tB8nwmfe83NFNHRMSurZpHqVZrxYL3M3IGmimXFQyEKx/s320/images%20(9).jpeg"
         ];
 
 
         const postContainer = document.getElementById("post-container");
         const searchInput = document.getElementById("search-input");
+        // Get the new icon elements
         const loginIcon = document.getElementById("login-icon");
-        const headerImage = document.getElementById("header-image");
+        // Removed signupIcon as it's no longer in the HTML
+        // Removed headerImage element reference
 
         const loginModal = document.getElementById("login-modal");
         const signupModal = document.getElementById("signup-modal");
@@ -393,6 +459,7 @@
         const signupAvatarInput = document.getElementById("signup-avatar");
         const settingsBtn = document.getElementById("settings-link");
         const settingsModal = document.getElementById("settings-modal");
+        const clearHistoryBtn = document.getElementById("clear-history-btn-history-modal"); // Corrected ID
         const settingsAvatarOptionsContainer = document.getElementById("settings-avatar-options-container");
         const settingsAvatarInput = document.getElementById("settings-avatar");
         const profileDropdown = document.getElementById("profile-dropdown");
@@ -408,13 +475,13 @@
         const changeUsernameInput = document.getElementById("change-username");
         const saveUsernameBtn = document.getElementById("save-username-btn");
         const changeUsernameError = document.getElementById("change-username-error");
-
-        // New History Elements
         const historyLink = document.getElementById("history-link");
         const historyModal = document.getElementById("history-modal");
         const historyList = document.getElementById("history-list");
-        const clearHistoryBtnHistoryModal = document.getElementById("clear-history-btn-history-modal");
         const historyMessageDiv = document.getElementById("history-message");
+        const notificationButton = document.getElementById("notification-button"); // New notification button
+        const notificationModal = document.getElementById("notification-modal"); // New notification modal
+        const notificationList = document.getElementById("notification-list"); // New notification list element
 
 
         let users = JSON.parse(localStorage.getItem("users")) || [];
@@ -427,6 +494,16 @@
         }
 
         let viewHistory = JSON.parse(localStorage.getItem("viewHistory")) || [];
+
+        // Sample notification data (for demo)
+        const sampleNotifications = [
+            "New episode of 'Awesome Anime' is available!",
+            "Your favorite show 'Cool Series' updated.",
+            "Welcome to Anitoono!",
+            "Check out the new movie releases!",
+            "Maintenance scheduled for tomorrow at 2 AM PKT."
+        ];
+
 
         // Helper function to open a modal
         function openModal(modalId) {
@@ -482,6 +559,8 @@
                  // Clear history message on close
                  historyMessageDiv.style.display = 'none';
                  historyMessageDiv.textContent = '';
+            } else if (modalId === 'notification-modal') {
+                 // No form fields to clear in the notification modal
             }
         }
 
@@ -551,9 +630,9 @@
                 const listItem = document.createElement("li");
                 listItem.textContent = "Your viewing history is empty.";
                 historyList.appendChild(listItem);
-                 clearHistoryBtnHistoryModal.classList.add('hidden'); // Hide clear button if history is empty
+                 clearHistoryBtn.classList.add('hidden'); // Hide clear button if history is empty
             } else {
-                 clearHistoryBtnHistoryModal.classList.remove('hidden'); // Show clear button if history is not empty
+                 clearHistoryBtn.classList.remove('hidden'); // Show clear button if history is not empty
                 // Display history in reverse order (most recent first)
                 for (let i = viewHistory.length - 1; i >= 0; i--) {
                     const post = viewHistory[i];
@@ -613,21 +692,47 @@
         }
 
         function loadUserProfile() {
+            console.log("loadUserProfile called. loggedInUser:", loggedInUser); // Debugging line
             // Check if loggedInUser is a valid object with essential properties
             if (loggedInUser && loggedInUser.email && loggedInUser.username && loggedInUser.password && loggedInUser.avatar) {
+                console.log("User is logged in. Avatar URL:", loggedInUser.avatar); // Debugging line
                 userProfileDiv.classList.remove("hidden"); // Show user profile
                 loginIcon.classList.add("hidden"); // Hide login icon
-                headerImage.classList.add("hidden"); // Hide the header image
-                avatarImg.src = loggedInUser.avatar;
+                // Removed headerImage.classList.add("hidden");
+                avatarImg.src = loggedInUser.avatar; // This sets the avatar source
                 usernameSpan.textContent = loggedInUser.username;
             } else {
+                console.log("User is not logged in."); // Debugging line
+                // User is not logged in, hide user profile and show login elements
                 userProfileDiv.classList.add("hidden"); // Hide user profile
                 loginIcon.classList.remove("hidden"); // Show login icon
-                headerImage.classList.remove("hidden"); // Show the header image
+                // Removed headerImage.classList.remove("hidden");
+                 // Explicitly clear avatar and username display
+                avatarImg.src = ''; // Clear the avatar image source
+                usernameSpan.textContent = ''; // Clear the username text
                  // Ensure the dropdown is hidden when the profile is hidden
                 profileDropdown.classList.add('hidden');
             }
         }
+
+        // Function to render sample notifications
+        function renderNotifications(notifications) {
+            notificationList.innerHTML = ""; // Clear previous notifications
+            if (notifications.length === 0) {
+                const listItem = document.createElement("li");
+                listItem.classList.add("bg-gray-700", "p-3", "rounded-md", "text-gray-300");
+                listItem.textContent = "No new notifications.";
+                notificationList.appendChild(listItem);
+            } else {
+                notifications.forEach(notificationText => {
+                    const listItem = document.createElement("li");
+                    listItem.classList.add("bg-gray-700", "p-3", "rounded-md", "text-gray-300");
+                    listItem.textContent = notificationText;
+                    notificationList.appendChild(listItem);
+                });
+            }
+        }
+
 
         // Event Listeners
         searchInput.addEventListener("input", handleSearch);
@@ -635,7 +740,6 @@
         loginIcon.addEventListener("click", () => {
             openModal('login-modal');
         });
-        // Removed event listener for signupIcon as it's no longer in the HTML
 
         switchToSignupBtn.addEventListener("click", (event) => {
             event.preventDefault(); // Prevent default link behavior
@@ -788,7 +892,7 @@
              event.preventDefault(); // Prevent default link behavior
             loggedInUser = null;
             localStorage.removeItem("loggedInUser");
-            loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser
+            loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser to null
             displayInitialPosts(); // Redisplay posts after logout
              // Hide the dropdown after logging out
             profileDropdown.classList.remove('show'); // Ensure dropdown is hidden on logout
@@ -874,7 +978,7 @@
         });
 
         // Event listener for the Clear History button in the History modal
-        clearHistoryBtnHistoryModal.addEventListener("click", () => {
+        clearHistoryBtn.addEventListener("click", () => {
             viewHistory = [];
             localStorage.removeItem('viewHistory');
             renderHistory(); // Re-render history to show it's empty
@@ -1032,6 +1136,12 @@
 
              // Clear the form fields
             resetPasscodeForm.reset();
+        });
+
+        // Event listener for notification button (Placeholder)
+        notificationButton.addEventListener('click', () => {
+            renderNotifications(sampleNotifications); // Render sample notifications
+            openModal('notification-modal'); // Open the notification modal
         });
 
 
