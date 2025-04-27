@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anitoono</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for Anitoono Theme (Red and Black) */
+        body {
+            background-color: #111827; /* Dark background */
+            color: #f9fafb; /* Light text */
+            font-family: 'Inter', sans-serif;
+        }
+        .text-red-500 {
+            color: #ef4444; /* Red color from Tailwind */
+        }
+        .bg-red-500 {
+            background-color: #ef4444; /* Red background from Tailwind */
+        }
+        .hover\:bg-red-600:hover {
+            background-color: #dc2626; /* Darker red hover effect */
+        }
+        .bg-gray-800 {
+            background-color: #1e293b; /* Dark gray background */
+        }
+        .border-red-500 {
+            border-color: #ef4444; /* Red border */
+        }
+        .focus\:ring-red-500:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.5); /* Red focus ring */
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .4; }
+        }
+
+        /* Mobile-friendly adjustments */
+        .container {
+            max-width: 100%; /* Ensure container takes full width on small screens */
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .grid-cols-1 {
+            grid-template-columns: 1fr; /* 1 column on small screens */
+        }
+        @media (min-width: 640px) {
+            .grid-cols-1 {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens and up */
+            }
+        }
+        @media (min-width: 768px) {
+            .grid-cols-1 {
+                grid-template-columns: repeat(3, 1fr); /* 3 columns on large screens and up */
+            }
+        }
+        @media (min-width: 1024px) {
+            .grid-cols-1 {
+                grid-template-columns: repeat(4, 1fr); /* 4 columns on extra-large screens */
+            }
+        }
+        .avatar-option.selected {
+            border-color: #ef4444; /* Red border for selected avatar */
+            box-shadow: 0 0 5px #ef4444; /* Optional: Add a shadow for better visibility */
+        }
+
+        /* Profile Dropdown Styles */
+        #user-profile {
+            position: relative;
+            display: inline-flex; /* Changed from flex to inline-flex */
+            align-items: center;
+            cursor: pointer;
+        }
+        #profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #1e293b;
+            border: 1px solid #374151;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0;
+            margin-top: 0.25rem;
+            min-width: 160px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            display: none; /* Initially hidden */
+        }
+        #profile-dropdown.show {
+            display: block; /* Show when the show class is added */
+        }
+        #profile-dropdown a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #f9fafb;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            font-size: 0.875rem;
+        }
+        #profile-dropdown a:hover {
+            color: #fff;
+            background-color: #374151;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(17, 24, 39, 0.9); /* bg-gray-900 with opacity */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50; /* Ensure modals are on top */
+            overflow-y: auto; /* Allow scrolling for tall modals */
+        }
+
+        .modal-content {
+            background-color: #1e293b; /* bg-gray-800 */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5); /* shadow-xl */
+            padding: 2rem; /* p-8 */
+            width: 100%;
+            max-width: 28rem; /* max-w-md */
+            position: relative; /* Needed for close button positioning */
+        }
+
+        .modal-close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #9ca3af; /* gray-400 */
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close-button:hover {
+            color: #f9fafb; /* white */
+        }
+
+        /* Icon Styles */
+        .auth-icon {
+            width: 24px; /* Adjust size as needed */
+            height: 24px; /* Adjust size as needed */
+            color: #d1d5db; /* gray-300 */
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .auth-icon:hover {
+            color: #f9fafb; /* white */
+        }
+
+        /* History List Styles */
+        #history-list {
+            list-style: none;
+            padding: 0;
+        }
+        #history-list li {
+            background-color: #374151;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+            color: #d1d5db;
+            word-break: break-word; /* Prevent long titles from overflowing */
+        }
+         #history-list li:last-child {
+            margin-bottom: 0;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <header class="bg-gray-800 py-4 flex justify-between items-center shadow-md sticky top-0 z-10 rounded-md">
+        <div class="logo text-red-500 text-2xl font-semibold ml-4">Anitoono</div>
+        <div id="auth-section" class="mr-4 flex items-center space-x-4">
+            <img id="header-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3Gfmx2W2t2Gr1G2qm6WNam39xD3oTVn1GUHBHGLxUkUEgxE8hws9Nq_Ae4D3pyNWEd9maJw4GOwrujsL-7aRWc2IjHfV0KzHV5Izgx7S2xVcXElhe1sWfQ6TMsZp0F9DdMpJfhgcEoqFxEzicuhZDY5Qz9TrS0PU1Jrr0d7gbBSQAQn5vDcXE2NTuLQ0V/s320/20241020_215136%20(1).png" alt="Header Image" class="w-8 h-8 rounded-full hidden">
+            <div id="login-icon" class="auth-icon hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+            </div>
+            <div id="user-profile" class="hidden">
+                <img id="avatar-img" src="" alt="Avatar" class="w-8 h-8 rounded-full mr-2">
+                <span id="username" class="text-gray-300 font-semibold"></span>
+                 <div id="profile-dropdown" class="hidden">
+                    <a href="#" id="history-link">History</a> <a href="#" id="settings-link">Settings</a>
+                    <a href="#" id="reset-passcode-link">Reset Passcode</a>
+                    <a href="#" id="logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto mt-8 p-4">
+        <div id="search-container" class="mb-6 flex justify-center">
+            <input
+                type="text"
+                id="search-input"
+                placeholder="Search for anime..."
+                class="w-full md:w-1/2 bg-gray-800 border border-gray-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+        </div>
+
+        <div id="post-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            </div>
+    </main>
+
+    <div id="login-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="modal-close-button" onclick="closeModal('login-modal')">&times;</span>
+            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Login to Anitoono</h2>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="login-email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
+                    <input type="email" id="login-email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
+                    <div id="login-email-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                <div>
+                    <label for="login-password" class="block text-gray-300 text-sm font-bold mb-2">Password:</label>
+                    <input type="password" id="login-password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
+                    <div id="login-password-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Login</button>
+            </form>
+            <div class="mt-4 text-center text-gray-400">
+                <p>Don't have an account? <a href="#" id="switch-to-signup" class="text-red-500 hover:underline">Sign Up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="signup-modal" class="modal hidden">
+        <div class="modal-content">
+             <span class="modal-close-button" onclick="closeModal('signup-modal')">&times;</span>
+            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Sign Up for Anitoono</h2>
+            <form id="signup-form" class="space-y-4">
+                <div>
+                    <label for="signup-email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
+                    <input type="email" id="signup-email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
+                    <div id="signup-email-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                <div>
+                    <label for="signup-username" class="block text-gray-300 text-sm font-bold mb-2">Username:</label>
+                    <input type="text" id="signup-username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
+                     <div id="signup-username-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                <div>
+                    <label for="signup-password" class="block text-gray-300 text-sm font-bold mb-2">Password:</label>
+                    <input type="password" id="signup-password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
+                    <div id="signup-password-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                <div>
+                    <label for="signup-avatar" class="block text-gray-300 text-sm font-bold mb-2">Choose Avatar:</label>
+                    <div class="flex flex-wrap gap-2" id="avatar-options-container">
+                        </div>
+                    <input type="hidden" id="signup-avatar" name="signup-avatar" value="">
+                    <div id="signup-avatar-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Sign Up</button>
+            </form>
+            <div class="mt-4 text-center text-gray-400">
+                <p>Already have an account? <a href="#" id="switch-to-login" class="text-red-500 hover:underline">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="post-details-modal" class="modal hidden">
+        <div class="modal-content max-w-2xl">
+             <span class="modal-close-button" onclick="closeModal('post-details-modal')">&times;</span>
+            <h2 id="post-details-title" class="text-2xl font-semibold mb-4 text-red-500"></h2>
+            <div id="post-details-content" class="text-gray-300 mb-4"></div>
+            <button onclick="closeModal('post-details-modal')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline">Close</button>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+             <span class="modal-close-button" onclick="closeModal('settings-modal')">&times;</span>
+            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Settings</h2>
+            <div class="space-y-4">
+                 <div>
+                    <label for="change-username" class="block text-gray-300 text-sm font-bold mb-2">Change Username:</label>
+                    <input type="text" id="change-username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500">
+                    <div id="change-username-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                <button id="save-username-btn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Save Username</button>
+
+                <div>
+                    <label for="change-avatar" class="block text-gray-300 text-sm font-bold mb-2">Change Avatar:</label>
+                     <div class="flex flex-wrap gap-2" id="settings-avatar-options-container">
+                        </div>
+                    <input type="hidden" id="settings-avatar" name="settings-avatar" value="">
+                    <div id="settings-avatar-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+
+                <button onclick="closeModal('settings-modal')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="history-modal" class="modal hidden">
+        <div class="modal-content max-w-lg">
+             <span class="modal-close-button" onclick="closeModal('history-modal')">&times;</span>
+            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Viewing History</h2>
+            <ul id="history-list" class="mb-4">
+                </ul>
+             <button id="clear-history-btn-history-modal" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full mb-4">Clear History</button>
+            <button onclick="closeModal('history-modal')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Close</button>
+             <div id="history-message" class="text-center mt-4 text-green-500" style="display: none;"></div> </div>
+    </div>
+
+
+    <div id="reset-passcode-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="modal-close-button" onclick="closeModal('reset-passcode-modal')">&times;</span>
+            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Reset Passcode</h2>
+            <form id="reset-passcode-form" class="space-y-4">
+                 <div>
+                    <label for="current-passcode" class="block text-gray-300 text-sm font-bold mb-2">Current Passcode:</label>
+                    <input type="password" id="current-passcode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
+                    <div id="current-passcode-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                <div>
+                    <label for="new-passcode" class="block text-gray-300 text-sm font-bold mb-2">New Passcode:</label>
+                    <input type="password" id="new-passcode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
+                    <div id="new-passcode-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                 <div>
+                    <label for="confirm-new-passcode" class="block text-gray-300 text-sm font-bold mb-2">Confirm New Passcode:</label>
+                    <input type="password" id="confirm-new-passcode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
+                    <div id="confirm-new-passcode-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Reset Passcode</button>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        // Data for initial posts (before search)
+        const initialPosts = [
+            { id: 1, title: "Anime Title 1", content: "Anime description 1.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime1" },
+            { id: 2, title: "Anime Title 2", content: "Anime description 2.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime2" },
+            { id: 3, title: "Anime Title 3", content: "Anime description 3.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime3" },
+            { id: 4, title: "Anime Title 4", content: "Anime description 4.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime4" },
+            { id: 5, title: "Anime Title 5", content: "Anime description 5.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime5" },
+            { id: 6, title: "Anime Title 6", content: "Anime description 6.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime6" },
+            { id: 7, title: "Anime Title 7", content: "Anime description 7.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime7" },
+            { id: 8, title: "Anime Title 8", content: "Anime description 8.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime8" },
+            { id: 9, title: "Anime Title 9", content: "Anime description 9.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime9" },
+            { id: 10, title: "Anime Title 10", content: "Anime description 10.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "https://example.com/anime10" },
+        ];
+
+        const avatarImages = [
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjjXN0Bpdhj1_h9DlhuWzNEe3YTNtlszbxSmVPJW_r6qgd7gayt8DFCct7Sx8DgwAbcWv1jJc2LpB1HbcpnUrjAUHbqYZQwVlBiyACPWRqmmiej278Qi30ohOejsqUmntWcanAy26k6McmKMRrqIjpq3KpakAJsaY3Jh29zMnoqzgEf0sBk8NuvdDzWdGT_/s320/images%20(11).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh_ca_A9wrVuMNYNAdMBEAmVr38Yjmag2WlX0UUf5N_WxpNAGw4qb9dNUfCxLwM1rBM0l1QOxUmETHQAdqiOHFfUEQMg9aXBIthMj7K1AA8s4Tz9iW6n4jTLJ9rA_BgmJjWLljrdzH5QBlrhILastYFv-xqUGaX2Qb3tGZlSUDu9KIkqoTukabVotXeerZB/s320/images%20(12).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7dygklswYc8euWmkj5gl3PwWXBYTidDFe-Eb78Qq_tlWLJjNy6G_vT_C91JHPMqO_keRuG-e8j3GQlWbGkkJcXLXiNUOSfDOssSFXvUN_L62kFV46HjBR_Z5gCCJRV-9RTPSG52ghMoBwgRg7Ydfu4wih6eMlHOgL5FBbd6JV44qBkeNBm60aIZnIDvaM/s320/images%20(2).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiywFGA_HPG1WMjbBbHXgT-x8kc7tK6u3mDbBJ_0Y6Tk2SgDnDmz1kkQAMl8x5rXOkK9T0mFKbQgueWDcPIAg64JYrWqQLzfswLsJwbnfabzeD17KbXmyBx7iizcakESTrYYQp92uDQ7LoND9T_OZrr8WlAulzSqrxw1VevxwzQtHpEvMMK-nyTruARC_hq/s320/images%20(4).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLM-ti-aScUyS-v3KTGwBDfZGCbbsbahabulW-pIAUl1yaKdWlMGh9-QAJ0kzf1mHOgoGw6Ili7JqYZaT47eMKV5XBXU3HaPD_4xXqqlenM4uqtB6tCpC12vNFKVNssgBLZFcMvFvEGT6nVPDkboS2LDhTjUw7sBmEhd2w00eKh20QlcwyV15E_sNaAgRc/s320/images%20(5).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPuIhfOIPGLjBNw-qE93Owjc_hyAg-79lANsiVmEdali5NYQLgQWJcgJmfQZWdBzipx4lEr7kjUM0Go9ZggtflGwwPrka27l4W10Tlpayp8FrIp7nK2YB2TAqKwS478TNPg1q5_IZnIKrxaV9FmWLEe_i6q9yO_kf3i68E3aY5gtS4jpgSqFNe6qw_zPBG/s320/images%20(6).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj3RUILnexM3-LOZcpxURjSaNN0ulbmNIWZEqSHG5zUaJMhIU8SyDc2NrEQ5VvQSO4oHZ9NdEDW38N820BAUpyDgYd36Gudje2Lq34BynZsVMibKd2AX9x4mQHmhcJzKMdGSFUIrrLGyOwjIuUOSzSdo4sgEAQH9c_IzjnzRR8mkuBCmL7s_w-LnITQMoav/s320/images%20(7).jpeg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhC3iaFiq2kDWhA5v4XKdP7t99L8oYZWUsGUHDb-9ZtlcB4wpW38iHYSnediTX3ysnCy8XDIvDsDYDbw_c0pWfcYv7BTDStC2gVOFBuH4O8lH2qf5FRmG6OizIQKMob5mD0MCKRmFJs4OdWAzBRy-XwZpYQWEXv7DbPQf46baXhBb_37gVAsScmbG0dXy_V/s320/images%20(8).jpeg",
+             "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5jB-drCHGhZrnl7I7hH7XYC8o0vkcYjz4ULNK_QXZTcfaOvrK8PkkuyR-p6Kqh321kGkcNcHduhzYN-5YAlaJljz6sz12tv-A5kLpdmiletSq0agRQWd9YNa07sidMpiMOhHhz73gRyQoTHX8tB8nwmfe83NFNHRMSurZpHqVZrxYL3M3IGmimXFQyEKx/s320/images%20(9).jpeg"
+        ];
+
+
+        const postContainer = document.getElementById("post-container");
+        const searchInput = document.getElementById("search-input");
+        const loginIcon = document.getElementById("login-icon");
+        const headerImage = document.getElementById("header-image");
+
+        const loginModal = document.getElementById("login-modal");
+        const signupModal = document.getElementById("signup-modal");
+        const loginForm = document.getElementById("login-form");
+        const signupForm = document.getElementById("signup-form");
+        const switchToSignupBtn = document.getElementById("switch-to-signup");
+        const switchToLoginBtn = document.getElementById("switch-to-login");
+        const userProfileDiv = document.getElementById("user-profile");
+        const avatarImg = document.getElementById("avatar-img");
+        const usernameSpan = document.getElementById("username");
+        const logoutBtn = document.getElementById("logout-btn");
+        const postDetailsModal = document.getElementById("post-details-modal");
+        const postDetailsTitle = document.getElementById("post-details-title");
+        const postDetailsContent = document.getElementById("post-details-content");
+        const avatarOptionsContainer = document.getElementById("avatar-options-container");
+        const signupAvatarInput = document.getElementById("signup-avatar");
+        const settingsBtn = document.getElementById("settings-link");
+        const settingsModal = document.getElementById("settings-modal");
+        const settingsAvatarOptionsContainer = document.getElementById("settings-avatar-options-container");
+        const settingsAvatarInput = document.getElementById("settings-avatar");
+        const profileDropdown = document.getElementById("profile-dropdown");
+        const resetPasscodeLink = document.getElementById("reset-passcode-link");
+        const resetPasscodeModal = document.getElementById("reset-passcode-modal");
+        const resetPasscodeForm = document.getElementById("reset-passcode-form");
+        const currentPasscodeInput = document.getElementById("current-passcode");
+        const newPasscodeInput = document.getElementById("new-passcode");
+        const confirmNewPasscodeInput = document.getElementById("confirm-new-passcode");
+        const currentPasscodeError = document.getElementById("current-passcode-error");
+        const newPasscodeError = document.getElementById("new-passcode-error");
+        const confirmNewPasscodeError = document.getElementById("confirm-new-passcode-error");
+        const changeUsernameInput = document.getElementById("change-username");
+        const saveUsernameBtn = document.getElementById("save-username-btn");
+        const changeUsernameError = document.getElementById("change-username-error");
+
+        // New History Elements
+        const historyLink = document.getElementById("history-link");
+        const historyModal = document.getElementById("history-modal");
+        const historyList = document.getElementById("history-list");
+        const clearHistoryBtnHistoryModal = document.getElementById("clear-history-btn-history-modal");
+        const historyMessageDiv = document.getElementById("history-message");
+
+
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        // More robust check for loggedInUser on initial load
+        let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        if (loggedInUser && (!loggedInUser.email || !loggedInUser.username || !loggedInUser.password || !loggedInUser.avatar)) {
+             // If loggedInUser exists but is missing essential properties, treat as not logged in
+             loggedInUser = null;
+             localStorage.removeItem("loggedInUser"); // Clear invalid data
+        }
+
+        let viewHistory = JSON.parse(localStorage.getItem("viewHistory")) || [];
+
+        // Helper function to open a modal
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove("hidden");
+            document.body.style.overflow = "hidden"; // Prevent scrolling background
+        }
+
+        // Helper function to close a modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add("hidden");
+            document.body.style.overflow = "auto"; // Restore scrolling background
+            // Clear form fields and errors when closing modals
+            if (modalId === 'login-modal') {
+                loginForm.reset();
+                document.getElementById("login-email-error").style.display = "none";
+                document.getElementById("login-password-error").style.display = "none";
+                 // Remove any previous error messages
+                 const existingError = loginForm.querySelector('.text-red-500.text-center');
+                 if (existingError) {
+                     existingError.remove();
+                 }
+            } else if (modalId === 'signup-modal') {
+                 signupForm.reset();
+                document.getElementById("signup-email-error").style.display = "none";
+                document.getElementById("signup-username-error").style.display = "none";
+                document.getElementById("signup-password-error").style.display = "none";
+                 document.getElementById("signup-avatar-error").style.display = "none";
+                  // Remove any previous error messages
+                 const existingError = signupForm.querySelector('.text-red-500.text-center');
+                 if (existingError) {
+                     existingError.remove();
+                 }
+            } else if (modalId === 'reset-passcode-modal') {
+                 resetPasscodeForm.reset();
+                 currentPasscodeError.style.display = "none";
+                 newPasscodeError.style.display = "none";
+                 confirmNewPasscodeError.style.display = "none";
+                  // Remove any previous messages
+                 const existingMessage = resetPasscodeModal.querySelector('.text-red-500.text-center, .text-green-500.text-center');
+                 if (existingMessage) {
+                     existingMessage.remove();
+                 }
+            } else if (modalId === 'settings-modal') {
+                 // Clear username input and error on close
+                 changeUsernameInput.value = '';
+                 changeUsernameError.style.display = 'none';
+                 // Remove any previous messages
+                 const existingMessage = settingsModal.querySelector('.text-red-500.text-center, .text-green-500.text-center');
+                 if (existingMessage) {
+                     existingMessage.remove();
+                 }
+            } else if (modalId === 'history-modal') {
+                 // Clear history message on close
+                 historyMessageDiv.style.display = 'none';
+                 historyMessageDiv.textContent = '';
+            }
+        }
+
+
+        function validateEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        function displayInitialPosts() {
+            postContainer.innerHTML = ""; // Clear previous posts
+            initialPosts.forEach((post) => {
+                const postElement = createPostElement(post);
+                postContainer.appendChild(postElement);
+            });
+        }
+
+        function createPostElement(post) {
+            const postElement = document.createElement("div");
+            postElement.classList.add("bg-gray-800", "rounded-lg", "shadow-md", "overflow-hidden", "transition-transform", "duration-300", "hover:scale-105", "cursor-pointer");
+            postElement.addEventListener("click", () => {
+                // Redirect to the post URL when clicked
+                window.location.href = post.url;
+                updateViewHistory(post);
+            });
+
+            const imageElement = document.createElement("img");
+            imageElement.src = post.imageUrl;
+            imageElement.alt = post.title;
+            imageElement.classList.add("w-full", "h-48", "object-cover");
+
+            const contentElement = document.createElement("div");
+            contentElement.classList.add("p-4");
+
+            const titleElement = document.createElement("h3");
+            titleElement.classList.add("text-lg", "font-semibold", "text-white", "mb-2");
+            titleElement.textContent = post.title;
+
+            const descriptionElement = document.createElement("p");
+            descriptionElement.classList.add("text-gray-300");
+            descriptionElement.textContent = post.content;
+
+            contentElement.appendChild(titleElement);
+            contentElement.appendChild(descriptionElement);
+            postElement.appendChild(imageElement);
+            postElement.appendChild(contentElement);
+
+            return postElement;
+        }
+
+         function updateViewHistory(post) {
+            // Check if the post is already in history
+            const postInHistory = viewHistory.find(item => item.id === post.id);
+            if (!postInHistory) {
+                viewHistory.push(post);
+                localStorage.setItem('viewHistory', JSON.stringify(viewHistory));
+            }
+        }
+
+        function renderHistory() {
+            historyList.innerHTML = ""; // Clear previous history items
+            if (viewHistory.length === 0) {
+                const listItem = document.createElement("li");
+                listItem.textContent = "Your viewing history is empty.";
+                historyList.appendChild(listItem);
+                 clearHistoryBtnHistoryModal.classList.add('hidden'); // Hide clear button if history is empty
+            } else {
+                 clearHistoryBtnHistoryModal.classList.remove('hidden'); // Show clear button if history is not empty
+                // Display history in reverse order (most recent first)
+                for (let i = viewHistory.length - 1; i >= 0; i--) {
+                    const post = viewHistory[i];
+                    const listItem = document.createElement("li");
+                    listItem.textContent = post.title; // Display the post title
+                    historyList.appendChild(listItem);
+                }
+            }
+        }
+
+
+        function handleSearch() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredPosts = initialPosts.filter((post) =>
+                post.title.toLowerCase().includes(searchTerm)
+            );
+
+            postContainer.innerHTML = ""; // Clear previous posts
+            filteredPosts.forEach((post) => {
+                const postElement = createPostElement(post);
+                postContainer.appendChild(postElement);
+            });
+        }
+
+        function renderAvatarOptions(container, selectedAvatarInput, currentAvatar = null) {
+            container.innerHTML = ""; // Clear previous avatars
+            avatarImages.forEach((avatar, index) => {
+                const avatarOption = document.createElement("div");
+                avatarOption.classList.add("avatar-option", "rounded-full", "cursor-pointer", "transition-all", "duration-200", "border-2", "border-transparent");
+                avatarOption.innerHTML = `<img src="${avatar}" alt="Avatar ${index + 1}" class="w-10 h-10 rounded-full">`;
+                avatarOption.dataset.avatar = avatar;
+
+                // Select the current avatar if provided
+                if (currentAvatar && currentAvatar === avatar) {
+                    avatarOption.classList.add("selected");
+                    selectedAvatarInput.value = avatar;
+                }
+
+                avatarOption.addEventListener("click", () => {
+                    // Remove selection from any previously selected avatar
+                    const selectedAvatar = container.querySelector(".avatar-option.selected");
+                    if (selectedAvatar) {
+                        selectedAvatar.classList.remove("selected");
+                    }
+                    avatarOption.classList.add("selected");
+                    selectedAvatarInput.value = avatar; // Update the hidden input field
+                });
+                container.appendChild(avatarOption);
+            });
+             // If no current avatar is selected (e.g., during signup), select the first one
+            if (!currentAvatar && avatarImages.length > 0) {
+                const firstAvatar = container.querySelector(`.avatar-option:nth-child(1)`);
+                if (firstAvatar) {
+                    firstAvatar.click(); // Simulate a click on the first avatar
+                }
+            }
+        }
+
+        function loadUserProfile() {
+            // Check if loggedInUser is a valid object with essential properties
+            if (loggedInUser && loggedInUser.email && loggedInUser.username && loggedInUser.password && loggedInUser.avatar) {
+                userProfileDiv.classList.remove("hidden"); // Show user profile
+                loginIcon.classList.add("hidden"); // Hide login icon
+                headerImage.classList.add("hidden"); // Hide the header image
+                avatarImg.src = loggedInUser.avatar;
+                usernameSpan.textContent = loggedInUser.username;
+            } else {
+                userProfileDiv.classList.add("hidden"); // Hide user profile
+                loginIcon.classList.remove("hidden"); // Show login icon
+                headerImage.classList.remove("hidden"); // Show the header image
+                 // Ensure the dropdown is hidden when the profile is hidden
+                profileDropdown.classList.add('hidden');
+            }
+        }
+
+        // Event Listeners
+        searchInput.addEventListener("input", handleSearch);
+        // Attach event listeners to the icons
+        loginIcon.addEventListener("click", () => {
+            openModal('login-modal');
+        });
+        // Removed event listener for signupIcon as it's no longer in the HTML
+
+        switchToSignupBtn.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            closeModal('login-modal');
+            openModal('signup-modal');
+            renderAvatarOptions(avatarOptionsContainer, signupAvatarInput);
+        });
+        switchToLoginBtn.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            closeModal('signup-modal');
+            openModal('login-modal');
+        });
+
+        loginForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("login-email").value.trim();
+            const password = document.getElementById("login-password").value.trim();
+            let hasErrors = false;
+
+            // Clear previous error messages
+             const existingError = loginForm.querySelector('.text-red-500.text-center');
+             if (existingError) {
+                 existingError.remove();
+             }
+
+            if (!validateEmail(email)) {
+                document.getElementById("login-email-error").textContent = "Invalid email format";
+                document.getElementById("login-email-error").style.display = "block";
+                hasErrors = true;
+            } else {
+                document.getElementById("login-email-error").style.display = "none";
+            }
+
+            if (!validatePassword(password)) {
+                document.getElementById("login-password-error").textContent = "Password must be at least 6 characters";
+                document.getElementById("login-password-error").style.display = "block";
+                hasErrors = true;
+            } else {
+                document.getElementById("login-password-error").style.display = "none";
+            }
+
+            if (hasErrors) {
+                return;
+            }
+
+            const user = users.find((u) => u.email === email && u.password === password);
+            if (user) {
+                loggedInUser = user;
+                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+                loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser
+                closeModal('login-modal');
+                displayInitialPosts(); // Redisplay posts after successful login
+            } else {
+                 // Use a simple div for messages instead of alert
+                const loginErrorDiv = document.createElement('div');
+                loginErrorDiv.classList.add('text-red-500', 'text-center', 'mt-4');
+                loginErrorDiv.textContent = 'Invalid credentials. Please try again.';
+                loginForm.appendChild(loginErrorDiv);
+            }
+        });
+
+        signupForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("signup-email").value.trim();
+            const username = document.getElementById("signup-username").value.trim();
+            const password = document.getElementById("signup-password").value.trim();
+            const avatar = signupAvatarInput.value;
+            let hasErrors = false;
+
+             // Clear previous error messages
+             const existingError = signupForm.querySelector('.text-red-500.text-center');
+             if (existingError) {
+                 existingError.remove();
+             }
+
+
+             if (!validateEmail(email)) {
+                document.getElementById("signup-email-error").textContent = "Invalid email format";
+                document.getElementById("signup-email-error").style.display = "block";
+                hasErrors = true;
+            } else {
+                document.getElementById("signup-email-error").style.display = "none";
+            }
+
+            if (!username) {
+                document.getElementById("signup-username-error").textContent = "Username is required";
+                document.getElementById("signup-username-error").style.display = "block";
+                hasErrors = true;
+            } else {
+                document.getElementById("signup-username-error").style.display = "none";
+            }
+
+
+            if (!validatePassword(password)) {
+                document.getElementById("signup-password-error").textContent = "Password must be at least 6 characters";
+                document.getElementById("signup-password-error").style.display = "block";
+                hasErrors = true;
+            } else {
+                document.getElementById("signup-password-error").style.display = "none";
+            }
+
+            if (!avatar) {
+                document.getElementById("signup-avatar-error").textContent = "Please select an avatar";
+                document.getElementById("signup-avatar-error").style.display = "block";
+                hasErrors = true;
+            } else {
+                document.getElementById("signup-avatar-error").style.display ="none";
+            }
+
+            if (hasErrors) {
+                return;
+            }
+
+            // Check if the email is already taken
+            const emailExists = users.some(user => user.email === email);
+            if (emailExists) {
+                document.getElementById("signup-email-error").textContent = "Email already exists";
+                document.getElementById("signup-email-error").style.display = "block";
+                return;
+            }
+
+             // Check if the username is already taken
+            const usernameExists = users.some(user => user.username === username);
+            if (usernameExists) {
+                document.getElementById("signup-username-error").textContent = "Username already exists";
+                document.getElementById("signup-username-error").style.display = "block";
+                return;
+            }
+
+
+            const newUser = {
+                email,
+                username,
+                password, // In a real app, hash this password!
+                avatar,
+            };
+
+            users.push(newUser);
+            localStorage.setItem("users", JSON.stringify(users));
+            loggedInUser = newUser;
+            localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+            loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser
+            closeModal('signup-modal');
+            displayInitialPosts(); // Redisplay posts after successful signup
+        });
+
+        logoutBtn.addEventListener("click", (event) => {
+             event.preventDefault(); // Prevent default link behavior
+            loggedInUser = null;
+            localStorage.removeItem("loggedInUser");
+            loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser
+            displayInitialPosts(); // Redisplay posts after logout
+             // Hide the dropdown after logging out
+            profileDropdown.classList.remove('show'); // Ensure dropdown is hidden on logout
+        });
+
+        settingsBtn.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            profileDropdown.classList.remove('show'); // Hide the dropdown
+            openModal('settings-modal');
+             // Render avatar options for settings, pre-selecting the current avatar
+            if(loggedInUser) {
+                renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, loggedInUser.avatar);
+                 // Set the current username in the input field
+                changeUsernameInput.value = loggedInUser.username;
+            }
+        });
+
+        // Event listener for saving username change
+        saveUsernameBtn.addEventListener('click', () => {
+            const newUsername = changeUsernameInput.value.trim();
+             // Clear previous messages and errors
+            const settingsModalContent = settingsModal.querySelector('.modal-content');
+            const existingMessage = settingsModalContent.querySelector('.text-red-500.text-center, .text-green-500.text-center');
+             if (existingMessage) {
+                 existingMessage.remove();
+             }
+            changeUsernameError.style.display = 'none';
+
+
+            if (!newUsername) {
+                changeUsernameError.textContent = "Username cannot be empty";
+                changeUsernameError.style.display = "block";
+                return;
+            }
+
+            // Check if the new username is already taken by another user
+            const usernameExists = users.some(user => user.username === newUsername && user.email !== loggedInUser.email);
+            if (usernameExists) {
+                 changeUsernameError.textContent = "Username already exists";
+                 changeUsernameError.style.display = "block";
+                 return;
+            }
+
+
+            if (loggedInUser) {
+                loggedInUser.username = newUsername;
+                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+                // Update the username in the main users array
+                const userIndex = users.findIndex(user => user.email === loggedInUser.email);
+                if (userIndex !== -1) {
+                    users[userIndex].username = newUsername;
+                    localStorage.setItem("users", JSON.stringify(users));
+                }
+
+                usernameSpan.textContent = newUsername; // Update header username immediately
+
+                 // Use a simple div for messages instead of alert
+                const successMessageDiv = document.createElement('div');
+                successMessageDiv.classList.add('text-green-500', 'text-center', 'mt-4');
+                successMessageDiv.textContent = 'Username updated successfully!';
+                settingsModalContent.appendChild(successMessageDiv);
+
+                // Optionally, close the modal after a delay
+                setTimeout(() => {
+                     closeModal('settings-modal');
+                      // Remove the success message after closing
+                     if (successMessageDiv.parentNode) {
+                         successMessageDiv.parentNode.removeChild(successMessageDiv);
+                     }
+                }, 2000); // Close after 2 seconds
+
+            }
+        });
+
+
+        // Event listener for the new History link
+        historyLink.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            profileDropdown.classList.remove('show'); // Hide the dropdown
+            renderHistory(); // Render the history list
+            openModal('history-modal'); // Open the history modal
+        });
+
+        // Event listener for the Clear History button in the History modal
+        clearHistoryBtnHistoryModal.addEventListener("click", () => {
+            viewHistory = [];
+            localStorage.removeItem('viewHistory');
+            renderHistory(); // Re-render history to show it's empty
+            // Use a simple div for messages instead of alert
+            historyMessageDiv.classList.remove('text-red-500'); // Ensure it's green
+            historyMessageDiv.classList.add('text-green-500');
+            historyMessageDiv.textContent = 'View history cleared!';
+            historyMessageDiv.style.display = 'block';
+
+            // Optionally, hide the message after a delay
+            setTimeout(() => {
+                 historyMessageDiv.style.display = 'none';
+                 historyMessageDiv.textContent = '';
+            }, 2000); // Hide after 2 seconds
+        });
+
+
+        // Event listener for avatar selection in settings
+        settingsAvatarOptionsContainer.addEventListener('click', (event) => {
+            const target = event.target.closest('.avatar-option');
+            if (target && loggedInUser) {
+                const newAvatar = target.dataset.avatar;
+                loggedInUser.avatar = newAvatar;
+                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+                avatarImg.src = newAvatar; // Update the avatar in the header immediately
+
+                 // Use a simple div for messages instead of alert
+                const settingsModalContent = settingsModal.querySelector('.modal-content');
+                const successMessageDiv = document.createElement('div');
+                successMessageDiv.classList.add('text-green-500', 'text-center', 'mt-4');
+                successMessageDiv.textContent = 'Avatar updated successfully!';
+                 // Remove previous message if exists
+                const existingMessage = settingsModalContent.querySelector('.text-green-500.text-center');
+                 if (existingMessage) {
+                     existingMessage.remove();
+                 }
+                settingsModalContent.appendChild(successMessageDiv);
+
+                // Optionally, close the modal after a delay
+                setTimeout(() => {
+                     closeModal('settings-modal');
+                      // Remove the success message after closing
+                     if (successMessageDiv.parentNode) {
+                         successMessageDiv.parentNode.removeChild(successMessageDiv);
+                     }
+                }, 2000); // Close after 2 seconds
+            }
+        });
+
+
+        userProfileDiv.addEventListener('click', () => {
+             // Only toggle dropdown visibility if a user is logged in
+            if (loggedInUser) {
+                 profileDropdown.classList.toggle('show');
+            }
+        });
+
+        window.addEventListener('click', (event) => {
+            // Close dropdown if click is outside user profile and dropdown
+            if (!userProfileDiv.contains(event.target) && !profileDropdown.contains(event.target)) {
+                profileDropdown.classList.remove('show');
+            }
+            // Close modals if click is outside modal content (but inside modal overlay)
+            if (event.target.classList.contains('modal')) {
+                 closeModal(event.target.id);
+            }
+        });
+
+        resetPasscodeLink.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent the default link behavior
+            profileDropdown.classList.remove('show'); // Hide the dropdown
+            openModal('reset-passcode-modal'); // Show the reset passcode modal
+        });
+
+        resetPasscodeForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const currentPasscode = currentPasscodeInput.value.trim();
+            const newPasscode = newPasscodeInput.value.trim();
+            const confirmNewPasscode = confirmNewPasscodeInput.value.trim();
+            let hasErrors = false;
+
+            // Clear previous errors and messages
+            currentPasscodeError.style.display = "none";
+            newPasscodeError.style.display = "none";
+            confirmNewPasscodeError.style.display = "none";
+             const existingMessage = resetPasscodeModal.querySelector('.text-red-500.text-center, .text-green-500.text-center');
+             if (existingMessage) {
+                 existingMessage.remove();
+             }
+
+
+            if (!loggedInUser) {
+                 // This case should ideally not happen if the link is only shown when logged in
+                 // Use a simple div for messages instead of alert
+                const resetModalContent = resetPasscodeModal.querySelector('.modal-content');
+                const errorMessageDiv = document.createElement('div');
+                errorMessageDiv.classList.add('text-red-500', 'text-center', 'mt-4');
+                errorMessageDiv.textContent = 'You must be logged in to reset your passcode.';
+                resetModalContent.appendChild(errorMessageDiv);
+                return;
+            }
+
+            // Validate current passcode
+            if (currentPasscode !== loggedInUser.password) { // In a real app, compare with hashed password
+                currentPasscodeError.textContent = "Incorrect current passcode";
+                currentPasscodeError.style.display = "block";
+                hasErrors = true;
+            }
+
+            // Validate new passcode
+            if (!validatePassword(newPasscode)) {
+                newPasscodeError.textContent = "New passcode must be at least 6 characters";
+                newPasscodeError.style.display = "block";
+                hasErrors = true;
+            }
+
+            // Validate confirm new passcode
+            if (newPasscode !== confirmNewPasscode) {
+                confirmNewPasscodeError.textContent = "New passcodes do not match";
+                confirmNewPasscodeError.style.display = "block";
+                hasErrors = true;
+            }
+
+            if (hasErrors) {
+                return;
+            }
+
+            // Update the password (simulated)
+            loggedInUser.password = newPasscode; // In a real app, hash and save the new password
+            // Find the user in the users array and update their password
+            const userIndex = users.findIndex(user => user.email === loggedInUser.email);
+            if (userIndex !== -1) {
+                users[userIndex].password = newPasscode;
+                localStorage.setItem("users", JSON.stringify(users));
+                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser)); // Update logged in user in storage
+            }
+
+
+            // Use a simple div for messages instead of alert
+            const resetModalContent = resetPasscodeModal.querySelector('.modal-content');
+            const successMessageDiv = document.createElement('div');
+            successMessageDiv.classList.add('text-green-500', 'text-center', 'mt-4');
+            successMessageDiv.textContent = 'Passcode reset successfully!';
+            resetModalContent.appendChild(successMessageDiv);
+
+            // Optionally, close the modal after a delay
+            setTimeout(() => {
+                 closeModal('reset-passcode-modal');
+                 // Remove the success message after closing
+                 if (successMessageDiv.parentNode) {
+                     successMessageDiv.parentNode.removeChild(successMessageDiv);
+                 }
+            }, 2000); // Close after 2 seconds
+
+             // Clear the form fields
+            resetPasscodeForm.reset();
+        });
+
+
+        // Initial setup
+        loadUserProfile(); // Ensure this is called on page load
+        displayInitialPosts();
+    </script>
+</body>
+</html>
+
