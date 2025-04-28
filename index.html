@@ -659,7 +659,7 @@
     <script>
         // Data for initial posts (before search)
         const initialPosts = [
-            { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEij2SK0ykiGneEVMYAIMpT37pa_4JBtkMvye4UAZE2XnGVHPwmnF-DUcH7O5L1r5UWvbJF50RwsS2v5-o5OChTmS4Kb4bnDlC0w0DMwz4hVk3Y8rfCZQXIV33HLErEvbl7agNrx6p-hC_k0e4VS30eMUPoZteWg4XZsC43WfcejCf6JdVppPsZtVy73yyYH/s320/20250428_150544.jpg" }, url: "https://anitoono45.github.io/super-mario-bros/" },
+            { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhL_apWUUxxoj36WYfK-sQFH9K2c_MuiwiVqrAWj0_T9YeiYXLMxEvaUN1187QO08JI_x2PL53rV4xWF4wOFuDKhm-y3Vtnpf3JKVLKtvpMJR4y5k7SCOzftvCcgXkgsBnoeBGsDay7a2FpzXv83NcAWhzsZXaeGb-_Od8gKu5KQqAocGUXEzzm0yWMwPXI/s3264/20250428_073533.jpg", url: "https://anitoono45.github.io/super-mario-bros/" },
             { id: 2, title: "Anime Title 2", content: "Anime description 2.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=2" },
             { id: 3, title: "Anime Title 3", content: "Anime description 3.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=3" },
             { id: 4, title: "Anime Title 4", content: "Anime description 4.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=4" },
@@ -979,23 +979,9 @@
                 avatarImg.src = loggedInUser.avatar; // This sets the avatar source
                 usernameSpan.textContent = loggedInUser.username;
 
-                // Set loading screen details
+                // Set loading screen details if logged in
                 loadingAvatarImg.src = loggedInUser.avatar;
                 loadingUsernameSpan.textContent = loggedInUser.username;
-
-                // Show loading screen and hide main content initially
-                loadingOverlay.style.display = 'flex';
-                mainContentDiv.style.display = 'none';
-
-                // Hide loading screen and show main content after 3 seconds
-                setTimeout(() => {
-                    loadingOverlay.style.opacity = '0'; // Start fade out
-                    setTimeout(() => {
-                        loadingOverlay.style.display = 'none'; // Hide completely after fade
-                        loadingOverlay.style.opacity = '1'; // Reset opacity for next load
-                        mainContentDiv.style.display = 'block'; // Show main content
-                    }, 500); // Match CSS transition duration
-                }, 3000); // 3 seconds delay
 
             } else {
                 console.log("User is not logged in."); // Debugging line
@@ -1008,9 +994,9 @@
                  // Ensure the dropdown is hidden when the profile is hidden
                 profileDropdown.classList.add('hidden');
 
-                // Hide loading overlay immediately and show main content
-                loadingOverlay.style.display = 'none';
-                mainContentDiv.style.display = 'block';
+                 // Set default loading screen details if not logged in
+                 loadingAvatarImg.src = avatarImages[0]; // Use the first avatar as default
+                 loadingUsernameSpan.textContent = 'Loading...'; // Generic loading text
             }
         }
 
@@ -1090,7 +1076,7 @@
                 loggedInUser = user;
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
                 closeModal('login-modal');
-                loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser to trigger loading screen
+                loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser to trigger header update
                 displayInitialPosts(); // Redisplay posts after successful login
             } else {
                 displayMessage(loginForm, 'Invalid credentials. Please try again.', 'error');
@@ -1179,7 +1165,7 @@
             loggedInUser = newUser;
             localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
             closeModal('signup-modal');
-            loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser to trigger loading screen
+            loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser to trigger header update
             displayInitialPosts(); // Redisplay posts after successful signup
         });
 
@@ -1403,8 +1389,28 @@
 
         // Initial setup on page load
         window.onload = function() {
-            loadUserProfile(); // This will handle showing the loading screen if logged in
-            displayInitialPosts(); // Always display initial posts regardless of login state
+             // Always show loading overlay initially
+            loadingOverlay.style.display = 'flex';
+            mainContentDiv.style.display = 'none'; // Hide main content
+
+            // Determine loading screen content based on login status
+            loadUserProfile(); // This now only sets the loading screen details and header elements' visibility state
+
+            // Hide loading screen and show main content after 3 seconds
+            setTimeout(() => {
+                loadingOverlay.style.opacity = '0'; // Start fade out
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none'; // Hide completely after fade
+                    loadingOverlay.style.opacity = '1'; // Reset opacity for next load
+                    mainContentDiv.style.display = 'block'; // Show main content
+
+                     // Now that the loading is done and main content is visible,
+                     // call loadUserProfile again to ensure correct header state
+                     // and display initial posts.
+                     loadUserProfile(); // Re-run to set header based on final loggedInUser state
+                     displayInitialPosts(); // Display posts
+                }, 500); // Match CSS transition duration
+            }, 3000); // 3 seconds delay
         };
 
     </script>
