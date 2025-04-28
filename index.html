@@ -10,21 +10,31 @@
     <style>
         /* Custom CSS for Anitoono Theme (Red and Black) */
         body {
-            background-color: #111827; /* Dark background */
-            color: #f9fafb; /* Light text */
+            background-color: #0f172a; /* Slightly darker background */
+            color: #e2e8f0; /* Lighter text for better contrast */
             font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            line-height: 1.6;
         }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #f87171; /* Lighter red for headings */
+        }
+
         .text-red-500 {
-            color: #ef4444; /* Red color from Tailwind */
+            color: #ef4444; /* Standard Red color from Tailwind */
         }
         .bg-red-500 {
-            background-color: #ef4444; /* Red background from Tailwind */
+            background-color: #ef4444; /* Standard Red background from Tailwind */
         }
         .hover\:bg-red-600:hover {
             background-color: #dc2626; /* Darker red hover effect */
         }
         .bg-gray-800 {
             background-color: #1e293b; /* Dark gray background */
+        }
+         .bg-gray-700 {
+            background-color: #334155; /* Medium gray background */
         }
         .border-red-500 {
             border-color: #ef4444; /* Red border */
@@ -66,16 +76,27 @@
         }
         .avatar-option.selected {
             border-color: #ef4444; /* Red border for selected avatar */
-            box-shadow: 0 0 5px #ef4444; /* Optional: Add a shadow for better visibility */
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.7); /* Enhanced shadow for selection */
+        }
+         .avatar-option:hover {
+            transform: scale(1.1); /* Slightly enlarge on hover */
+             transition: transform 0.2s ease-in-out;
         }
 
         /* Profile Dropdown Styles */
         #user-profile {
             position: relative;
-            display: inline-flex; /* Changed from flex to inline-flex */
+            display: inline-flex;
             align-items: center;
             cursor: pointer;
+            padding: 0.5rem; /* Add padding for larger click area */
+            border-radius: 0.375rem; /* Rounded corners */
+            transition: background-color 0.2s ease;
         }
+         #user-profile:hover {
+            background-color: #334155; /* Medium gray background on hover */
+        }
+
         #profile-dropdown {
             position: absolute;
             top: 100%;
@@ -84,26 +105,31 @@
             border: 1px solid #374151;
             border-radius: 0.375rem;
             padding: 0.5rem 0;
-            margin-top: 0.25rem;
-            min-width: 160px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin-top: 0.5rem; /* Increased margin */
+            min-width: 180px; /* Increased min-width */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Darker shadow */
             z-index: 10;
             display: none; /* Initially hidden */
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
         }
         #profile-dropdown.show {
             display: block; /* Show when the show class is added */
+            opacity: 1;
+            transform: translateY(0);
         }
         #profile-dropdown a {
             display: block;
-            padding: 0.5rem 1rem;
-            color: #f9fafb;
+            padding: 0.75rem 1.25rem; /* Increased padding */
+            color: #cbd5e1; /* Light gray text */
             text-decoration: none;
-            transition: color 0.2s ease;
-            font-size: 0.875rem;
+            transition: color 0.2s ease, background-color 0.2s ease;
+            font-size: 0.9rem; /* Slightly larger font */
         }
         #profile-dropdown a:hover {
-            color: #fff;
-            background-color: #374151;
+            color: #f9fafb; /* White text on hover */
+            background-color: #374151; /* Medium gray background on hover */
         }
 
         /* Modal Styles */
@@ -113,49 +139,56 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(17, 24, 39, 0.9); /* bg-gray-900 with opacity */
+            background-color: rgba(15, 23, 42, 0.95); /* Darker background with more opacity */
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 50; /* Ensure modals are on top */
             overflow-y: auto; /* Allow scrolling for tall modals */
+            padding: 1rem; /* Add padding for mobile */
         }
 
         .modal-content {
             background-color: #1e293b; /* bg-gray-800 */
-            border-radius: 0.5rem; /* rounded-lg */
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5); /* shadow-xl */
-            padding: 2rem; /* p-8 */
+            border-radius: 0.75rem; /* More rounded corners */
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6); /* Deeper shadow */
+            padding: 2.5rem; /* Increased padding */
             width: 100%;
-            max-width: 28rem; /* max-w-md */
+            max-width: 32rem; /* Increased max-width */
             position: relative; /* Needed for close button positioning */
+            animation: fadeInScale 0.3s ease-out; /* Add modal entry animation */
+        }
+
+         @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         .modal-close-button {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            color: #9ca3af; /* gray-400 */
+            top: 1.25rem; /* Adjusted position */
+            right: 1.25rem; /* Adjusted position */
+            font-size: 1.75rem; /* Larger close icon */
+            color: #94a3b8; /* Light gray color */
             cursor: pointer;
             transition: color 0.2s ease;
         }
 
         .modal-close-button:hover {
-            color: #f9fafb; /* white */
+            color: #f1f5f9; /* Lighter gray on hover */
         }
 
         /* Icon Styles */
         .auth-icon {
-            width: 24px; /* Adjust size as needed */
-            height: 24px; /* Adjust size as needed */
-            color: #d1d5db; /* gray-300 */
+            width: 28px; /* Adjust size as needed */
+            height: 28px; /* Adjust size as needed */
+            color: #cbd5e1; /* Light gray color */
             cursor: pointer;
             transition: color 0.3s ease;
         }
 
         .auth-icon:hover {
-            color: #f9fafb; /* white */
+            color: #f1f5f9; /* Lighter gray on hover */
         }
 
          /* History List Styles */
@@ -164,13 +197,18 @@
             padding: 0;
         }
         #history-list li {
-            background-color: #374151;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.9rem;
-            color: #d1d5db;
+            background-color: #334155; /* Medium gray */
+            padding: 1rem 1.25rem; /* Increased padding */
+            margin-bottom: 0.75rem; /* Increased margin */
+            border-radius: 0.375rem; /* Rounded corners */
+            font-size: 1rem; /* Slightly larger font */
+            color: #cbd5e1; /* Light gray text */
             word-break: break-word; /* Prevent long titles from overflowing */
+            border-left: 4px solid #ef4444; /* Red accent border */
+            transition: background-color 0.2s ease;
+        }
+         #history-list li:hover {
+            background-color: #475569; /* Darker gray on hover */
         }
          #history-list li:last-child {
             margin-bottom: 0;
@@ -180,99 +218,313 @@
         #notification-button {
             background: none;
             border: none;
-            color: #d1d5db; /* gray-300 */
+            color: #cbd5e1; /* Light gray */
             cursor: pointer;
-            padding: 0;
-            font-size: 1.25rem; /* Adjust size as needed */
+            padding: 0.5rem; /* Add padding */
+            font-size: 1.5rem; /* Larger icon */
             transition: color 0.3s ease;
-            display: flex; /* Use flex to align icon */
+            display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 0.375rem; /* Rounded corners */
+             transition: background-color 0.2s ease;
         }
 
         #notification-button:hover {
-            color: #f9fafb; /* white */
+            color: #f1f5f9; /* Lighter gray on hover */
+             background-color: #334155; /* Medium gray background on hover */
         }
 
         /* Notification List Styling */
         #notification-list {
             list-style: none;
             padding: 0;
-            margin-top: 1rem;
+            margin-top: 1.5rem; /* Increased margin */
         }
 
         #notification-list li {
-            background-color: #374151;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.9rem;
-            color: #d1d5db;
-             /* Add some basic styling for different notification types if needed */
+            background-color: #334155; /* Medium gray */
+            padding: 1rem 1.25rem; /* Increased padding */
+            margin-bottom: 0.75rem; /* Increased margin */
+            border-radius: 0.375rem; /* Rounded corners */
+            font-size: 0.95rem; /* Slightly larger font */
+            color: #cbd5e1; /* Light gray text */
+             border-left: 4px solid #f87171; /* Lighter red accent */
+             transition: background-color 0.2s ease;
         }
+         #notification-list li:hover {
+             background-color: #475569; /* Darker gray on hover */
+         }
 
         #notification-list li:last-child {
             margin-bottom: 0;
         }
 
+        /* Loading Screen Styles */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0f172a; /* Same as body background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99; /* High z-index to cover everything */
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .loading-avatar-container {
+            position: relative;
+            width: 100px; /* Larger avatar container */
+            height: 100px;
+            margin-bottom: 1.5rem; /* Increased margin */
+        }
+
+        #loading-avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid #334155; /* Thicker border around avatar */
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); /* Red glow effect */
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: -15px; /* Position further outside the avatar */
+            left: -15px;
+            width: 130px; /* Larger spinner */
+            height: 130px;
+            border: 8px solid rgba(239, 68, 68, 0.2); /* Red with opacity */
+            border-top-color: #ef4444; /* Solid red for the spinner part */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loading-username {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #f1f5f9; /* Lighter white */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Add text shadow */
+        }
+
+        /* Hide main content initially */
+        #main-content {
+            display: none;
+        }
+
+        /* Post Card Styling */
+        .post-card {
+            background-color: #1e293b; /* Dark gray background */
+            border-radius: 0.75rem; /* More rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Deeper shadow */
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            display: flex; /* Use flexbox for layout */
+            flex-direction: column; /* Stack image and content */
+            height: 100%; /* Ensure consistent height */
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px); /* Lift effect on hover */
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.6); /* Stronger shadow on hover */
+        }
+
+        .post-card img {
+            width: 100%;
+            height: 200px; /* Fixed height for images */
+            object-fit: cover; /* Cover the area without distortion */
+            transition: transform 0.3s ease-in-out;
+        }
+
+         .post-card:hover img {
+            transform: scale(1.05); /* Slightly zoom image on hover */
+         }
+
+        .post-card-content {
+            padding: 1.25rem; /* Increased padding */
+            flex-grow: 1; /* Allow content to take available space */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-card-content h3 {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* font-semibold */
+            color: #f87171; /* Lighter red */
+            margin-bottom: 0.5rem;
+        }
+
+        .post-card-content p {
+            font-size: 0.95rem; /* Slightly larger text */
+            color: #cbd5e1; /* Light gray */
+            flex-grow: 1; /* Allow description to take space */
+        }
+
+        /* Form Input Styling */
+        .form-input {
+             background-color: #334155; /* Medium gray */
+            border: 1px solid #475569; /* Darker gray border */
+            color: #f1f5f9; /* Lighter text */
+            padding: 0.75rem 1rem; /* Increased padding */
+            border-radius: 0.375rem; /* Rounded corners */
+            width: 100%;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ef4444; /* Red border on focus */
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3); /* Red glow on focus */
+        }
+
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem; /* Increased padding */
+            font-weight: 600; /* font-semibold */
+            text-align: center;
+            border-radius: 0.375rem; /* Rounded corners */
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #ef4444; /* Red */
+            color: #f9fafb; /* White */
+        }
+
+        .btn-primary:hover {
+            background-color: #dc2626; /* Darker red on hover */
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+
+         .btn-secondary {
+            background-color: #475569; /* Darker gray */
+            color: #cbd5e1; /* Light gray */
+         }
+
+         .btn-secondary:hover {
+            background-color: #334155; /* Medium gray on hover */
+             transform: translateY(-1px); /* Slight lift on hover */
+         }
+
+         .btn:active {
+            transform: translateY(0); /* Reset lift on click */
+         }
+
+        /* Link Styling */
+        a {
+            color: #f87171; /* Lighter red for links */
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: #ef4444; /* Standard red on hover */
+            text-decoration: underline;
+        }
+
+         /* Message Box Styling (for errors/success) */
+         .message-box {
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.9rem;
+            text-align: center;
+         }
+
+         .message-box.error {
+            background-color: #fee2e2; /* Red background */
+            color: #b91c1c; /* Dark red text */
+            border: 1px solid #ef4444; /* Red border */
+         }
+
+         .message-box.success {
+            background-color: #d1fae5; /* Green background */
+            color: #065f46; /* Dark green text */
+            border: 1px solid #10b981; /* Green border */
+         }
+
 
     </style>
 </head>
 <body class="bg-gray-900 text-white">
-    <header class="bg-gray-800 py-4 flex justify-between items-center shadow-md sticky top-0 z-10 rounded-md">
-        <div class="logo text-red-500 text-2xl font-semibold ml-4">Anitoono</div>
-        <div class="mr-4 flex items-center space-x-4">
-             <button id="notification-button">
-                 <i class="fas fa-bell"></i> </button>
-            <div id="login-icon" class="auth-icon hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                </svg>
-            </div>
-            <div id="user-profile" class="hidden">
-                <img id="avatar-img" src="" alt="Avatar" class="w-8 h-8 rounded-full mr-2">
-                <span id="username" class="text-gray-300 font-semibold"></span>
-                 <div id="profile-dropdown" class="hidden">
-                    <a href="#" id="history-link">History</a> <a href="#" id="settings-link">Settings</a>
-                    <a href="#" id="reset-passcode-link">Reset Passcode</a>
-                    <a href="#" id="logout-btn">Logout</a>
+
+    <div id="loading-overlay">
+        <div class="loading-avatar-container">
+            <img id="loading-avatar-img" src="" alt="Loading Avatar">
+            <div class="loading-spinner"></div>
+        </div>
+        <span id="loading-username" class="mt-2"></span>
+    </div>
+
+    <div id="main-content">
+        <header class="bg-gray-800 py-4 flex justify-between items-center shadow-md sticky top-0 z-10 rounded-md">
+            <div class="logo text-red-500 text-2xl font-semibold ml-4">Anitoono</div>
+            <div class="mr-4 flex items-center space-x-4">
+                 <button id="notification-button">
+                     <i class="fas fa-bell"></i> </button>
+                <div id="login-icon" class="auth-icon hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                </div>
+                <div id="user-profile" class="hidden">
+                    <img id="avatar-img" src="" alt="Avatar" class="w-9 h-9 rounded-full mr-2 border-2 border-red-500">
+                    <span id="username" class="text-gray-300 font-semibold"></span>
+                     <div id="profile-dropdown" class="hidden">
+                        <a href="#" id="history-link">History</a> <a href="#" id="settings-link">Settings</a>
+                        <a href="#" id="reset-passcode-link">Reset Passcode</a>
+                        <a href="#" id="logout-btn">Logout</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <main class="container mx-auto mt-8 p-4">
-        <div id="search-container" class="mb-6 flex justify-center">
-            <input
-                type="text"
-                id="search-input"
-                placeholder="Search for anime..."
-                class="w-full md:w-1/2 bg-gray-800 border border-gray-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-            />
-        </div>
-
-        <div id="post-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <main class="container mx-auto mt-8 p-4">
+            <div id="search-container" class="mb-8 flex justify-center">
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search for anime..."
+                    class="form-input w-full md:w-2/3 lg:w-1/2"
+                />
             </div>
-    </main>
+
+            <div id="post-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                </div>
+        </main>
+    </div>
+
 
     <div id="login-modal" class="modal hidden">
         <div class="modal-content">
             <span class="modal-close-button" onclick="closeModal('login-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Login to Anitoono</h2>
-            <form id="login-form" class="space-y-4">
+            <form id="login-form" class="space-y-6">
                 <div>
                     <label for="login-email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
-                    <input type="email" id="login-email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
-                    <div id="login-email-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <input type="email" id="login-email" class="form-input" required>
+                    <div id="login-email-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
                 <div>
                     <label for="login-password" class="block text-gray-300 text-sm font-bold mb-2">Password:</label>
-                    <input type="password" id="login-password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
-                    <div id="login-password-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <input type="password" id="login-password" class="form-input" required>
+                    <div id="login-password-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
-                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Login</button>
+                <button type="submit" class="btn btn-primary w-full">Login</button>
             </form>
-            <div class="mt-4 text-center text-gray-400">
+            <div class="mt-6 text-center text-gray-400">
                 <p>Don't have an account? <a href="#" id="switch-to-signup" class="text-red-500 hover:underline">Sign Up</a></p>
             </div>
         </div>
@@ -282,32 +534,32 @@
         <div class="modal-content">
              <span class="modal-close-button" onclick="closeModal('signup-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Sign Up for Anitoono</h2>
-            <form id="signup-form" class="space-y-4">
+            <form id="signup-form" class="space-y-6">
                 <div>
                     <label for="signup-email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
-                    <input type="email" id="signup-email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
-                    <div id="signup-email-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <input type="email" id="signup-email" class="form-input" required>
+                    <div id="signup-email-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
                 <div>
                     <label for="signup-username" class="block text-gray-300 text-sm font-bold mb-2">Username:</label>
-                    <input type="text" id="signup-username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
-                     <div id="signup-username-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <input type="text" id="signup-username" class="form-input" required>
+                     <div id="signup-username-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
                 <div>
                     <label for="signup-password" class="block text-gray-300 text-sm font-bold mb-2">Password:</label>
-                    <input type="password" id="signup-password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
-                    <div id="signup-password-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <input type="password" id="signup-password" class="form-input" required>
+                    <div id="signup-password-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
                 <div>
                     <label for="signup-avatar" class="block text-gray-300 text-sm font-bold mb-2">Choose Avatar:</label>
-                    <div class="flex flex-wrap gap-2" id="avatar-options-container">
+                    <div class="flex flex-wrap gap-3" id="avatar-options-container">
                         </div>
                     <input type="hidden" id="signup-avatar" name="signup-avatar" value="">
-                    <div id="signup-avatar-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <div id="signup-avatar-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
-                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Sign Up</button>
+                <button type="submit" class="btn btn-primary w-full">Sign Up</button>
             </form>
-            <div class="mt-4 text-center text-gray-400">
+            <div class="mt-6 text-center text-gray-400">
                 <p>Already have an account? <a href="#" id="switch-to-login" class="text-red-500 hover:underline">Login</a></p>
             </div>
         </div>
@@ -317,8 +569,8 @@
         <div class="modal-content max-w-2xl">
              <span class="modal-close-button" onclick="closeModal('post-details-modal')">&times;</span>
             <h2 id="post-details-title" class="text-2xl font-semibold mb-4 text-red-500"></h2>
-            <div id="post-details-content" class="text-gray-300 mb-4"></div>
-            <button onclick="closeModal('post-details-modal')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline">Close</button>
+            <div id="post-details-content" class="text-gray-300 mb-6"></div>
+            <button onclick="closeModal('post-details-modal')" class="btn btn-secondary w-full">Close</button>
         </div>
     </div>
 
@@ -326,23 +578,23 @@
         <div class="modal-content">
              <span class="modal-close-button" onclick="closeModal('settings-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Settings</h2>
-            <div class="space-y-4">
+            <div class="space-y-6">
                  <div>
                     <label for="change-username" class="block text-gray-300 text-sm font-bold mb-2">Change Username:</label>
-                    <input type="text" id="change-username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500">
-                    <div id="change-username-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <input type="text" id="change-username" class="form-input">
+                    <div id="change-username-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
-                <button id="save-username-btn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Save Username</button>
+                <button id="save-username-btn" class="btn btn-primary w-full">Save Username</button>
 
                 <div>
                     <label for="change-avatar" class="block text-gray-300 text-sm font-bold mb-2">Change Avatar:</label>
-                     <div class="flex flex-wrap gap-2" id="settings-avatar-options-container">
+                     <div class="flex flex-wrap gap-3" id="settings-avatar-options-container">
                         </div>
                     <input type="hidden" id="settings-avatar" name="settings-avatar" value="">
-                    <div id="settings-avatar-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <div id="settings-avatar-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
 
-                <button onclick="closeModal('settings-modal')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Close</button>
+                <button onclick="closeModal('settings-modal')" class="btn btn-secondary w-full">Close</button>
             </div>
         </div>
     </div>
@@ -351,10 +603,10 @@
         <div class="modal-content max-w-lg">
              <span class="modal-close-button" onclick="closeModal('history-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Viewing History</h2>
-            <ul id="history-list" class="mb-4">
+            <ul id="history-list" class="mb-6">
                 </ul>
-             <button id="clear-history-btn-history-modal" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full mb-4">Clear History</button>
-            <button onclick="closeModal('history-modal')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Close</button>
+             <button id="clear-history-btn-history-modal" class="btn btn-primary w-full mb-4">Clear History</button>
+            <button onclick="closeModal('history-modal')" class="btn btn-secondary w-full">Close</button>
              <div id="history-message" class="text-center mt-4 text-green-500" style="display: none;"></div> </div>
     </div>
 
@@ -362,7 +614,7 @@
         <div class="modal-content max-w-sm">
             <span class="modal-close-button" onclick="closeModal('notification-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Notifications</h2>
-            <ul id="notification-list" class="space-y-3">
+            <ul id="notification-list" class="space-y-4">
                  <li class="bg-gray-700 p-3 rounded-md text-gray-300">
                     New episode of "Awesome Anime" is available!
                 </li>
@@ -373,7 +625,7 @@
                     Welcome to Anitoono!
                 </li>
             </ul>
-            <button onclick="closeModal('notification-modal')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full mt-6">Close</button>
+            <button onclick="closeModal('notification-modal')" class="btn btn-secondary w-full mt-6">Close</button>
         </div>
     </div>
 
@@ -382,23 +634,23 @@
         <div class="modal-content">
             <span class="modal-close-button" onclick="closeModal('reset-passcode-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Reset Passcode</h2>
-            <form id="reset-passcode-form" class="space-y-4">
+            <form id="reset-passcode-form" class="space-y-6">
                  <div>
                     <label for="current-passcode" class="block text-gray-300 text-sm font-bold mb-2">Current Passcode:</label>
-                    <input type="password" id="current-passcode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
-                    <div id="current-passcode-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <input type="password" id="current-passcode" class="form-input" required>
+                    <div id="current-passcode-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
                 <div>
                     <label for="new-passcode" class="block text-gray-300 text-sm font-bold mb-2">New Passcode:</label>
-                    <input type="password" id="new-passcode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
-                    <div id="new-passcode-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <input type="password" id="new-passcode" class="form-input" required>
+                    <div id="new-passcode-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
                  <div>
                     <label for="confirm-new-passcode" class="block text-gray-300 text-sm font-bold mb-2">Confirm New Passcode:</label>
-                    <input type="password" id="confirm-new-passcode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 focus:ring-2 focus:ring-red-500" required>
-                    <div id="confirm-new-passcode-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                    <input type="password" id="confirm-new-passcode" class="form-input" required>
+                    <div id="confirm-new-passcode-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
-                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Reset Passcode</button>
+                <button type="submit" class="btn btn-primary w-full">Reset Passcode</button>
             </form>
         </div>
     </div>
@@ -407,7 +659,7 @@
     <script>
         // Data for initial posts (before search)
         const initialPosts = [
-            { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEij2SK0ykiGneEVMYAIMpT37pa_4JBtkMvye4UAZE2XnGVHPwmnF-DUcH7O5L1r5UWvbJF50RwsS2v5-o5OChTmS4Kb4bnDlC0w0DMwz4hVk3Y8rfCZQXIV33HLErEvbl7agNrx6p-hC_k0e4VS30eMUPoZteWg4XZsC43WfcejCf6JdVppPsZtVy73yyYH/s320/20250428_150544.jpg" },
+            { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEij2SK0ykiGneEVMYAIMpT37pa_4JBtkMvye4UAZE2XnGVHPwmnF-DUcH7O5L1r5UWvbJF50RwsS2v5-o5OChTmS4Kb4bnDlC0w0DMwz4hVk3Y8rfCZQXIV33HLErEvbl7agNrx6p-hC_k0e4VS30eMUPoZteWg4XZsC43WfcejCf6JdVppPsZtVy73yyYH/s320/20250428_150544.jpg" }, url: "https://anitoono45.github.io/super-mario-bros/" },
             { id: 2, title: "Anime Title 2", content: "Anime description 2.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=2" },
             { id: 3, title: "Anime Title 3", content: "Anime description 3.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=3" },
             { id: 4, title: "Anime Title 4", content: "Anime description 4.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=4" },
@@ -440,11 +692,7 @@
 
         const postContainer = document.getElementById("post-container");
         const searchInput = document.getElementById("search-input");
-        // Get the new icon elements
         const loginIcon = document.getElementById("login-icon");
-        // Removed signupIcon as it's no longer in the HTML
-        // Removed headerImage element reference
-
         const loginModal = document.getElementById("login-modal");
         const signupModal = document.getElementById("signup-modal");
         const loginForm = document.getElementById("login-form");
@@ -486,6 +734,12 @@
         const notificationModal = document.getElementById("notification-modal"); // New notification modal
         const notificationList = document.getElementById("notification-list"); // New notification list element
 
+        // New Loading Screen Elements
+        const loadingOverlay = document.getElementById("loading-overlay");
+        const loadingAvatarImg = document.getElementById("loading-avatar-img");
+        const loadingUsernameSpan = document.getElementById("loading-username");
+        const mainContentDiv = document.getElementById("main-content");
+
 
         let users = JSON.parse(localStorage.getItem("users")) || [];
         // More robust check for loggedInUser on initial load
@@ -524,7 +778,7 @@
                 document.getElementById("login-email-error").style.display = "none";
                 document.getElementById("login-password-error").style.display = "none";
                  // Remove any previous error messages
-                 const existingError = loginForm.querySelector('.text-red-500.text-center');
+                 const existingError = loginForm.querySelector('.message-box.error');
                  if (existingError) {
                      existingError.remove();
                  }
@@ -535,7 +789,7 @@
                 document.getElementById("signup-password-error").style.display = "none";
                  document.getElementById("signup-avatar-error").style.display = "none";
                   // Remove any previous error messages
-                 const existingError = signupForm.querySelector('.text-red-500.text-center');
+                 const existingError = signupForm.querySelector('.message-box.error');
                  if (existingError) {
                      existingError.remove();
                  }
@@ -545,7 +799,7 @@
                  newPasscodeError.style.display = "none";
                  confirmNewPasscodeError.style.display = "none";
                   // Remove any previous messages
-                 const existingMessage = resetPasscodeModal.querySelector('.text-red-500.text-center, .text-green-500.text-center');
+                 const existingMessage = resetPasscodeModal.querySelector('.message-box');
                  if (existingMessage) {
                      existingMessage.remove();
                  }
@@ -554,7 +808,7 @@
                  changeUsernameInput.value = '';
                  changeUsernameError.style.display = 'none';
                  // Remove any previous messages
-                 const existingMessage = settingsModal.querySelector('.text-red-500.text-center, .text-green-500.text-center');
+                 const existingMessage = settingsModal.querySelector('.message-box');
                  if (existingMessage) {
                      existingMessage.remove();
                  }
@@ -566,6 +820,27 @@
                  // No form fields to clear in the notification modal
             }
         }
+
+         // Helper function to display messages (errors or success)
+         function displayMessage(formElement, message, type) {
+            // Remove any existing message boxes
+            const existingMessage = formElement.querySelector('.message-box');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message-box', type);
+            messageDiv.textContent = message;
+
+             // Insert message before the submit button or at the end of the form
+             const submitButton = formElement.querySelector('button[type="submit"]');
+             if (submitButton) {
+                 formElement.insertBefore(messageDiv, submitButton);
+             } else {
+                 formElement.appendChild(messageDiv);
+             }
+         }
 
 
         function validateEmail(email) {
@@ -587,7 +862,7 @@
 
         function createPostElement(post) {
             const postElement = document.createElement("div");
-            postElement.classList.add("bg-gray-800", "rounded-lg", "shadow-md", "overflow-hidden", "transition-transform", "duration-300", "hover:scale-105", "cursor-pointer");
+            postElement.classList.add("post-card"); // Use the new post-card class
             postElement.addEventListener("click", () => {
                 // Redirect to the post URL when clicked
                 window.location.href = post.url;
@@ -597,18 +872,18 @@
             const imageElement = document.createElement("img");
             imageElement.src = post.imageUrl;
             imageElement.alt = post.title;
-            imageElement.classList.add("w-full", "h-48", "object-cover");
+            // Tailwind classes for image are now in the .post-card img rule
 
             const contentElement = document.createElement("div");
-            contentElement.classList.add("p-4");
+            contentElement.classList.add("post-card-content"); // Use the new post-card-content class
 
             const titleElement = document.createElement("h3");
-            titleElement.classList.add("text-lg", "font-semibold", "text-white", "mb-2");
             titleElement.textContent = post.title;
+            // Tailwind classes for title are now in the .post-card-content h3 rule
 
             const descriptionElement = document.createElement("p");
-            descriptionElement.classList.add("text-gray-300");
             descriptionElement.textContent = post.content;
+             // Tailwind classes for description are now in the .post-card-content p rule
 
             contentElement.appendChild(titleElement);
             contentElement.appendChild(descriptionElement);
@@ -665,7 +940,7 @@
             avatarImages.forEach((avatar, index) => {
                 const avatarOption = document.createElement("div");
                 avatarOption.classList.add("avatar-option", "rounded-full", "cursor-pointer", "transition-all", "duration-200", "border-2", "border-transparent");
-                avatarOption.innerHTML = `<img src="${avatar}" alt="Avatar ${index + 1}" class="w-10 h-10 rounded-full">`;
+                avatarOption.innerHTML = `<img src="${avatar}" alt="Avatar ${index + 1}" class="w-10 h-10 rounded-full object-cover">`; // Added object-cover
                 avatarOption.dataset.avatar = avatar;
 
                 // Select the current avatar if provided
@@ -701,20 +976,41 @@
                 console.log("User is logged in. Avatar URL:", loggedInUser.avatar); // Debugging line
                 userProfileDiv.classList.remove("hidden"); // Show user profile
                 loginIcon.classList.add("hidden"); // Hide login icon
-                // Removed headerImage.classList.add("hidden");
                 avatarImg.src = loggedInUser.avatar; // This sets the avatar source
                 usernameSpan.textContent = loggedInUser.username;
+
+                // Set loading screen details
+                loadingAvatarImg.src = loggedInUser.avatar;
+                loadingUsernameSpan.textContent = loggedInUser.username;
+
+                // Show loading screen and hide main content initially
+                loadingOverlay.style.display = 'flex';
+                mainContentDiv.style.display = 'none';
+
+                // Hide loading screen and show main content after 3 seconds
+                setTimeout(() => {
+                    loadingOverlay.style.opacity = '0'; // Start fade out
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none'; // Hide completely after fade
+                        loadingOverlay.style.opacity = '1'; // Reset opacity for next load
+                        mainContentDiv.style.display = 'block'; // Show main content
+                    }, 500); // Match CSS transition duration
+                }, 3000); // 3 seconds delay
+
             } else {
                 console.log("User is not logged in."); // Debugging line
                 // User is not logged in, hide user profile and show login elements
                 userProfileDiv.classList.add("hidden"); // Hide user profile
                 loginIcon.classList.remove("hidden"); // Show login icon
-                // Removed headerImage.classList.remove("hidden");
                  // Explicitly clear avatar and username display
                 avatarImg.src = ''; // Clear the avatar image source
                 usernameSpan.textContent = ''; // Clear the username text
                  // Ensure the dropdown is hidden when the profile is hidden
                 profileDropdown.classList.add('hidden');
+
+                // Hide loading overlay immediately and show main content
+                loadingOverlay.style.display = 'none';
+                mainContentDiv.style.display = 'block';
             }
         }
 
@@ -764,7 +1060,7 @@
             let hasErrors = false;
 
             // Clear previous error messages
-             const existingError = loginForm.querySelector('.text-red-500.text-center');
+             const existingError = loginForm.querySelector('.message-box.error');
              if (existingError) {
                  existingError.remove();
              }
@@ -793,15 +1089,11 @@
             if (user) {
                 loggedInUser = user;
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
-                loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser
                 closeModal('login-modal');
+                loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser to trigger loading screen
                 displayInitialPosts(); // Redisplay posts after successful login
             } else {
-                 // Use a simple div for messages instead of alert
-                const loginErrorDiv = document.createElement('div');
-                loginErrorDiv.classList.add('text-red-500', 'text-center', 'mt-4');
-                loginErrorDiv.textContent = 'Invalid credentials. Please try again.';
-                loginForm.appendChild(loginErrorDiv);
+                displayMessage(loginForm, 'Invalid credentials. Please try again.', 'error');
             }
         });
 
@@ -815,7 +1107,7 @@
             let hasErrors = false;
 
              // Clear previous error messages
-             const existingError = signupForm.querySelector('.text-red-500.text-center');
+             const existingError = signupForm.querySelector('.message-box.error');
              if (existingError) {
                  existingError.remove();
              }
@@ -886,8 +1178,8 @@
             localStorage.setItem("users", JSON.stringify(users));
             loggedInUser = newUser;
             localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
-            loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser
             closeModal('signup-modal');
+            loadUserProfile(); // Call loadUserProfile AFTER setting loggedInUser to trigger loading screen
             displayInitialPosts(); // Redisplay posts after successful signup
         });
 
@@ -918,7 +1210,7 @@
             const newUsername = changeUsernameInput.value.trim();
              // Clear previous messages and errors
             const settingsModalContent = settingsModal.querySelector('.modal-content');
-            const existingMessage = settingsModalContent.querySelector('.text-red-500.text-center, .text-green-500.text-center');
+            const existingMessage = settingsModalContent.querySelector('.message-box');
              if (existingMessage) {
                  existingMessage.remove();
              }
@@ -953,19 +1245,11 @@
 
                 usernameSpan.textContent = newUsername; // Update header username immediately
 
-                 // Use a simple div for messages instead of alert
-                const successMessageDiv = document.createElement('div');
-                successMessageDiv.classList.add('text-green-500', 'text-center', 'mt-4');
-                successMessageDiv.textContent = 'Username updated successfully!';
-                settingsModalContent.appendChild(successMessageDiv);
+                displayMessage(settingsModalContent, 'Username updated successfully!', 'success');
 
                 // Optionally, close the modal after a delay
                 setTimeout(() => {
                      closeModal('settings-modal');
-                      // Remove the success message after closing
-                     if (successMessageDiv.parentNode) {
-                         successMessageDiv.parentNode.removeChild(successMessageDiv);
-                     }
                 }, 2000); // Close after 2 seconds
 
             }
@@ -985,16 +1269,14 @@
             viewHistory = [];
             localStorage.removeItem('viewHistory');
             renderHistory(); // Re-render history to show it's empty
-            // Use a simple div for messages instead of alert
-            historyMessageDiv.classList.remove('text-red-500'); // Ensure it's green
-            historyMessageDiv.classList.add('text-green-500');
-            historyMessageDiv.textContent = 'View history cleared!';
-            historyMessageDiv.style.display = 'block';
+
+            const historyModalContent = historyModal.querySelector('.modal-content');
+            displayMessage(historyModalContent, 'View history cleared!', 'success');
 
             // Optionally, hide the message after a delay
             setTimeout(() => {
-                 historyMessageDiv.style.display = 'none';
-                 historyMessageDiv.textContent = '';
+                 const messageBox = historyModalContent.querySelector('.message-box');
+                 if (messageBox) messageBox.remove();
             }, 2000); // Hide after 2 seconds
         });
 
@@ -1008,25 +1290,12 @@
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
                 avatarImg.src = newAvatar; // Update the avatar in the header immediately
 
-                 // Use a simple div for messages instead of alert
                 const settingsModalContent = settingsModal.querySelector('.modal-content');
-                const successMessageDiv = document.createElement('div');
-                successMessageDiv.classList.add('text-green-500', 'text-center', 'mt-4');
-                successMessageDiv.textContent = 'Avatar updated successfully!';
-                 // Remove previous message if exists
-                const existingMessage = settingsModalContent.querySelector('.text-green-500.text-center');
-                 if (existingMessage) {
-                     existingMessage.remove();
-                 }
-                settingsModalContent.appendChild(successMessageDiv);
+                displayMessage(settingsModalContent, 'Avatar updated successfully!', 'success');
 
                 // Optionally, close the modal after a delay
                 setTimeout(() => {
                      closeModal('settings-modal');
-                      // Remove the success message after closing
-                     if (successMessageDiv.parentNode) {
-                         successMessageDiv.parentNode.removeChild(successMessageDiv);
-                     }
                 }, 2000); // Close after 2 seconds
             }
         });
@@ -1068,7 +1337,7 @@
             currentPasscodeError.style.display = "none";
             newPasscodeError.style.display = "none";
             confirmNewPasscodeError.style.display = "none";
-             const existingMessage = resetPasscodeModal.querySelector('.text-red-500.text-center, .text-green-500.text-center');
+             const existingMessage = resetPasscodeModal.querySelector('.message-box');
              if (existingMessage) {
                  existingMessage.remove();
              }
@@ -1076,12 +1345,7 @@
 
             if (!loggedInUser) {
                  // This case should ideally not happen if the link is only shown when logged in
-                 // Use a simple div for messages instead of alert
-                const resetModalContent = resetPasscodeModal.querySelector('.modal-content');
-                const errorMessageDiv = document.createElement('div');
-                errorMessageDiv.classList.add('text-red-500', 'text-center', 'mt-4');
-                errorMessageDiv.textContent = 'You must be logged in to reset your passcode.';
-                resetModalContent.appendChild(errorMessageDiv);
+                displayMessage(resetPasscodeForm, 'You must be logged in to reset your passcode.', 'error');
                 return;
             }
 
@@ -1120,21 +1384,11 @@
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser)); // Update logged in user in storage
             }
 
-
-            // Use a simple div for messages instead of alert
-            const resetModalContent = resetPasscodeModal.querySelector('.modal-content');
-            const successMessageDiv = document.createElement('div');
-            successMessageDiv.classList.add('text-green-500', 'text-center', 'mt-4');
-            successMessageDiv.textContent = 'Passcode reset successfully!';
-            resetModalContent.appendChild(successMessageDiv);
+            displayMessage(resetPasscodeForm, 'Passcode reset successfully!', 'success');
 
             // Optionally, close the modal after a delay
             setTimeout(() => {
                  closeModal('reset-passcode-modal');
-                 // Remove the success message after closing
-                 if (successMessageDiv.parentNode) {
-                     successMessageDiv.parentNode.removeChild(successMessageDiv);
-                 }
             }, 2000); // Close after 2 seconds
 
              // Clear the form fields
@@ -1147,10 +1401,12 @@
             openModal('notification-modal'); // Open the notification modal
         });
 
+        // Initial setup on page load
+        window.onload = function() {
+            loadUserProfile(); // This will handle showing the loading screen if logged in
+            displayInitialPosts(); // Always display initial posts regardless of login state
+        };
 
-        // Initial setup
-        loadUserProfile(); // Ensure this is called on page load
-        displayInitialPosts();
     </script>
 </body>
 </html>
