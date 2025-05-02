@@ -325,6 +325,7 @@
             display: flex;
             flex-direction: column; /* Stack image and content */
             width: 100%; /* Ensure it takes full column width */
+            position: relative; /* Needed for remove button positioning */
         }
 
         .post-card:hover {
@@ -662,6 +663,38 @@
          .enable-disable-group .btn:not(.active):hover {
              background-color: #334155; /* Medium gray on hover */
          }
+
+         /* Remove Button on Continue Watching Posts */
+        .remove-from-history-btn {
+            position: absolute;
+            top: 8px; /* Adjust position as needed */
+            right: 8px; /* Adjust position as needed */
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+            color: #ef4444; /* Red icon color */
+            border: none;
+            border-radius: 50%; /* Make it round */
+            width: 28px; /* Size of the button */
+            height: 28px; /* Size of the button */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1rem; /* Icon size */
+            transition: background-color 0.2s ease, color 0.2s ease;
+            z-index: 5; /* Ensure it's above the image */
+            opacity: 0; /* Initially hidden */
+            pointer-events: none; /* Disable clicks when hidden */
+        }
+
+        .post-card:hover .remove-from-history-btn {
+            opacity: 1; /* Show on hover */
+            pointer-events: auto; /* Enable clicks on hover */
+        }
+
+        .remove-from-history-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+            color: #f87171; /* Lighter red on hover */
+        }
 
 
         /* Scroll to Top Button */
@@ -1191,7 +1224,7 @@
         function displayInitialPosts() {
             postContainer.innerHTML = ""; // Clear previous posts
             initialPosts.forEach((post) => {
-                const postElement = createPostElement(post);
+                const postElement = createPostElement(post, false); // Pass false for isContinueWatching
                 postContainer.appendChild(postElement);
             });
              // Add skeleton effect initially
@@ -1217,14 +1250,20 @@
         }
 
 
-        function createPostElement(post) {
+        function createPostElement(post, isContinueWatching = false) {
             const postElement = document.createElement("div");
             postElement.classList.add("post-card"); // Use the new post-card class
-            postElement.addEventListener("click", () => {
-                // Redirect to the post URL when clicked
-                window.location.href = post.url;
-                updateViewHistory(post);
-            });
+            postElement.dataset.postId = post.id; // Add data attribute for post ID
+
+            // Add click listener only if it's not the continue watching section (to avoid conflicts with remove button)
+            if (!isContinueWatching) {
+                postElement.addEventListener("click", () => {
+                    // Redirect to the post URL when clicked
+                    window.location.href = post.url;
+                    updateViewHistory(post);
+                });
+            }
+
 
             const imageElement = document.createElement("img");
             imageElement.src = post.imageUrl;
@@ -1247,6 +1286,23 @@
             postElement.appendChild(imageElement);
             postElement.appendChild(contentElement);
 
+            // Add remove button if it's for the Continue Watching section
+            if (isContinueWatching) {
+                const removeButton = document.createElement('button');
+                removeButton.classList.add('remove-from-history-btn');
+                removeButton.innerHTML = '<i class="fas fa-times"></i>'; // Font Awesome times icon
+                removeButton.dataset.postId = post.id; // Store post ID on the button
+
+                removeButton.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Prevent click from triggering the post click
+                    const postIdToRemove = parseInt(event.currentTarget.dataset.postId);
+                    removePostFromHistory(postIdToRemove);
+                });
+
+                postElement.appendChild(removeButton);
+            }
+
+
             return postElement;
         }
 
@@ -1263,6 +1319,22 @@
                 }
             }
         }
+
+        function removePostFromHistory(postId) {
+             if (loggedInUser) {
+                 // Filter out the post with the matching ID
+                 viewHistory = viewHistory.filter(post => post.id !== postId);
+                 // Save the updated history back to localStorage
+                 localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
+                 // Re-render the continue watching section
+                 renderContinueWatching();
+                 // Re-render the history modal if it's open
+                 if (!historyModal.classList.contains('hidden')) {
+                     renderHistory();
+                 }
+             }
+        }
+
 
         function renderHistory() {
             historyList.innerHTML = ""; // Clear previous history items
@@ -1300,7 +1372,7 @@
 
                  // Display the continue watching posts
                  continueWatchingPosts.forEach(post => {
-                     const postElement = createPostElement(post); // Reuse createPostElement
+                     const postElement = createPostElement(post, true); // Pass true for isContinueWatching
                      continueWatchingContainer.appendChild(postElement);
                  });
 
@@ -1356,7 +1428,7 @@
 
             postContainer.innerHTML = ""; // Clear previous posts
             filteredPosts.forEach((post) => {
-                const postElement = createPostElement(post);
+                const postElement = createPostElement(post, false); // Pass false for isContinueWatching
                 postContainer.appendChild(postElement);
             });
             // Add skeleton effect to filtered posts and then remove
