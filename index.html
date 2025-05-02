@@ -56,24 +56,7 @@
             padding-left: 1rem;
             padding-right: 1rem;
         }
-        .grid-cols-1 {
-            grid-template-columns: 1fr; /* 1 column on small screens */
-        }
-        @media (min-width: 640px) {
-            .grid-cols-1 {
-                grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens and up */
-            }
-        }
-        @media (min-width: 768px) {
-            .grid-cols-1 {
-                grid-template-columns: repeat(3, 1fr); /* 3 columns on large screens and up */
-            }
-        }
-        @media (min-width: 1024px) {
-            .grid-cols-1 {
-                grid-template-columns: repeat(4, 1fr); /* 4 columns on extra-large screens */
-            }
-        }
+
         .avatar-option.selected {
             border-color: #ef4444; /* Red border for selected avatar */
             box-shadow: 0 0 8px rgba(239, 68, 68, 0.7); /* Enhanced shadow for selection */
@@ -83,7 +66,7 @@
              transition: transform 0.2s ease-in-out;
         }
 
-        /* Profile Dropdown Styles */
+        /* Profile Dropdown Styles - NEW DESIGN */
         #user-profile {
             position: relative;
             display: inline-flex;
@@ -101,18 +84,19 @@
             position: absolute;
             top: 100%;
             right: 0;
-            background-color: #1e293b;
-            border: 1px solid #374151;
-            border-radius: 0.375rem;
-            padding: 0.5rem 0;
-            margin-top: 0.5rem; /* Increased margin */
-            min-width: 180px; /* Increased min-width */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Darker shadow */
+            background-color: #334155; /* Medium gray background */
+            border: none; /* No border */
+            border-radius: 0.5rem; /* More rounded corners */
+            padding: 0.5rem 0; /* Adjusted padding */
+            margin-top: 0.75rem; /* Increased margin */
+            min-width: 200px; /* Increased min-width */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5); /* Deeper shadow */
             z-index: 10;
             display: none; /* Initially hidden */
             opacity: 0;
             transform: translateY(-10px);
             transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+             overflow: hidden; /* Ensure rounded corners are visible */
         }
         #profile-dropdown.show {
             display: block; /* Show when the show class is added */
@@ -122,20 +106,23 @@
         #profile-dropdown a {
             display: flex; /* Use flexbox for icon and text alignment */
             align-items: center; /* Vertically align items */
-            padding: 0.75rem 1.25rem; /* Increased padding */
+            padding: 0.75rem 1.5rem; /* Increased padding */
             color: #cbd5e1; /* Light gray text */
             text-decoration: none;
             transition: color 0.2s ease, background-color 0.2s ease;
-            font-size: 0.9rem; /* Slightly larger font */
+            font-size: 1rem; /* Slightly larger font */
+             /* No border between items in this design */
         }
+
         #profile-dropdown a i {
-             margin-right: 0.75rem; /* Space between icon and text */
-             width: 1rem; /* Fixed width for icons */
+             margin-right: 1rem; /* More space between icon and text */
+             width: 1.2rem; /* Fixed width for icons */
              text-align: center; /* Center icon */
+             color: #f87171; /* Red color for icons */
         }
         #profile-dropdown a:hover {
             color: #f9fafb; /* White text on hover */
-            background-color: #374151; /* Medium gray background on hover */
+            background-color: #475569; /* Darker gray background on hover */
         }
 
         /* Modal Styles */
@@ -327,7 +314,7 @@
             display: none;
         }
 
-        /* Post Card Styling */
+        /* Post Card Styling - Modified for Portrait */
         .post-card {
             background-color: #1e293b; /* Dark gray background */
             border-radius: 0.75rem; /* More rounded corners */
@@ -335,9 +322,9 @@
             overflow: hidden;
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
             cursor: pointer;
-            display: flex; /* Use flexbox for layout */
+            display: flex;
             flex-direction: column; /* Stack image and content */
-            height: 100%; /* Ensure consistent height */
+            width: 100%; /* Ensure it takes full column width */
         }
 
         .post-card:hover {
@@ -347,7 +334,7 @@
 
         .post-card img {
             width: 100%;
-            height: 200px; /* Fixed height for images */
+            height: 250px; /* Decreased height for smaller portrait */
             object-fit: cover; /* Cover the area without distortion */
             transition: transform 0.3s ease-in-out;
         }
@@ -368,13 +355,66 @@
             font-weight: 600; /* font-semibold */
             color: #f87171; /* Lighter red */
             margin-bottom: 0.5rem;
+             overflow: hidden; /* Hide overflow text */
+            text-overflow: ellipsis; /* Add ellipsis for overflow */
+            white-space: nowrap; /* Prevent wrapping */
         }
 
         .post-card-content p {
             font-size: 0.95rem; /* Slightly larger text */
             color: #cbd5e1; /* Light gray */
             flex-grow: 1; /* Allow description to take space */
+             display: -webkit-box;
+            -webkit-line-clamp: 3; /* Limit to 3 lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+
+        /* Skeleton Screen Styles */
+        .post-card.skeleton {
+            pointer-events: none; /* Disable clicks during skeleton state */
+        }
+
+        .post-card.skeleton img,
+        .post-card.skeleton .post-card-content h3,
+        .post-card.skeleton .post-card-content p {
+            background-color: #334155; /* Medium gray placeholder background */
+            color: transparent; /* Hide text */
+            border-radius: 4px; /* Rounded corners for placeholders */
+            animation: pulse 1.5s infinite ease-in-out; /* Apply pulse animation */
+        }
+
+        .post-card.skeleton img {
+             /* Maintain image dimensions during skeleton state */
+            height: 250px;
+            width: 100%;
+        }
+
+        .post-card.skeleton .post-card-content h3 {
+            height: 1.5rem; /* Placeholder height for title */
+            width: 80%; /* Placeholder width for title */
+            margin-bottom: 0.5rem;
+        }
+
+        .post-card.skeleton .post-card-content p {
+            height: 3.5rem; /* Placeholder height for description (approx 3 lines) */
+            width: 95%; /* Placeholder width for description */
+        }
+
+         /* Remove skeleton styles when not in skeleton state */
+         .post-card:not(.skeleton) img {
+            background-color: transparent;
+            animation: none;
+         }
+         .post-card:not(.skeleton) .post-card-content h3,
+         .post-card:not(.skeleton) .post-card-content p {
+            background-color: transparent;
+            color: #f87171; /* Restore title color */
+            color: #cbd5e1; /* Restore description color */
+            animation: none;
+         }
+
 
         /* Form Input Styling */
         .form-input {
@@ -642,7 +682,7 @@
                 />
             </div>
 
-            <div id="post-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div id="post-container" class="grid grid-cols-2 gap-4">
                 </div>
         </main>
     </div>
@@ -813,34 +853,34 @@
     <script>
         // Data for initial posts (before search)
         const initialPosts = [
-                        { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhL_apWUUxxoj36WYfK-sQFH9K2c_MuiwiVqrAWj0_T9YeiYXLMxEvaUN1187QO08JI_x2PL53rV4xWF4wOFuDKhm-y3Vtnpf3JKVLKtvpMJR4y5k7SCOzftvCcgXkgsBnoeBGsDay7a2FpzXv83NcAWhzsZXaeGb-_Od8gKu5KQqAocGUXEzzm0yWMwPXI/s3264/20250428_073533.jpg", url: "https://anitoono45.github.io/super-mario-bros/" },
-            { id: 2, title: "The glassworker", content: "click to watch.", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9Q2YAvS1DpyuwzkS5FGmzgaUEggnBAAw7R1IQpKYLXQ84RGG-IgQonslBWc8bumg0tluAz31xJMp2Z-bdc0_mGEbRR0MGUMQtMXUeE4r7ntxiP9TKZIAulkiKkzXAdtVK17ivYxHkNNVVhszSreTzlv4Ngg6ULPF2GwiP4Z6nAcbN9PDFxrrkddF7SI1m/s320/20250501_121440.jpg", url: "https://anitoono45.github.io/The-glassworker/" },
-            { id: 3, title: "Anime Title 3", content: "Anime description 3.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=3" },
-            { id: 4, title: "Anime Title 4", content: "Anime description 4.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=4" },
-            { id: 5, title: "Anime Title 5", content: "Anime description 5.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=5" },
-            { id: 6, title: "Anime Title 6", content: "Anime description 6.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=6" },
-            { id: 7, title: "Anime Title 7", content: "Anime description 7.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=7" },
-            { id: 8, title: "Anime Title 8", content: "Anime description 8.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=8" },
-            { id: 9, title: "Anime Title 9", content: "Anime description 9.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=9" },
-            { id: 10, title: "Anime Title 10", content: "Anime description 10.", imageUrl: "https://placehold.co/400x300/EEE/31343C", url: "watch.html?id=10" },
+                        { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ZJ6mD8c41yfKCkzMB31PjOc4lQAHsjBtPblEk8rgFZEKA55VOrvPLaB7Xu7n9NQmvq9H4AMSCMTSE4w6K0DYegjEluUG8aXeNgf3DQEtGga8kbesrTn58botILFHXORCDCEIN7Ar8Q1jn0FDNrOw_orbasxl6jyZE1l9BvDJQO9Mnb3Ae0aut25qCAji/s320/images%20(16).jpeg", url: "https://anitoono45.github.io/super-mario-bros/" },
+            { id: 2, title: "The glassworker", content: "click to watch.", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIUXm_1t8BPBw1giZXIo-ng9wBEWN1sqEUmWBJAb6pgNaR3foGxYsMwOEhV5bfZ01wlB6nRPqOl6A06lmy1VE3BaGVM8QTUotS2fc3ol_dI8XYfCu9BRxYCcDFf0_a-5IujAMnzmvayUeuCNwRVcg6Fx3XwgbTJo5CXiXp2B9yBmZip2vymSkQjIGdeizN/s320/images%20(17).jpeg", url: "https://anitoono45.github.io/The-glassworker/" },
+            { id: 3, title: "Anime Title 3", content: "Anime description 3.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+3", url: "watch.html?id=3" },
+            { id: 4, title: "Anime Title 4", content: "Anime description 4.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+4", url: "watch.html?id=4" },
+            { id: 5, title: "Anime Title 5", content: "Anime description 5.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+5", url: "watch.html?id=5" },
+            { id: 6, title: "Anime Title 6", content: "Anime description 6.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+6", url: "watch.html?id=6" },
+            { id: 7, title: "Anime Title 7", content: "Anime description 7.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+7", url: "watch.html?id=7" },
+            { id: 8, title: "Anime Title 8", content: "Anime description 8.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+8", url: "watch.html?id=8" },
+            { id: 9, title: "Anime Title 9", content: "Anime description 9.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+9", url: "watch.html?id=9" },
+            { id: 10, title: "Anime Title 10", content: "Anime description 10.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+10", url: "watch.html?id=10" },
             // Add your new posts here, like this:
             // { id: 11, title: "New Anime Title 1", content: "Description for new anime.", imageUrl: "URL_OF_YOUR_IMAGE", url: "watch.html?id=11" },
             // { id: 12, title: "New Anime Title 2", content: "Another great show.", imageUrl: "URL_OF_ANOTHER_IMAGE", url: "watch.html?id=12" },
         ];
 
         const avatarImages = [
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh_ca_A9wrVuMNYNAdMBEAmVr38Yjmag2WlX0UUf5N_WxpNAGw4qb9dNUfCxLwM1rBM0l1QOxUmETHQAdqiOHFfUEQMg9aXBIthMj7K1AA8s4Tz9iW6n4jTLJ9rA_BgmJjWLljrdzH5QBlrhILastYFv-xqUGaX2Qb3tGZlSUDu9KIkqoTukabVotXeerZB/s320/images%20(12).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjjXN0Bpdhj1_h9DlhuWzNEe3YTNtlszbxSmVPJW_r6qgd7gayt8DFCct7Sx8DgwAbcWv1jJc2LpB1HbcpnUrjAUHbqYZQwVlBiyACPWRqmmiej278Qi30ohOejsqUmntWcanAy26k6McmKMRrqIjpq3KpakAJsaY3Jh29zMnoqzgEf0sBk8NuvdDzWdGT_/s320/images%20(11).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLywX0IbfA4QLd_SuOlEfXVoS0b-cCfC7GlTRmVdPFAEzAiqa3tA56ncL-oO_9D1RyY-E7LBNetKRv7QyFXrOUOPnAnONhjzUlfxeSmWyXIyKvu91MrgCeUjn-wW6UuoA6QNU05HHmzGp9lnHFhBYmFR4UOASEcdqiyQs3_5dHLbR9I5wfRGGB9VZoEvxw/s320/images%20(2).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2jwXiTITDNaryWwfg6M9dsQgVubEmdnB7YMCINoo3x461EsIsld575Gd58fcKCqvc-cSefLtfv3nicIEoUFKRshcAjB07SuKx6POHk5aXkjcqZ2YzQDAmB_NXoBDEJQbHcmJOS6gBPc2oNGq9DRegcXKyX1hTs7PlN___6djPc90CADsXu4CoWjmDjnDX/s320/images%20(4).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhaHQZq0-mmCLhwBksZgdP2f4kvb9dhAZQnj18Ybp44gSyuFvBh_s5CqOjknay3J6zqA8mSbPEPHFhF3BXG_nJRC5Rm2lGbhnDlhU2yZ8Zpm7VJa7msj02OxO5nViuX4yryhwklae-z1kB-w77uFzqXYIDtRx-QYNxeFFJbb6C9PErjTsLW0_OXCyTJV6Vp/s320/images%20(5).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjLTZ4ZG3T2qklL16G4WRTFB3BFGN-B5dJViu3UhurzaVqdGueXdeHRevqy6jN5iKDZsxnGpWyjIiRvCbEaX9z3NXbWgxPlOAwl0i7_ZPeQ4GE5iuJBT8yhXjbOmRUnFJ-KXBk2kjRgNBXZDZct9lJUrVdunTW661fbWaEAm4AINsda_jaVgKyEFxYdLlyD/s320/images%20(6).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgj8BQrcI51_OMaNoAGctizntzxqFOnQ5rMrc7nnGcjPvYQFvvCAUK6Kj2UgPwT-JoraIiLylOV6YUhwY_ntMiUw9DbcWDNni5SQrdY5SdhjneuGISPF65zZrePrqQ2YKF5LpFkWjrnnK1sjmo31Y-Y0zzJt7vds5wW7bdNtSoeqfFFqOVTwx8A-Zz-tuaW/s320/images%20(7).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMgph7LCDPbAosa6RR0YKqE59bdCCX94_wjHCNwPAPENrKLcEgJQRUyUoj9baUZVNPzhtW8MF4E61MyhU9Q0Bx-9UI57iLYCnfgxVIcM7tKCRmkYlaOKgMVs8J4Sc2IMx9XGyhjv6pietuw8rAnr1y6SjQ9xjwnhc_XSOyDY_dct1NgvZFCRkF2q0F_RQ_/s320/images%20(8).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj2Vo2WUIjen2aktqxxIhzeFpgII5MEKvZPuzDJBxMeyHrwQzAS615EV-MdV7dcmhyphenhyphenT_9n7hVS6xPTf2PjrPWbySLt7EhDAvcXOVn8WCWU9FZ6vo-hpYzTzIR5LZVGKPmnLmuSJsDZIM9aKkkTmno0B9h-_n8smRp_Wj-DA1dWW3YFNbN7omXDHEJqW97DC/s320/images%20(9).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgEDKdFKhlfGAInoUdFLTdpRZ5OGxi27Vnb_Na4cSB7E86N_AuMOnQbXNel0V4WR7gNauEmzISn6fsn8iLumyv1IHOB3Mnz7UAckriREfy5tmEaFQkLQr62muQHf-hOpj-LtjLbpP1Z9O6vbOZM09xT6Yry0KtojLHcOVIU_KzGhxUm4zbiyf65rB0Ecoav/s320/images%20(10).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjLR8ARIsr_qBu60_6V72A37vnDr5rRbYfRnpaKTFJXBLKvy1yHjSewjNdGBEmcqZ3eJoI6nqQGqyEtTIogd5Is_kvSRMj9oBMXiEackLb3NqZON2LZG36dreOchc80Q87PLoIu3lQ7Mf9QjrfnJN6NMgpZDyVFMW3F5lJnmrz30a8cG9bezDM0HIMEWJ4w/s320/images%20(13).jpeg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgbOo5jofekpzVOt7letzrOEiIKeTcZa2GE3Xl6FQzlXB_5pkQdBpHkbMuLjZ-Bv9pxRf8BQvSrR0YAiS3oXDcJg0mdfOWepuwq2CVi0XryrLoAwyz0b8hyGAPlf5XS5pvUAXmowP-nSG8fnSdZAIPBSvjW4UL6nxSPXSxSaPFSimZSbdkRvCh7Ym4bpYqE/s554/images%20(14).jpeg"
+                                              "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh_ca_A9wrVuMNYNAdMBEAmVr38Yjmag2WlX0UUf5N_WxpNAGw4qb9dNUfCxLwM1rBM0l1QOxUmETHQAdqiOHFfUEQMg9aXBIthMj7K1AA8s4Tz9iW6n4jTLJ9rA_BgmJjWLljrdzH5QBlrhILastYFv-xqUGaX2Qb3tGZlSUDu9KIkqoTukabVotXeerZB/s320/images%20(12).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjjXN0Bpdhj1_h9DlhuWzNEe3YTNtlszbxSmVPJW_r6qgd7gayt8DFCct7Sx8DgwAbcWv1jJc2LpB1HbcpnUrjAUHbqYZQwVlBiyACPWRqmmiej278Qi30ohOejsqUmntWcanAy26k6McmKMRrqIjpq3KpakAJsaY3Jh29zMnoqzgEf0sBk8NuvdDzWdGT_/s320/images%20(11).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLywX0IbfA4QLd_SuOlEfXVoS0b-cCfC7GlTRmVdPFAEzAiqa3tA56ncL-oO_9D1RyY-E7LBNetKRv7QyFXrOUOPnAnONhjzUlfxeSmWyXIyKvu91MrgCeUjn-wW6UuoA6QNU05HHmzGp9lnHFhBYmFR4UOASEcdqiyQs3_5dHLbR9I5wfRGGB9VZoEvxw/s320/images%20(2).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2jwXiTITDNaryWwfg6M9dsQgVubEmdnB7YMCINoo3x461EsIsld575Gd58fcKCqvc-cSefLtfv3nicIEoUFKRshcAjB07SuKx6POHk5aXkjcqZ2YzQDAmB_NXoBDEJQbHcmJOS6gBPc2oNGq9DRegcXKyX1hTs7PlN___6djPc90CADsXu4CoWjmDjnDX/s320/images%20(4).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhaHQZq0-mmCLhwBksZgdP2f4kvb9dhAZQnj18Ybp44gSyuFvBh_s5CqOjknay3J6zqA8mSbPEPHFhF3BXG_nJRC5Rm2lGbhnDlhU2yZ8Zpm7VJa7msj02OxO5nViuX4yryhwklae-z1kB-w77uFzqXYIDtRx-QYNxeFFJbb6C9PErjTsLW0_OXCyTJV6Vp/s320/images%20(5).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjLTZ4ZG3T2qklL16G4WRTFB3BFGN-B5dJViu3UhurzaVqdGueXdeHRevqy6jN5iKDZsxnGpWyjIiRvCbEaX9z3NXbWgxPlOAwl0i7_ZPeQ4GE5iuJBT8yhXjbOmRUnFJ-KXBk2kjRgNBXZDZct9lJUrVdunTW661fbWaEAm4AINsda_jaVgKyEFxYdLlyD/s320/images%20(6).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgj8BQrcI51_OMaNoAGctizntzxqFOnQ5rMrc7nnGcjPvYQFvvCAUK6Kj2UgPwT-JoraIiLylOV6YUhwY_ntMiUw9DbcWDNni5SQrdY5SdhjneuGISPF65zZrePrqQ2YKF5LpFkWjrnnK1sjmo31Y-Y0zzJt7vds5wW7bdNtSoeqfFFqOVTwx8A-Zz-tuaW/s320/images%20(7).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMgph7LCDPbAosa6RR0YKqE59bdCCX94_wjHCNwPAPENrKLcEgJQRUyUoj9baUZVNPzhtW8MF4E61MyhU9Q0Bx-9UI57iLYCnfgxVIcM7tKCRmkYlaOKgMVs8J4Sc2IMx9XGyhjv6pietuw8rAnr1y6SjQ9xjwnhc_XSOyDY_dct1NgvZFCRkF2q0F_RQ_/s320/images%20(8).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj2Vo2WUIjen2aktqxxIhzeFpgII5MEKvZPuzDJBxMeyHrwQzAS615EV-MdV7dcmhyphenhyphenT_9n7hVS6xPTf2PjrPWbySLt7EhDAvcXOVn8WCWU9FZ6vo-hpYzTzIR5LZVGKPmnLmuSJsDZIM9aKkkTmno0B9h-_n8smRp_Wj-DA1dWW3YFNbN7omXDHEJqW97DC/s320/images%20(9).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgEDKdFKhlfGAInoUdFLTdpRZ5OGxi27Vnb_Na4cSB7E86N_AuMOnQbXNel0V4WR7gNauEmzISn6fsn8iLumyv1IHOB3Mnz7UAckriREfy5tmEaFQkLQr62muQHf-hOpj-LtjLbpP1Z9O6vbOZM09xT6Yry0KtojLHcOVIU_KzGhxUm4zbiyf65rB0Ecoav/s320/images%20(10).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjLR8ARIsr_qBu60_6V72A37vnDr5rRbYfRnpaKTFJXBLKvy1yHjSewjNdGBEmcqZ3eJoI6nqQGqyEtTIogd5Is_kvSRMj9oBMXiEackLb3NqZON2LZG36dreOchc80Q87PLoIu3lQ7Mf9QjrfnJN6NMgpZDyVFMW3F5lJnmrz30a8cG9bezDM0HIMEWJ4w/s320/images%20(13).jpeg",
+                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgbOo5jofekpzVOt7letzrOEiIKeTcZa2GE3Xl6FQzlXB_5pkQdBpHkbMuLjZ-Bv9pxRf8BQvSrR0YAiS3oXDcJg0mdfOWepuwq2CVi0XryrLoAwyz0b8hyGAPlf5XS5pvUAXmowP-nSG8fnSdZAIPBSvjW4UL6nxSPXSxSaPFSimZSbdkRvCh7Ym4bpYqE/s554/images%20(14).jpeg"
         ];
 
 
@@ -912,7 +952,9 @@
              localStorage.removeItem("loggedInUser"); // Clear invalid data
         }
 
-        let viewHistory = JSON.parse(localStorage.getItem("viewHistory")) || [];
+        // Initialize viewHistory based on loggedInUser
+        let viewHistory = loggedInUser ? (JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || []) : [];
+
 
         // Sample notification data (for demo)
         const sampleNotifications = [
@@ -1040,7 +1082,28 @@
                 const postElement = createPostElement(post);
                 postContainer.appendChild(postElement);
             });
+             // Add skeleton effect initially
+            addSkeletonEffect();
         }
+
+         // Function to add skeleton effect
+        function addSkeletonEffect() {
+            const postCards = document.querySelectorAll('.post-card');
+            postCards.forEach(card => {
+                card.classList.add('skeleton');
+            });
+        }
+
+        // Function to remove skeleton effect after a delay
+        function removeSkeletonEffect(delay = 1500) { // Default delay of 1.5 seconds
+            setTimeout(() => {
+                const postCards = document.querySelectorAll('.post-card.skeleton');
+                postCards.forEach(card => {
+                    card.classList.remove('skeleton');
+                });
+            }, delay);
+        }
+
 
         function createPostElement(post) {
             const postElement = document.createElement("div");
@@ -1076,16 +1139,22 @@
         }
 
          function updateViewHistory(post) {
-            // Check if the post is already in history
-            const postInHistory = viewHistory.find(item => item.id === post.id);
-            if (!postInHistory) {
-                viewHistory.push(post);
-                localStorage.setItem('viewHistory', JSON.stringify(viewHistory));
+            if (loggedInUser) { // Only update history if a user is logged in
+                // Check if the post is already in history
+                const postInHistory = viewHistory.find(item => item.id === post.id);
+                if (!postInHistory) {
+                    viewHistory.push(post);
+                    // Save history to localStorage using the logged-in user's email as key
+                    localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
+                }
             }
         }
 
         function renderHistory() {
             historyList.innerHTML = ""; // Clear previous history items
+             // Load history for the currently logged-in user
+            viewHistory = loggedInUser ? (JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || []) : [];
+
             if (viewHistory.length === 0) {
                 const listItem = document.createElement("li");
                 listItem.textContent = "Your viewing history is empty.";
@@ -1115,6 +1184,9 @@
                 const postElement = createPostElement(post);
                 postContainer.appendChild(postElement);
             });
+            // Add skeleton effect to filtered posts and then remove
+            addSkeletonEffect();
+            removeSkeletonEffect(500); // Shorter delay for search results
         }
 
         function renderAvatarOptions(container, selectedAvatarInput, currentAvatar = null) {
@@ -1155,6 +1227,10 @@
                 avatarImg.src = loggedInUser.avatar; // This sets the avatar source
                 usernameSpan.textContent = loggedInUser.username;
 
+                 // Load the history for the logged-in user
+                viewHistory = JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || [];
+
+
                 // Show/hide Add Account and Switch Account links based on user count
                 if (users.length < ACCOUNT_LIMIT) {
                     addAccountLink.classList.remove('hidden');
@@ -1178,6 +1254,9 @@
                 usernameSpan.textContent = ''; // Clear the username text
                  // Ensure the dropdown is hidden when the profile is hidden
                 profileDropdown.classList.add('hidden');
+
+                 // Clear the view history as no user is logged in
+                viewHistory = [];
 
                  // Hide multi-account links
                  addAccountLink.classList.add('hidden');
@@ -1231,8 +1310,10 @@
                                 localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
                                 closeModal('switch-account-modal');
                                 // Reload profile and posts for the new user
-                                loadUserProfile(); // Update header and links
-                                displayInitialPosts();
+                                loadUserProfile(); // Update header and links (this will also load the correct history)
+                                displayInitialPosts(); // Display posts for the new user and add skeleton effect
+                                removeSkeletonEffect(); // Remove skeleton effect after a delay
+
                                  // Remove loading indicator (optional, as modal closes)
                                  accountOption.classList.remove('switching');
                                  loadingText.remove();
@@ -1325,9 +1406,10 @@
                 loggedInUser = user;
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
                 closeModal('login-modal');
-                 // Re-run loadUserProfile after successful login to update header and account links
+                 // Re-run loadUserProfile after successful login to update header and account links (this will also load the correct history)
                 loadUserProfile();
-                displayInitialPosts(); // Redisplay posts after successful login
+                displayInitialPosts(); // Redisplay posts after successful login and add skeleton effect
+                removeSkeletonEffect(); // Remove skeleton effect after a delay
             } else {
                 displayMessage(loginForm, 'Invalid credentials. Please try again.', 'error');
             }
@@ -1420,9 +1502,16 @@
             localStorage.setItem("users", JSON.stringify(users));
             loggedInUser = newUser; // Automatically log in the new user
             localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+             // Initialize history for the new user
+            viewHistory = [];
+            localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
+
+
             closeModal('signup-modal');
             loadUserProfile(); // Call loadUserProfile after successful signup to update header and account links
-            displayInitialPosts(); // Redisplay posts after successful signup
+            displayInitialPosts(); // Redisplay posts after successful signup and add skeleton effect
+            removeSkeletonEffect(); // Remove skeleton effect after a delay
         });
 
         logoutBtn.addEventListener("click", (event) => {
@@ -1453,8 +1542,9 @@
                          loadingOverlay.style.display = 'none';
                          loadingOverlay.style.opacity = '1';
                          mainContentDiv.style.display = 'block';
-                         loadUserProfile(); // Update header and links based on the new loggedInUser
-                         displayInitialPosts(); // Display posts for the new user
+                         loadUserProfile(); // Update header and links based on the new loggedInUser (this will also load the correct history)
+                         displayInitialPosts(); // Display posts for the new user and add skeleton effect
+                         removeSkeletonEffect(); // Remove skeleton effect after a delay
                      }, 500);
                  }, 1000); // Simulate 1 second switch time
 
@@ -1463,8 +1553,10 @@
                 // No other accounts, proceed with regular logout
                 loggedInUser = null;
                 localStorage.removeItem("loggedInUser");
+                viewHistory = []; // Clear history when no user is logged in
                 loadUserProfile(); // Call loadUserProfile to update UI (show login icon)
-                displayInitialPosts(); // Redisplay posts (might show default content or require login)
+                displayInitialPosts(); // Redisplay posts (might show default content or require login) and add skeleton effect
+                removeSkeletonEffect(); // Remove skeleton effect after a delay
             }
 
              // Hide the dropdown after logging out/switching
@@ -1538,24 +1630,26 @@
         historyLink.addEventListener('click', (event) => {
             event.preventDefault(); // Prevent default link behavior
             profileDropdown.classList.remove('show'); // Hide the dropdown
-            renderHistory(); // Render the history list
+            renderHistory(); // Render the history list for the current user
             openModal('history-modal'); // Open the history modal
         });
 
         // Event listener for the Clear History button in the History modal
         clearHistoryBtn.addEventListener("click", () => {
-            viewHistory = [];
-            localStorage.removeItem('viewHistory');
-            renderHistory(); // Re-render history to show it's empty
+             if (loggedInUser) { // Only clear history if a user is logged in
+                viewHistory = [];
+                localStorage.removeItem(`history_${loggedInUser.email}`); // Remove history for this specific user
+                renderHistory(); // Re-render history to show it's empty
 
-            const historyModalContent = historyModal.querySelector('.modal-content');
-            displayMessage(historyModalContent, 'View history cleared!', 'success');
+                const historyModalContent = historyModal.querySelector('.modal-content');
+                displayMessage(historyModalContent, 'View history cleared!', 'success');
 
-            // Optionally, hide the message after a delay
-            setTimeout(() => {
-                 const messageBox = historyModalContent.querySelector('.message-box');
-                 if (messageBox) messageBox.remove();
-            }, 2000); // Hide after 2 seconds
+                // Optionally, hide the message after a delay
+                setTimeout(() => {
+                    const messageBox = historyModalContent.querySelector('.message-box');
+                    if (messageBox) messageBox.remove();
+                }, 2000); // Hide after 2 seconds
+             }
         });
 
 
@@ -1771,10 +1865,11 @@
                      // Now that the loading is done and main content is visible,
                      // call loadUserProfile again to ensure correct header state
                      // and display initial posts.
-                     loadUserProfile(); // Re-run to set header based on final loggedInUser state
-                     displayInitialPosts(); // Display posts
+                     loadUserProfile(); // Re-run to set header based on final loggedInUser state (this will also load the correct history)
+                     displayInitialPosts(); // Display posts and add skeleton effect
+                     removeSkeletonEffect(); // Remove skeleton effect after a delay
                 }, 500); // Match CSS transition duration
-            }, 3000); // 3 seconds delay
+            }, 3000); // 3 seconds delay for initial loading screen
         };
 
     </script>
