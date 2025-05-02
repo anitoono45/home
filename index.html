@@ -415,6 +415,37 @@
             animation: none;
          }
 
+        /* Continue Watching Section Styles */
+        #continue-watching-section {
+            margin-bottom: 2rem; /* Space below the section */
+             padding-bottom: 1.5rem; /* Add padding at the bottom */
+            border-bottom: 1px solid #334155; /* Subtle separator */
+        }
+
+        #continue-watching-section h2 {
+            font-size: 1.75rem; /* Larger title */
+            font-weight: 700; /* Bold title */
+            margin-bottom: 1.5rem; /* Space below the title */
+            color: #f87171; /* Match heading color */
+        }
+
+        #continue-watching-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid */
+            gap: 1rem; /* Space between items */
+             /* Ensure grid items stretch to fill the row height */
+            align-items: stretch;
+        }
+
+         /* Main Post Container Styles */
+        #post-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid */
+            gap: 1rem; /* Space between items */
+             /* Ensure grid items stretch to fill the row height */
+            align-items: stretch;
+        }
+
 
         /* Form Input Styling */
         .form-input {
@@ -501,8 +532,8 @@
             border: 1px solid #10b981; /* Green border */
          }
 
-         /* Switch Account Modal Styles */
-        #switch-account-modal {
+         /* Bottom Sheet Modal Styles (for Settings and Switch Account) */
+        .modal-bottom-sheet {
             position: fixed;
             bottom: 0; /* Start from the bottom */
             left: 0;
@@ -521,11 +552,11 @@
             overflow-y: auto; /* Allow scrolling if content exceeds max height */
         }
 
-        #switch-account-modal.show {
+        .modal-bottom-sheet.show {
             transform: translateY(0); /* Slide up into view */
         }
 
-        #switch-account-modal .modal-content {
+        .modal-bottom-sheet .modal-content {
              /* Override some modal-content styles for the bottom sheet */
             background-color: transparent; /* No background color */
             box-shadow: none; /* No shadow */
@@ -535,7 +566,7 @@
             animation: none; /* No entry animation */
         }
 
-        #switch-account-modal .modal-close-button {
+        .modal-bottom-sheet .modal-close-button {
             position: static; /* Remove absolute positioning */
             align-self: flex-end; /* Align to the right */
             margin-bottom: 1rem; /* Add space below */
@@ -588,6 +619,51 @@
              margin-left: 1rem;
         }
 
+        /* Setting Option Row */
+        .setting-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0; /* Padding for each setting row */
+            border-bottom: 1px solid #334155; /* Separator */
+        }
+
+        .setting-option:last-child {
+            border-bottom: none; /* No border for the last item */
+        }
+
+        .setting-option label {
+            font-size: 1rem;
+            color: #cbd5e1;
+            flex-grow: 1; /* Allow label to take space */
+            margin-right: 1rem; /* Space between label and buttons */
+        }
+
+         /* Enable/Disable Button Group */
+        .enable-disable-group {
+            display: flex;
+            gap: 0.5rem; /* Space between buttons */
+        }
+
+        .enable-disable-group .btn {
+            padding: 0.5rem 1rem; /* Smaller padding for these buttons */
+            font-size: 0.9rem; /* Smaller font size */
+        }
+
+        .enable-disable-group .btn.active {
+            background-color: #ef4444; /* Red for active */
+            color: #f9fafb; /* White text */
+        }
+
+        .enable-disable-group .btn:not(.active) {
+             background-color: #475569; /* Darker gray for inactive */
+             color: #cbd5e1; /* Light gray text */
+        }
+         .enable-disable-group .btn:not(.active):hover {
+             background-color: #334155; /* Medium gray on hover */
+         }
+
+
         /* Scroll to Top Button */
         #scroll-to-top-btn {
             display: none; /* Hidden by default */
@@ -635,7 +711,7 @@
     </div>
 
     <div id="main-content">
-        <header class="bg-gray-800 py-4 flex justify-between items-center shadow-md sticky top-0 z-10 rounded-md">
+        <header class="bg-gray-800 py-3 flex justify-between items-center shadow-md sticky top-0 z-10 rounded-md">
             <div class="logo text-red-500 text-2xl font-semibold ml-4">Anitoono</div>
             <div class="mr-4 flex items-center space-x-4">
                  <button id="notification-button">
@@ -682,7 +758,13 @@
                 />
             </div>
 
-            <div id="post-container" class="grid grid-cols-2 gap-4">
+            <div id="continue-watching-section" class="hidden">
+                <h2>Continue Watching</h2>
+                <div id="continue-watching-container">
+                    </div>
+            </div>
+
+            <div id="post-container">
                 </div>
         </main>
     </div>
@@ -755,27 +837,45 @@
         </div>
     </div>
 
-    <div id="settings-modal" class="modal hidden">
+    <div id="settings-modal" class="modal-bottom-sheet hidden">
         <div class="modal-content">
              <span class="modal-close-button" onclick="closeModal('settings-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Settings</h2>
-            <div class="space-y-6">
-                 <div>
-                    <label for="change-username" class="block text-gray-300 text-sm font-bold mb-2">Change Username:</label>
-                    <input type="text" id="change-username" class="form-input">
-                    <div id="change-username-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
-                </div>
-                <button id="save-username-btn" class="btn btn-primary w-full">Save Username</button>
+            <div class="space-y-4">
+                 <div class="setting-option">
+                    <label for="change-username">Change Username:</label>
+                    <input type="text" id="change-username" class="form-input flex-grow ml-4">
+                    </div>
+                 <div id="change-username-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
+                 <button id="save-username-btn" class="btn btn-primary w-full mt-4">Save Username</button>
 
-                <div>
-                    <label for="change-avatar" class="block text-gray-300 text-sm font-bold mb-2">Change Avatar:</label>
+
+                <div class="setting-option flex-col items-start">
+                    <label for="change-avatar" class="mb-2">Change Avatar:</label>
                      <div class="flex flex-wrap gap-3" id="settings-avatar-options-container">
                         </div>
                     <input type="hidden" id="settings-avatar" name="settings-avatar" value="">
                     <div id="settings-avatar-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
 
-                <button onclick="closeModal('settings-modal')" class="btn btn-secondary w-full">Close</button>
+                <div class="setting-option">
+                    <label>Enable Continue Watching:</label>
+                    <div class="enable-disable-group">
+                        <button class="btn btn-secondary" id="enable-continue-watching-btn">Enable</button>
+                        <button class="btn btn-secondary" id="disable-continue-watching-btn">Disable</button>
+                    </div>
+                </div>
+
+                 <div class="setting-option">
+                    <label>Save Viewing History:</label>
+                    <div class="enable-disable-group">
+                        <button class="btn btn-secondary" id="enable-save-history-btn">Enable</button>
+                        <button class="btn btn-secondary" id="disable-save-history-btn">Disable</button>
+                    </div>
+                </div>
+
+
+                <button onclick="closeModal('settings-modal')" class="btn btn-secondary w-full mt-6">Close</button>
             </div>
         </div>
     </div>
@@ -836,7 +936,7 @@
         </div>
     </div>
 
-     <div id="switch-account-modal" class="hidden">
+     <div id="switch-account-modal" class="modal-bottom-sheet hidden">
         <div class="modal-content">
              <span class="modal-close-button" onclick="closeModal('switch-account-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Switch Account</h2>
@@ -885,7 +985,6 @@
             "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiFo74xshPdL1B1MvVmvpdyenYwgJXQ-J1O35J_lY0Jc7usutM_0CjcnRBjElRZUCFfcEakTJooZ4jgc4Ue7uF8PBqoj5Bj_DsBJmVtJIdOXpcPyYAZUGm5AqDM0jDTlotmImDyg1AD6t9Ua265D0TAwVPaoMyU5Hu3ycy0x0p78OXGhyphenhyphenvyCrJxmbIlENPQ/s320/b7889fadbcb5ba406e459ceaafe63ec7.jpg",
             "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwIJ9ntvynjV7W8iCtPYT6wEft5HVfKXpaKTvjnTLlpj012mOXAkB6c1kd8w823fZv93mLzPZJ5zN0O8UDHd6woKMyEygwU6WqXS6Q9di9CrUATTQ7kqlacvlYKkjbPeBJVxG6EOUWwvMt15wT3WzmQi4rhQo-7UK0O7fhimF5WpgzMxfZK3RKlqcshjGH/s736/674a3c41f18db2e52b81632d54efca75.jpg",
             "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhz8YpI3dFaT6hsN3uDhat7OrCLhY7SZk9mwb8sTz1rGcYx8pDNDyUjpO_PfMQPXnheGfyMyrRa1f3ZP7N1UTPvVLMhuqVNQTzcly9xMH_8lii3VozgUNgwhFwdxeyXXgmyzNTGeDP-0zHLPKx6wqWB-h4_1g7_KBrIz_9daUj0J4MUCg54930HQ21PUX59/s320/10ed0c3d6a489f246dddf84788115520.jpg",
-            
         ];
 
 
@@ -934,6 +1033,16 @@
         const notificationList = document.getElementById("notification-list"); // New notification list element
         const scrollToTopBtn = document.getElementById("scroll-to-top-btn"); // Get the scroll to top button
 
+        // New Continue Watching Elements
+        const continueWatchingSection = document.getElementById('continue-watching-section');
+        const continueWatchingContainer = document.getElementById('continue-watching-container');
+
+        // New Settings Buttons (replacing toggles)
+        const enableContinueWatchingBtn = document.getElementById('enable-continue-watching-btn');
+        const disableContinueWatchingBtn = document.getElementById('disable-continue-watching-btn');
+        const enableSaveHistoryBtn = document.getElementById('enable-save-history-btn');
+        const disableSaveHistoryBtn = document.getElementById('disable-save-history-btn');
+
 
         // New Loading Screen Elements
         const loadingOverlay = document.getElementById("loading-overlay");
@@ -960,6 +1069,9 @@
         // Initialize viewHistory based on loggedInUser
         let viewHistory = loggedInUser ? (JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || []) : [];
 
+        // Initialize settings based on loggedInUser or defaults
+        let userSettings = loggedInUser ? (JSON.parse(localStorage.getItem(`settings_${loggedInUser.email}`)) || { enableContinueWatching: true, saveHistory: true }) : { enableContinueWatching: true, saveHistory: true };
+
 
         // Sample notification data (for demo)
         const sampleNotifications = [
@@ -978,7 +1090,7 @@
             const modal = document.getElementById(modalId);
             modal.classList.remove("hidden");
              // Add 'show' class for bottom sheet animation
-            if (modalId === 'switch-account-modal') {
+            if (modal.classList.contains('modal-bottom-sheet')) {
                  setTimeout(() => { // Allow display:flex to apply before adding show
                      modal.classList.add("show");
                  }, 10); // Small delay
@@ -990,7 +1102,7 @@
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             // Remove 'show' class for bottom sheet animation
-            if (modalId === 'switch-account-modal') {
+            if (modal.classList.contains('modal-bottom-sheet')) {
                  modal.classList.remove("show");
                  setTimeout(() => { // Hide completely after animation
                      modal.classList.add("hidden");
@@ -1028,7 +1140,7 @@
                  newPasscodeError.style.display = "none";
                  confirmNewPasscodeError.style.display = "none";
                   // Remove any previous messages
-                 const existingMessage = resetPasscodeModal.querySelector('.message-box');
+                 const existingMessage = resetPasscodeModal.querySelector('.modal-content').querySelector('.message-box');
                  if (existingMessage) {
                      existingMessage.remove();
                  }
@@ -1037,7 +1149,7 @@
                  changeUsernameInput.value = '';
                  changeUsernameError.style.display = 'none';
                  // Remove any previous messages
-                 const existingMessage = settingsModal.querySelector('.message-box');
+                 const existingMessage = settingsModal.querySelector('.modal-content').querySelector('.message-box');
                  if (existingMessage) {
                      existingMessage.remove();
                  }
@@ -1051,9 +1163,9 @@
         }
 
          // Helper function to display messages (errors or success)
-         function displayMessage(formElement, message, type) {
-            // Remove any existing message boxes
-            const existingMessage = formElement.querySelector('.message-box');
+         function displayMessage(containerElement, message, type) {
+            // Remove any existing message boxes within the specific container
+            const existingMessage = containerElement.querySelector('.message-box');
             if (existingMessage) {
                 existingMessage.remove();
             }
@@ -1062,13 +1174,8 @@
             messageDiv.classList.add('message-box', type);
             messageDiv.textContent = message;
 
-             // Insert message before the submit button or at the end of the form
-             const submitButton = formElement.querySelector('button[type="submit"]');
-             if (submitButton) {
-                 formElement.insertBefore(messageDiv, submitButton);
-             } else {
-                 formElement.appendChild(messageDiv);
-             }
+             // Insert message at the beginning of the container
+             containerElement.insertBefore(messageDiv, containerElement.firstChild);
          }
 
 
@@ -1093,7 +1200,7 @@
 
          // Function to add skeleton effect
         function addSkeletonEffect() {
-            const postCards = document.querySelectorAll('.post-card');
+            const postCards = document.querySelectorAll('#post-container .post-card'); // Only target main posts
             postCards.forEach(card => {
                 card.classList.add('skeleton');
             });
@@ -1102,7 +1209,7 @@
         // Function to remove skeleton effect after a delay
         function removeSkeletonEffect(delay = 1500) { // Default delay of 1.5 seconds
             setTimeout(() => {
-                const postCards = document.querySelectorAll('.post-card.skeleton');
+                const postCards = document.querySelectorAll('#post-container .post-card.skeleton'); // Only target main posts
                 postCards.forEach(card => {
                     card.classList.remove('skeleton');
                 });
@@ -1144,13 +1251,15 @@
         }
 
          function updateViewHistory(post) {
-            if (loggedInUser) { // Only update history if a user is logged in
+            if (loggedInUser && userSettings.saveHistory) { // Only update history if a user is logged in AND history saving is enabled
                 // Check if the post is already in history
                 const postInHistory = viewHistory.find(item => item.id === post.id);
                 if (!postInHistory) {
                     viewHistory.push(post);
                     // Save history to localStorage using the logged-in user's email as key
                     localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
+                     // Update continue watching section immediately after adding to history
+                    renderContinueWatching();
                 }
             }
         }
@@ -1176,6 +1285,67 @@
                 }
             }
         }
+
+        function renderContinueWatching() {
+             continueWatchingContainer.innerHTML = ""; // Clear previous continue watching posts
+
+            if (loggedInUser && userSettings.enableContinueWatching && viewHistory.length > 0) { // Check if continue watching is enabled
+                 continueWatchingSection.classList.remove('hidden'); // Show the section
+
+                 // Filter initialPosts to find the ones in the current user's history
+                 // Display in reverse order (most recent first)
+                 const continueWatchingPosts = initialPosts.filter(post =>
+                     viewHistory.some(historyItem => historyItem.id === post.id)
+                 ).reverse(); // Reverse to show most recent first
+
+                 // Display the continue watching posts
+                 continueWatchingPosts.forEach(post => {
+                     const postElement = createPostElement(post); // Reuse createPostElement
+                     continueWatchingContainer.appendChild(postElement);
+                 });
+
+            } else {
+                 continueWatchingSection.classList.add('hidden'); // Hide the section if no user, continue watching disabled, or empty history
+            }
+        }
+
+        function saveUserSettings() {
+             if (loggedInUser) {
+                localStorage.setItem(`settings_${loggedInUser.email}`, JSON.stringify(userSettings));
+             }
+        }
+
+        function loadUserSettings() {
+             if (loggedInUser) {
+                userSettings = JSON.parse(localStorage.getItem(`settings_${loggedInUser.email}`)) || { enableContinueWatching: true, saveHistory: true };
+             } else {
+                 // Default settings if not logged in
+                 userSettings = { enableContinueWatching: true, saveHistory: true };
+             }
+             // Update the button states in the settings modal when loaded
+             updateSettingsButtonStates();
+        }
+
+         function updateSettingsButtonStates() {
+             if (enableContinueWatchingBtn && disableContinueWatchingBtn) {
+                 if (userSettings.enableContinueWatching) {
+                     enableContinueWatchingBtn.classList.add('active');
+                     disableContinueWatchingBtn.classList.remove('active');
+                 } else {
+                     enableContinueWatchingBtn.classList.remove('active');
+                     disableContinueWatchingBtn.classList.add('active');
+                 }
+             }
+             if (enableSaveHistoryBtn && disableSaveHistoryBtn) {
+                 if (userSettings.saveHistory) {
+                     enableSaveHistoryBtn.classList.add('active');
+                     disableSaveHistoryBtn.classList.remove('active');
+                 } else {
+                     enableSaveHistoryBtn.classList.remove('active');
+                     disableSaveHistoryBtn.classList.add('active');
+                 }
+             }
+         }
 
 
         function handleSearch() {
@@ -1235,6 +1405,8 @@
                  // Load the history for the logged-in user
                 viewHistory = JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || [];
 
+                 // Load settings for the logged-in user
+                loadUserSettings();
 
                 // Show/hide Add Account and Switch Account links based on user count
                 if (users.length < ACCOUNT_LIMIT) {
@@ -1247,6 +1419,9 @@
                 } else {
                      switchAccountLink.classList.add('hidden');
                 }
+
+                // Render continue watching section for the logged-in user (respects settings)
+                renderContinueWatching();
 
 
             } else {
@@ -1262,10 +1437,17 @@
 
                  // Clear the view history as no user is logged in
                 viewHistory = [];
+                 // Reset settings to default when not logged in
+                 userSettings = { enableContinueWatching: true, saveHistory: true };
+
 
                  // Hide multi-account links
                  addAccountLink.classList.add('hidden');
                  switchAccountLink.classList.add('hidden');
+
+                 // Hide continue watching section when not logged in
+                 continueWatchingSection.classList.add('hidden');
+                 continueWatchingContainer.innerHTML = ""; // Clear continue watching posts
             }
         }
 
@@ -1315,7 +1497,7 @@
                                 localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
                                 closeModal('switch-account-modal');
                                 // Reload profile and posts for the new user
-                                loadUserProfile(); // Update header and links (this will also load the correct history)
+                                loadUserProfile(); // Update header and links (this will also load the correct history and render continue watching)
                                 displayInitialPosts(); // Display posts for the new user and add skeleton effect
                                 removeSkeletonEffect(); // Remove skeleton effect after a delay
 
@@ -1411,7 +1593,7 @@
                 loggedInUser = user;
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
                 closeModal('login-modal');
-                 // Re-run loadUserProfile after successful login to update header and account links (this will also load the correct history)
+                 // Re-run loadUserProfile after successful login to update header and account links (this will also load the correct history and render continue watching)
                 loadUserProfile();
                 displayInitialPosts(); // Redisplay posts after successful login and add skeleton effect
                 removeSkeletonEffect(); // Remove skeleton effect after a delay
@@ -1512,9 +1694,13 @@
             viewHistory = [];
             localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
 
+             // Initialize default settings for the new user
+             userSettings = { enableContinueWatching: true, saveHistory: true };
+             saveUserSettings();
+
 
             closeModal('signup-modal');
-            loadUserProfile(); // Call loadUserProfile after successful signup to update header and account links
+            loadUserProfile(); // Call loadUserProfile after successful signup to update header and account links and render continue watching
             displayInitialPosts(); // Redisplay posts after successful signup and add skeleton effect
             removeSkeletonEffect(); // Remove skeleton effect after a delay
         });
@@ -1547,7 +1733,7 @@
                          loadingOverlay.style.display = 'none';
                          loadingOverlay.style.opacity = '1';
                          mainContentDiv.style.display = 'block';
-                         loadUserProfile(); // Update header and links based on the new loggedInUser (this will also load the correct history)
+                         loadUserProfile(); // Update header and links based on the new loggedInUser (this will also load the correct history and render continue watching)
                          displayInitialPosts(); // Display posts for the new user and add skeleton effect
                          removeSkeletonEffect(); // Remove skeleton effect after a delay
                      }, 500);
@@ -1559,7 +1745,8 @@
                 loggedInUser = null;
                 localStorage.removeItem("loggedInUser");
                 viewHistory = []; // Clear history when no user is logged in
-                loadUserProfile(); // Call loadUserProfile to update UI (show login icon)
+                 userSettings = { enableContinueWatching: true, saveHistory: true }; // Reset settings to default
+                loadUserProfile(); // Call loadUserProfile to update UI (show login icon) and hide continue watching
                 displayInitialPosts(); // Redisplay posts (might show default content or require login) and add skeleton effect
                 removeSkeletonEffect(); // Remove skeleton effect after a delay
             }
@@ -1571,6 +1758,8 @@
         settingsBtn.addEventListener("click", (event) => {
             event.preventDefault(); // Prevent default link behavior
             profileDropdown.classList.remove('show'); // Hide the dropdown
+             // Load current settings before opening the modal
+            loadUserSettings();
             openModal('settings-modal');
              // Render avatar options for settings, pre-selecting the current avatar
             if(loggedInUser) {
@@ -1583,7 +1772,7 @@
         // Event listener for saving username change
         saveUsernameBtn.addEventListener('click', () => {
             const newUsername = changeUsernameInput.value.trim();
-             // Clear previous messages and errors
+             // Clear previous messages and errors within the settings modal content
             const settingsModalContent = settingsModal.querySelector('.modal-content');
             const existingMessage = settingsModalContent.querySelector('.message-box');
              if (existingMessage) {
@@ -1645,6 +1834,7 @@
                 viewHistory = [];
                 localStorage.removeItem(`history_${loggedInUser.email}`); // Remove history for this specific user
                 renderHistory(); // Re-render history to show it's empty
+                 renderContinueWatching(); // Update continue watching section
 
                 const historyModalContent = historyModal.querySelector('.modal-content');
                 displayMessage(historyModalContent, 'View history cleared!', 'success');
@@ -1686,6 +1876,46 @@
             }
         });
 
+        // Event listeners for the new settings buttons
+        if (enableContinueWatchingBtn && disableContinueWatchingBtn && enableSaveHistoryBtn && disableSaveHistoryBtn) {
+             enableContinueWatchingBtn.addEventListener('click', () => {
+                 if (loggedInUser) {
+                     userSettings.enableContinueWatching = true;
+                     saveUserSettings();
+                     renderContinueWatching(); // Update the display based on the new setting
+                     updateSettingsButtonStates(); // Update button appearance
+                 }
+             });
+
+             disableContinueWatchingBtn.addEventListener('click', () => {
+                 if (loggedInUser) {
+                     userSettings.enableContinueWatching = false;
+                     saveUserSettings();
+                     renderContinueWatching(); // Update the display based on the new setting
+                     updateSettingsButtonStates(); // Update button appearance
+                 }
+             });
+
+             enableSaveHistoryBtn.addEventListener('click', () => {
+                 if (loggedInUser) {
+                     userSettings.saveHistory = true;
+                     saveUserSettings();
+                     updateSettingsButtonStates(); // Update button appearance
+                 }
+             });
+
+             disableSaveHistoryBtn.addEventListener('click', () => {
+                 if (loggedInUser) {
+                     userSettings.saveHistory = false;
+                     saveUserSettings();
+                     // Note: Disabling save history doesn't clear existing history,
+                     // it just stops adding new items. Clearing history is a separate action.
+                     updateSettingsButtonStates(); // Update button appearance
+                 }
+             }
+             );
+        }
+
 
         userProfileDiv.addEventListener('click', () => {
              // Only toggle dropdown visibility if a user is logged in
@@ -1694,7 +1924,7 @@
             }
         });
 
-        // Modified window click listener to close modals including switch account modal
+        // Modified window click listener to close modals including bottom sheets
         window.addEventListener('click', (event) => {
             // Close dropdown if click is outside user profile and dropdown
             if (!userProfileDiv.contains(event.target) && !profileDropdown.contains(event.target)) {
@@ -1702,18 +1932,20 @@
             }
 
             // Close regular modals if click is outside modal content (but inside modal overlay)
-            const modals = document.querySelectorAll('.modal:not(#switch-account-modal)');
-            modals.forEach(modal => {
+            const regularModals = document.querySelectorAll('.modal:not(.modal-bottom-sheet)');
+            regularModals.forEach(modal => {
                 if (!modal.classList.contains('hidden') && event.target === modal) {
                     closeModal(modal.id);
                 }
             });
 
-            // Close switch account modal if click is outside its content (on the overlay)
-            const switchModal = document.getElementById('switch-account-modal');
-             if (!switchModal.classList.contains('hidden') && switchModal.classList.contains('show') && event.target === switchModal) {
-                 closeModal('switch-account-modal');
-             }
+            // Close bottom sheet modals if click is outside its content (on the overlay)
+            const bottomSheetModals = document.querySelectorAll('.modal-bottom-sheet');
+             bottomSheetModals.forEach(modal => {
+                 if (!modal.classList.contains('hidden') && modal.classList.contains('show') && event.target === modal) {
+                     closeModal(modal.id);
+                 }
+             });
         });
 
         resetPasscodeLink.addEventListener('click', (event) => {
@@ -1734,7 +1966,7 @@
             currentPasscodeError.style.display = "none";
             newPasscodeError.style.display = "none";
             confirmNewPasscodeError.style.display = "none";
-             const existingMessage = resetPasscodeModal.querySelector('.message-box');
+             const existingMessage = resetPasscodeModal.querySelector('.modal-content').querySelector('.message-box');
              if (existingMessage) {
                  existingMessage.remove();
              }
@@ -1742,7 +1974,7 @@
 
             if (!loggedInUser) {
                  // This case should ideally not happen if the link is only shown when logged in
-                displayMessage(resetPasscodeForm, 'You must be logged in to reset your passcode.', 'error');
+                displayMessage(resetPasscodeModal.querySelector('.modal-content'), 'You must be logged in to reset your passcode.', 'error');
                 return;
             }
 
@@ -1781,7 +2013,7 @@
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser)); // Update logged in user in storage
             }
 
-            displayMessage(resetPasscodeForm, 'Passcode reset successfully!', 'success');
+            displayMessage(resetPasscodeModal.querySelector('.modal-content'), 'Passcode reset successfully!', 'success');
 
             // Optionally, close the modal after a delay
             setTimeout(() => {
@@ -1870,7 +2102,7 @@
                      // Now that the loading is done and main content is visible,
                      // call loadUserProfile again to ensure correct header state
                      // and display initial posts.
-                     loadUserProfile(); // Re-run to set header based on final loggedInUser state (this will also load the correct history)
+                     loadUserProfile(); // Re-run to set header based on final loggedInUser state (this will also load the correct history and render continue watching)
                      displayInitialPosts(); // Display posts and add skeleton effect
                      removeSkeletonEffect(); // Remove skeleton effect after a delay
                 }, 500); // Match CSS transition duration
