@@ -321,7 +321,7 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Deeper shadow */
             overflow: hidden;
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            cursor: pointer;
+            cursor: pointer; /* Make the entire card clickable */
             display: flex;
             flex-direction: column; /* Stack image and content */
             width: 100%; /* Ensure it takes full column width */
@@ -681,7 +681,7 @@
             cursor: pointer;
             font-size: 1rem; /* Icon size */
             transition: background-color 0.2s ease, color 0.2s ease;
-            z-index: 5; /* Ensure it's above the image */
+            z-index: 5; /* Ensure it's above the image and content */
             opacity: 0; /* Initially hidden */
             pointer-events: none; /* Disable clicks when hidden */
         }
@@ -694,6 +694,31 @@
         .remove-from-history-btn:hover {
             background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
             color: #f87171; /* Lighter red on hover */
+        }
+
+        /* Profile Details Modal Specific Styles */
+        #profile-details-modal .modal-content {
+            text-align: center; /* Center content in the profile modal */
+        }
+
+        #profile-details-modal .modal-content img {
+            width: 80px; /* Larger avatar in modal */
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem auto; /* Center avatar and add space below */
+            border: 4px solid #ef4444; /* Red border */
+        }
+
+        #profile-details-modal .modal-content p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-bottom: 0.75rem;
+        }
+
+        #profile-details-modal .modal-content p strong {
+            color: #f87171; /* Lighter red for labels */
+            margin-right: 0.5rem;
         }
 
 
@@ -758,20 +783,23 @@
                     <img id="avatar-img" src="" alt="Avatar" class="w-9 h-9 rounded-full mr-2 border-2 border-red-500">
                     <span id="username" class="text-gray-300 font-semibold"></span>
                      <div id="profile-dropdown" class="hidden">
+                        <a href="#" id="view-profile-link">
+                             <i class="fas fa-user-circle"></i> Profile
+                        </a>
+                         <a href="#" id="settings-link">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                         <a href="#" id="history-link">
+                            <i class="fas fa-history"></i> History
+                        </a>
+                         <a href="#" id="reset-passcode-link">
+                            <i class="fas fa-key"></i> Reset Passcode
+                        </a>
                         <a href="#" id="add-account-link" class="hidden">
                             <i class="fas fa-user-plus"></i> Add Account
                         </a>
                         <a href="#" id="switch-account-link" class="hidden">
                              <i class="fas fa-users"></i> Switch Account
-                        </a>
-                        <a href="#" id="history-link">
-                            <i class="fas fa-history"></i> History
-                        </a>
-                        <a href="#" id="settings-link">
-                            <i class="fas fa-cog"></i> Settings
-                        </a>
-                        <a href="#" id="reset-passcode-link">
-                            <i class="fas fa-key"></i> Reset Passcode
                         </a>
                         <a href="#" id="logout-btn">
                             <i class="fas fa-sign-out-alt"></i> Logout
@@ -943,6 +971,17 @@
         </div>
     </div>
 
+    <div id="profile-details-modal" class="modal hidden">
+        <div class="modal-content max-w-sm">
+             <span class="modal-close-button" onclick="closeModal('profile-details-modal')">&times;</span>
+            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">My Profile</h2>
+             <img id="profile-modal-avatar" src="" alt="User Avatar">
+             <p><strong>Username:</strong> <span id="profile-modal-username"></span></p>
+             <p><strong>Email:</strong> <span id="profile-modal-email"></span></p>
+            <button onclick="closeModal('profile-details-modal')" class="btn btn-secondary w-full mt-6">Close</button>
+        </div>
+    </div>
+
 
     <div id="reset-passcode-modal" class="modal hidden">
         <div class="modal-content">
@@ -986,7 +1025,7 @@
     <script>
         // Data for initial posts (before search)
         const initialPosts = [
-                        { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ZJ6mD8c41yfKCkzMB31PjOc4lQAHsjBtPblEk8rgFZEKA55VOrvPLaB7Xu7n9NQmvq9H4AMSCMTSE4w6K0DYegjEluUG8aXeNgf3DQEtGga8kbesrTn58botILFHXORCDCEIN7Ar8Q1jn0FDNrOw_orbasxl6jyZE1l9BvDJQO9Mnb3Ae0aut25qCAji/s320/images%20(16).jpeg", url: "https://anitoono45.github.io/super-mario-bros/" },
+                          { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ZJ6mD8c41yfKCkzMB31PjOc4lQAHsjBtPblEk8rgFZEKA55VOrvPLaB7Xu7n9NQmvq9H4AMSCMTSE4w6K0DYegjEluUG8aXeNgf3DQEtGga8kbesrTn58botILFHXORCDCEIN7Ar8Q1jn0FDNrOw_orbasxl6jyZE1l9BvDJQO9Mnb3Ae0aut25qCAji/s320/images%20(16).jpeg", url: "https://anitoono45.github.io/super-mario-bros/" },
             { id: 2, title: "The glassworker", content: "click to watch.", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIUXm_1t8BPBw1giZXIo-ng9wBEWN1sqEUmWBJAb6pgNaR3foGxYsMwOEhV5bfZ01wlB6nRPqOl6A06lmy1VE3BaGVM8QTUotS2fc3ol_dI8XYfCu9BRxYCcDFf0_a-5IujAMnzmvayUeuCNwRVcg6Fx3XwgbTJo5CXiXp2B9yBmZip2vymSkQjIGdeizN/s320/images%20(17).jpeg", url: "https://anitoono45.github.io/The-glassworker/" },
             { id: 3, title: "Anime Title 3", content: "Anime description 3.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+3", url: "watch.html?id=3" },
             { id: 4, title: "Anime Title 4", content: "Anime description 4.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+4", url: "watch.html?id=4" },
@@ -1075,6 +1114,13 @@
         const disableContinueWatchingBtn = document.getElementById('disable-continue-watching-btn');
         const enableSaveHistoryBtn = document.getElementById('enable-save-history-btn');
         const disableSaveHistoryBtn = document.getElementById('disable-save-history-btn');
+
+        // New Profile Details Modal Elements
+        const viewProfileLink = document.getElementById('view-profile-link');
+        const profileDetailsModal = document.getElementById('profile-details-modal');
+        const profileModalAvatar = document.getElementById('profile-modal-avatar');
+        const profileModalUsername = document.getElementById('profile-modal-username');
+        const profileModalEmail = document.getElementById('profile-modal-email');
 
 
         // New Loading Screen Elements
@@ -1192,6 +1238,8 @@
                  historyMessageDiv.textContent = '';
             } else if (modalId === 'notification-modal') {
                  // No form fields to clear in the notification modal
+            } else if (modalId === 'profile-details-modal') {
+                 // No form fields to clear in the profile details modal
             }
         }
 
@@ -1255,14 +1303,12 @@
             postElement.classList.add("post-card"); // Use the new post-card class
             postElement.dataset.postId = post.id; // Add data attribute for post ID
 
-            // Add click listener only if it's not the continue watching section (to avoid conflicts with remove button)
-            if (!isContinueWatching) {
-                postElement.addEventListener("click", () => {
-                    // Redirect to the post URL when clicked
-                    window.location.href = post.url;
-                    updateViewHistory(post);
-                });
-            }
+            // Add click listener to the post card
+            postElement.addEventListener("click", () => {
+                // Redirect to the post URL when clicked
+                window.location.href = post.url;
+                updateViewHistory(post);
+            });
 
 
             const imageElement = document.createElement("img");
@@ -1495,6 +1541,11 @@
                 // Render continue watching section for the logged-in user (respects settings)
                 renderContinueWatching();
 
+                // Populate profile details modal if it's open (shouldn't be initially, but good practice)
+                 if (!profileDetailsModal.classList.contains('hidden')) {
+                    populateProfileDetailsModal();
+                 }
+
 
             } else {
                 console.log("User is not logged in."); // Debugging line
@@ -1584,6 +1635,20 @@
 
                     accountListDiv.appendChild(accountOption);
                 });
+            }
+        }
+
+        // Function to populate the profile details modal
+        function populateProfileDetailsModal() {
+            if (loggedInUser) {
+                profileModalAvatar.src = loggedInUser.avatar;
+                profileModalUsername.textContent = loggedInUser.username;
+                profileModalEmail.textContent = loggedInUser.email;
+            } else {
+                 // Clear details if somehow the modal is opened without a logged-in user
+                 profileModalAvatar.src = '';
+                 profileModalUsername.textContent = 'N/A';
+                 profileModalEmail.textContent = 'N/A';
             }
         }
 
@@ -1887,7 +1952,6 @@
                 setTimeout(() => {
                      closeModal('settings-modal');
                 }, 2000); // Close after 2 seconds
-
             }
         });
 
@@ -1987,6 +2051,14 @@
              }
              );
         }
+
+        // Event listener for the new View Profile link
+        viewProfileLink.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            profileDropdown.classList.remove('show'); // Hide the dropdown
+            populateProfileDetailsModal(); // Populate the modal with current user data
+            openModal('profile-details-modal'); // Open the profile details modal
+        });
 
 
         userProfileDiv.addEventListener('click', () => {
