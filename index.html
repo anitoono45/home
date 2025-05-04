@@ -15,7 +15,14 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden; /* Prevent horizontal scrolling */
             line-height: 1.6;
+            /* Ensure overflow is auto by default, handled by JS when modal is open */
+            overflow-y: auto;
         }
+
+        body.modal-open {
+             overflow: hidden; /* Hide body scroll when a modal is open */
+        }
+
 
         h1, h2, h3, h4, h5, h6 {
             color: #f87171; /* Lighter red for headings */
@@ -126,6 +133,7 @@
         }
 
         /* Modal Styles */
+        /* The base modal class is now primarily for the overlay */
         .modal {
             position: fixed;
             top: 0;
@@ -555,7 +563,7 @@
             border: 1px solid #10b981; /* Green border */
          }
 
-         /* Bottom Sheet Modal Styles (for Settings and Switch Account) */
+         /* Bottom Sheet Modal Styles */
         .modal-bottom-sheet {
             position: fixed;
             bottom: 0; /* Start from the bottom */
@@ -569,10 +577,11 @@
             box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.5); /* Shadow at the top */
             z-index: 60; /* Higher than other modals */
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Arrange children vertically */
             transform: translateY(100%); /* Initially hidden below the screen */
             transition: transform 0.3s ease-out;
-            overflow-y: auto; /* Allow scrolling if content exceeds max height */
+            /* Remove overflow-y from the main modal container */
+            overflow-y: hidden;
         }
 
         .modal-bottom-sheet.show {
@@ -583,17 +592,64 @@
              /* Override some modal-content styles for the bottom sheet */
             background-color: transparent; /* No background color */
             box-shadow: none; /* No shadow */
-            padding: 1.5rem; /* Adjusted padding */
+            padding: 0 1.5rem 1.5rem 1.5rem; /* Adjusted padding - 0 top, 1.5rem others */
             max-width: none; /* No max width */
             border-radius: 0; /* No border radius */
             animation: none; /* No entry animation */
+             /* Ensure content itself can scroll if needed */
+            overflow-y: auto;
+            flex-grow: 1; /* Allow content to take up remaining space */
         }
 
-        .modal-bottom-sheet .modal-close-button {
-            position: static; /* Remove absolute positioning */
-            align-self: flex-end; /* Align to the right */
-            margin-bottom: 1rem; /* Add space below */
+        /* Style for the new header handle area */
+        .modal-header-handle {
+            width: 100%;
+            padding: 1.25rem 1.5rem; /* Increased top/bottom padding */
+            background-color: #334155; /* Medium gray background */
+            border-top-left-radius: 1rem; /* Match modal top border radius */
+            border-top-right-radius: 1rem;
+            display: flex;
+            justify-content: center; /* Center handle indicator */
+            align-items: center;
+            cursor: grab; /* Indicate it's draggable */
+             /* Prevent the handle from scrolling with the content */
+            position: sticky;
+            top: 0;
+            z-index: 1; /* Ensure it's above scrolling content */
+             flex-shrink: 0; /* Prevent the handle from shrinking */
+             min-height: 40px; /* Ensure a minimum height */
+             position: relative; /* Needed for absolute positioning of close button */
         }
+
+        /* Style for the handle indicator */
+        .modal-header-handle::before {
+            content: '';
+            display: block;
+            width: 40px; /* Width of the handle indicator */
+            height: 5px; /* Height of the handle indicator */
+            background-color: #475569; /* Darker gray color for the handle */
+            border-radius: 2.5px; /* Rounded corners for the handle */
+        }
+
+
+        /* Style for close button within bottom sheets */
+        /* Position it within the handle area */
+        .modal-bottom-sheet .modal-close-button {
+            position: absolute; /* Position absolutely within the handle */
+            top: 50%; /* Center vertically */
+            right: 1.5rem; /* Adjusted right position */
+            transform: translateY(-50%); /* Adjust for vertical centering */
+            font-size: 1.5rem; /* Slightly smaller icon */
+            color: #cbd5e1; /* Light gray color */
+            cursor: pointer;
+            transition: color 0.2s ease;
+             z-index: 2; /* Ensure it's above the handle indicator */
+        }
+
+        .modal-bottom-sheet .modal-close-button:hover {
+            color: #f1f5f9; /* Lighter gray on hover */
+        }
+
 
         .account-option {
             display: flex;
@@ -784,11 +840,54 @@
              overflow: hidden; /* Hide content when collapsed */
              max-height: 0; /* Initially collapsed */
              opacity: 0; /* Initially hidden */
+             position: relative; /* Needed for absolute positioning of clear button/spinner */
+             display: flex; /* Use flexbox to align input, clear button, and spinner */
+             align-items: center; /* Vertically align items */
          }
 
          #search-container.show {
              max-height: 100px; /* Sufficient height to show the input */
              opacity: 1; /* Fully visible */
+         }
+
+         #search-input {
+             flex-grow: 1; /* Allow input to take available space */
+             padding-right: 2.5rem; /* Make space for clear button/spinner */
+         }
+
+         .search-icon-container {
+             position: absolute;
+             right: 1rem; /* Position from the right */
+             display: flex;
+             align-items: center;
+             height: 100%; /* Match input height */
+             top: 0;
+         }
+
+         .clear-search-btn, .search-loading-spinner {
+             color: #94a3b8; /* Light gray color */
+             cursor: pointer;
+             font-size: 1.2rem; /* Icon size */
+             transition: color 0.2s ease;
+             display: none; /* Initially hidden */
+         }
+
+         .clear-search-btn:hover {
+             color: #f1f5f9; /* Lighter gray on hover */
+         }
+
+         .search-loading-spinner {
+             animation: spin 1s linear infinite; /* Apply spin animation */
+             margin-left: 0.5rem; /* Space between clear button and spinner */
+         }
+
+         /* No Results Message */
+         #no-results-message {
+             text-align: center;
+             color: #cbd5e1;
+             font-size: 1.1rem;
+             margin-top: 2rem;
+             display: none; /* Initially hidden */
          }
 
 
@@ -843,12 +942,24 @@
         </header>
 
         <main class="container mx-auto mt-8 p-4">
-            <div id="search-container" class="mb-8 flex justify-center"> <input
+             <div id="search-container" class="mb-8 flex justify-center">
+                <input
                     type="text"
                     id="search-input"
                     placeholder="Search for anime..."
                     class="form-input w-full md:w-2/3 lg:w-1/2"
+                    aria-label="Search for anime"
                 />
+                 <div class="search-icon-container">
+                     <button id="clear-search-btn" class="clear-search-btn" aria-label="Clear search input">
+                         <i class="fas fa-times-circle"></i>
+                     </button>
+                     <i id="search-loading-spinner" class="fas fa-spinner fa-spin search-loading-spinner"></i>
+                 </div>
+            </div>
+
+            <div id="no-results-message" role="alert">
+                No results found for your search.
             </div>
 
             <div id="continue-watching-section" class="hidden">
@@ -862,10 +973,11 @@
         </main>
     </div>
 
-
-    <div id="login-modal" class="modal hidden">
+    <div id="login-modal" class="modal-bottom-sheet hidden">
+        <div class="modal-header-handle">
+             <span class="modal-close-button" onclick="closeModal('login-modal')">&times;</span>
+        </div>
         <div class="modal-content">
-            <span class="modal-close-button" onclick="closeModal('login-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Login to Anitoono</h2>
             <form id="login-form" class="space-y-6">
                 <div>
@@ -886,9 +998,11 @@
         </div>
     </div>
 
-    <div id="signup-modal" class="modal hidden">
-        <div class="modal-content">
+    <div id="signup-modal" class="modal-bottom-sheet hidden">
+        <div class="modal-header-handle">
              <span class="modal-close-button" onclick="closeModal('signup-modal')">&times;</span>
+         </div>
+        <div class="modal-content">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Sign Up for Anitoono</h2>
             <form id="signup-form" class="space-y-6">
                 <div>
@@ -921,9 +1035,11 @@
         </div>
     </div>
 
-    <div id="post-details-modal" class="modal hidden">
-        <div class="modal-content max-w-2xl">
+    <div id="post-details-modal" class="modal-bottom-sheet hidden">
+        <div class="modal-header-handle">
              <span class="modal-close-button" onclick="closeModal('post-details-modal')">&times;</span>
+         </div>
+        <div class="modal-content max-w-2xl">
             <h2 id="post-details-title" class="text-2xl font-semibold mb-4 text-red-500"></h2>
             <div id="post-details-content" class="text-gray-300 mb-6"></div>
             <button onclick="closeModal('post-details-modal')" class="btn btn-secondary w-full">Close</button>
@@ -931,8 +1047,10 @@
     </div>
 
     <div id="settings-modal" class="modal-bottom-sheet hidden">
+        <div class="modal-header-handle">
+            <span class="modal-close-button" onclick="closeModal('settings-modal')">&times;</span>
+        </div>
         <div class="modal-content">
-             <span class="modal-close-button" onclick="closeModal('settings-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Settings</h2>
             <div class="space-y-4">
                  <div class="setting-option">
@@ -973,9 +1091,11 @@
         </div>
     </div>
 
-    <div id="history-modal" class="modal hidden">
-        <div class="modal-content max-w-lg">
+    <div id="history-modal" class="modal-bottom-sheet hidden">
+        <div class="modal-header-handle">
              <span class="modal-close-button" onclick="closeModal('history-modal')">&times;</span>
+         </div>
+        <div class="modal-content max-lg">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Viewing History</h2>
             <ul id="history-list" class="mb-6">
                 </ul>
@@ -984,9 +1104,11 @@
              <div id="history-message" class="text-center mt-4 text-green-500" style="display: none;"></div> </div>
     </div>
 
-    <div id="notification-modal" class="modal hidden">
-        <div class="modal-content max-w-sm">
-            <span class="modal-close-button" onclick="closeModal('notification-modal')">&times;</span>
+    <div id="notification-modal" class="modal-bottom-sheet hidden">
+        <div class="modal-header-handle">
+             <span class="modal-close-button" onclick="closeModal('notification-modal')">&times;</span>
+        </div>
+        <div class="modal-content max-sm">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Notifications</h2>
             <ul id="notification-list" class="space-y-4">
                  <li class="bg-gray-700 p-3 rounded-md text-gray-300">
@@ -1003,9 +1125,11 @@
         </div>
     </div>
 
-    <div id="profile-details-modal" class="modal hidden">
-        <div class="modal-content max-w-sm">
+    <div id="profile-details-modal" class="modal-bottom-sheet hidden">
+        <div class="modal-header-handle">
              <span class="modal-close-button" onclick="closeModal('profile-details-modal')">&times;</span>
+         </div>
+        <div class="modal-content max-sm">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">My Profile</h2>
              <img id="profile-modal-avatar" src="" alt="User Avatar">
              <p><strong>Username:</strong> <span id="profile-modal-username"></span></p>
@@ -1014,10 +1138,11 @@
         </div>
     </div>
 
-
-    <div id="reset-passcode-modal" class="modal hidden">
-        <div class="modal-content">
+    <div id="reset-passcode-modal" class="modal-bottom-sheet hidden">
+        <div class="modal-header-handle">
             <span class="modal-close-button" onclick="closeModal('reset-passcode-modal')">&times;</span>
+        </div>
+        <div class="modal-content">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Reset Passcode</h2>
             <form id="reset-passcode-form" class="space-y-6">
                  <div>
@@ -1041,8 +1166,10 @@
     </div>
 
      <div id="switch-account-modal" class="modal-bottom-sheet hidden">
+        <div class="modal-header-handle">
+            <span class="modal-close-button" onclick="closeModal('switch-account-modal')">&times;</span>
+        </div>
         <div class="modal-content">
-             <span class="modal-close-button" onclick="closeModal('switch-account-modal')">&times;</span>
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Switch Account</h2>
             <div id="account-list" class="space-y-4">
                 </div>
@@ -1056,7 +1183,7 @@
 
     <script>
         // Data for initial posts (before search)
-        const initialPosts = [
+        let initialPosts = [ // Changed to 'let' so it can be shuffled
                          { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ZJ6mD8c41yfKCkzMB31PjOc4lQAHsjBtPblEk8rgFZEKA55VOrvPLaB7Xu7n9NQmvq9H4AMSCMTSE4w6K0DYegjEluUG8aXeNgf3DQEtGga8kbesrTn58botILFHXORCDCEIN7Ar8Q1jn0FDNrOw_orbasxl6jyZE1l9BvDJQO9Mnb3Ae0aut25qCAji/s320/images%20(16).jpeg", url: "https://anitoono45.github.io/super-mario-bros/" },
             { id: 2, title: "The glassworker", content: "click to watch.", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIUXm_1t8BPBw1giZXIo-ng9wBEWN1sqEUmWBJAb6pgNaR3foGxYsMwOEhV5bfZ01wlB6nRPqOl6A06lmy1VE3BaGVM8QTUotS2fc3ol_dI8XYfCu9BRxYCcDFf0_a-5IujAMnzmvayUeuCNwRVcg6Fx3XwgbTJo5CXiXp2B9yBmZip2vymSkQjIGdeizN/s320/images%20(17).jpeg", url: "https://anitoono45.github.io/The-glassworker/" },
              { id: 4, title: "The luck Movie", content: "click to watch",imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhryblKlxmlDovuvylSoutki5vxx7v4iz6MxWj7Wz46Ba0sveY27m_D29YQ7HohFTKNJloAZ_ridH8WwS1RVgxjgngCsWsgr2fKOy4s4MF_kaoYeME1BvtQ-032EEZmPRAj0juQNKO1wEnWmpat39zB62uiFbTdQxcLPx0jLtxWzLW0lE0F1kkzP1m1sEAX/s371/Luck_(2022)_poster.png", url: "https://anitoono45.github.io/The-Luck-Movie/" },
@@ -1170,6 +1297,12 @@
         // New Search Elements
         const searchButton = document.getElementById('search-button'); // Get the new search button
         const searchContainer = document.getElementById('search-container'); // Get the search input container
+        const clearSearchBtn = document.getElementById('clear-search-btn'); // Get the clear search button
+        const searchLoadingSpinner = document.getElementById('search-loading-spinner'); // Get the search loading spinner
+        const noResultsMessage = document.getElementById('no-results-message'); // Get the no results message element
+
+        // Get all modal header handle elements for swipe gestures
+        const modalHeaderHandles = document.querySelectorAll('.modal-bottom-sheet .modal-header-handle');
 
 
         let users = JSON.parse(localStorage.getItem("users")) || [];
@@ -1199,6 +1332,10 @@
 
         const ACCOUNT_LIMIT = 2; // Set the account limit here
 
+        let searchTimeout; // Variable to hold the debounce timeout
+
+        let touchstartY = 0; // To track the start of a touch for swipe
+
 
         // Helper function to open a modal
         function openModal(modalId) {
@@ -1210,7 +1347,8 @@
                      modal.classList.add("show");
                  }, 10); // Small delay
             }
-            document.body.style.overflow = "hidden"; // Prevent scrolling background
+            // Add class to body to disable scrolling
+            document.body.classList.add('modal-open');
         }
 
         // Helper function to close a modal
@@ -1221,11 +1359,13 @@
                  modal.classList.remove("show");
                  setTimeout(() => { // Hide completely after animation
                      modal.classList.add("hidden");
-                     document.body.style.overflow = "auto"; // Restore scrolling background
+                     // Remove class from body to re-enable scrolling
+                     document.body.classList.remove('modal-open');
                  }, 300); // Match CSS transition duration
             } else {
                 modal.classList.add("hidden");
-                document.body.style.overflow = "auto"; // Restore scrolling background
+                // Remove class from body to re-enable scrolling
+                document.body.classList.remove('modal-open');
             }
 
             // Clear form fields and errors when closing modals
@@ -1234,9 +1374,9 @@
                 document.getElementById("login-email-error").style.display = "none";
                 document.getElementById("login-password-error").style.display = "none";
                  // Remove any previous error messages
-                 const existingError = loginForm.querySelector('.message-box.error');
-                 if (existingError) {
-                     existingError.remove();
+                 const existingMessage = loginForm.querySelector('.message-box.error');
+                 if (existingMessage) {
+                     existingMessage.remove();
                  }
             } else if (modalId === 'signup-modal') {
                  signupForm.reset();
@@ -1305,14 +1445,42 @@
             return password.length >= 6;
         }
 
-        function displayInitialPosts() {
+        // Function to shuffle an array (Fisher-Yates (aka Knuth) Shuffle)
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+
+            // While there remain elements to shuffle.
+            while (currentIndex !== 0) {
+
+                // Pick a remaining element.
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                // And swap it with the current element.
+                [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+
+            return array;
+        }
+
+
+        function displayPosts(postsToDisplay) {
             postContainer.innerHTML = ""; // Clear previous posts
-            initialPosts.forEach((post) => {
-                const postElement = createPostElement(post, false); // Pass false for isContinueWatching
-                postContainer.appendChild(postElement);
-            });
-             // Add skeleton effect initially
-            addSkeletonEffect();
+            noResultsMessage.style.display = 'none'; // Hide no results message
+
+            if (postsToDisplay.length === 0 && searchInput.value.trim() !== "") {
+                 noResultsMessage.style.display = 'block'; // Show no results message if search has no results
+            } else {
+                postsToDisplay.forEach((post) => {
+                    const postElement = createPostElement(post, false); // Pass false for isContinueWatching
+                    postContainer.appendChild(postElement);
+                });
+                 // Add skeleton effect initially
+                addSkeletonEffect();
+                 // Remove skeleton effect after a delay
+                removeSkeletonEffect();
+            }
         }
 
          // Function to add skeleton effect
@@ -1502,21 +1670,48 @@
          }
 
 
-        function handleSearch() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const filteredPosts = initialPosts.filter((post) =>
-                post.title.toLowerCase().includes(searchTerm)
-            );
-
-            postContainer.innerHTML = ""; // Clear previous posts
-            filteredPosts.forEach((post) => {
-                const postElement = createPostElement(post, false); // Pass false for isContinueWatching
-                postContainer.appendChild(postElement);
-            });
-            // Add skeleton effect to filtered posts and then remove
-            addSkeletonEffect();
-            removeSkeletonEffect(500); // Shorter delay for search results
+        // Debounced search function
+        function debounce(func, delay) {
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    func.apply(context, args);
+                }, delay);
+            };
         }
+
+        // Actual search logic
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim(); // Trim whitespace
+
+            // Show spinner, hide clear button
+            clearSearchBtn.style.display = 'none';
+            searchLoadingSpinner.style.display = 'inline-block';
+
+            // Simulate a slight delay for search (remove in real API call)
+            setTimeout(() => {
+                const filteredPosts = initialPosts.filter((post) =>
+                    post.title.toLowerCase().includes(searchTerm)
+                );
+
+                displayPosts(filteredPosts); // Use the displayPosts function
+
+                // Hide spinner
+                searchLoadingSpinner.style.display = 'none';
+
+                // Show clear button if input is not empty
+                if (searchTerm !== "") {
+                    clearSearchBtn.style.display = 'inline-block';
+                }
+
+            }, 300); // Simulate 300ms search time
+        }
+
+        // Debounced version of performSearch
+        const debouncedSearch = debounce(performSearch, 300); // 300ms debounce delay
+
 
         function renderAvatarOptions(container, selectedAvatarInput, currentAvatar = null) {
             container.innerHTML = ""; // Clear previous avatars
@@ -1652,12 +1847,12 @@
                             setTimeout(() => {
                                 // Switch to this account
                                 loggedInUser = user;
-                                localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+                                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
                                 closeModal('switch-account-modal');
                                 // Reload profile and posts for the new user
                                 loadUserProfile(); // Update header and links (this will also load the correct history and render continue watching)
-                                displayInitialPosts(); // Display posts for the new user and add skeleton effect
-                                removeSkeletonEffect(); // Remove skeleton effect after a delay
+                                // Re-shuffle and display posts for the new user
+                                shuffleAndDisplayPosts(); // Use the new shuffle and display function
 
                                  // Remove loading indicator (optional, as modal closes)
                                  accountOption.classList.remove('switching');
@@ -1707,8 +1902,44 @@
         }
 
 
+        // Function to shuffle and display posts
+        function shuffleAndDisplayPosts() {
+             // Only shuffle and display if the search input is empty
+            if (searchInput.value.trim() === "") {
+                initialPosts = shuffleArray(initialPosts); // Shuffle the main posts array
+                displayPosts(initialPosts); // Display the shuffled posts
+            } else {
+                 // If there's a search term, just re-display the current filtered posts
+                 performSearch(); // Use performSearch directly without debounce for immediate display after other actions
+            }
+        }
+
+
         // Event Listeners
-        searchInput.addEventListener("input", handleSearch);
+        // Use the debounced search function for input events
+        searchInput.addEventListener("input", () => {
+             // Show clear button and potentially hide spinner immediately on input
+            if (searchInput.value.trim() !== "") {
+                 clearSearchBtn.style.display = 'inline-block';
+            } else {
+                 clearSearchBtn.style.display = 'none';
+                 // If input is cleared, immediately perform search to show all posts
+                 performSearch();
+                 return; // Stop the debounce timer if input is empty
+            }
+            searchLoadingSpinner.style.display = 'inline-block'; // Show spinner on typing
+            debouncedSearch(); // Call the debounced search
+        });
+
+         // Event listener for the clear search button
+         clearSearchBtn.addEventListener('click', () => {
+             searchInput.value = ''; // Clear the input field
+             clearSearchBtn.style.display = 'none'; // Hide the clear button
+             performSearch(); // Perform search with empty term to show all posts
+             searchInput.focus(); // Put focus back on the search input
+         });
+
+
         // Attach event listeners to the icons
         loginIcon.addEventListener("click", () => {
             openModal('login-modal');
@@ -1735,9 +1966,9 @@
             let hasErrors = false;
 
             // Clear previous error messages
-             const existingError = loginForm.querySelector('.message-box.error');
-             if (existingError) {
-                 existingError.remove();
+             const existingMessage = loginForm.querySelector('.message-box.error');
+             if (existingMessage) {
+                 existingMessage.remove();
              }
 
             if (!validateEmail(email)) {
@@ -1767,8 +1998,8 @@
                 closeModal('login-modal');
                  // Re-run loadUserProfile after successful login to update header and account links (this will also load the correct history and render continue watching)
                 loadUserProfile();
-                displayInitialPosts(); // Redisplay posts after successful login and add skeleton effect
-                removeSkeletonEffect(); // Remove skeleton effect after a delay
+                shuffleAndDisplayPosts(); // Shuffle and display posts after successful login
+
             } else {
                 displayMessage(loginForm, 'Invalid credentials. Please try again.', 'error');
             }
@@ -1784,9 +2015,9 @@
             let hasErrors = false;
 
              // Clear previous error messages
-             const existingError = signupForm.querySelector('.message-box.error');
-             if (existingError) {
-                 existingError.remove();
+             const existingMessage = signupForm.querySelector('.message-box.error');
+             if (existingMessage) {
+                 existingMessage.remove();
              }
 
              // Check account limit BEFORE validation
@@ -1873,8 +2104,7 @@
 
             closeModal('signup-modal');
             loadUserProfile(); // Call loadUserProfile after successful signup to update header and account links and render continue watching
-            displayInitialPosts(); // Redisplay posts after successful signup and add skeleton effect
-            removeSkeletonEffect(); // Remove skeleton effect after a delay
+            shuffleAndDisplayPosts(); // Shuffle and display posts after successful signup
         });
 
         logoutBtn.addEventListener("click", (event) => {
@@ -1906,8 +2136,7 @@
                          loadingOverlay.style.opacity = '1';
                          mainContentDiv.style.display = 'block';
                          loadUserProfile(); // Update header and links based on the new loggedInUser (this will also load the correct history and render continue watching)
-                         displayInitialPosts(); // Display posts for the new user and add skeleton effect
-                         removeSkeletonEffect(); // Remove skeleton effect after a delay
+                         shuffleAndDisplayPosts(); // Shuffle and display posts for the new user
                      }, 500);
                  }, 1000); // Simulate 1 second switch time
 
@@ -1919,8 +2148,7 @@
                 viewHistory = []; // Clear history when no user is logged in
                  userSettings = { enableContinueWatching: true, saveHistory: true }; // Reset settings to default
                 loadUserProfile(); // Call loadUserProfile to update UI (show login icon) and hide continue watching
-                displayInitialPosts(); // Redisplay posts (might show default content or require login) and add skeleton effect
-                removeSkeletonEffect(); // Remove skeleton effect after a delay
+                shuffleAndDisplayPosts(); // Shuffle and display posts (might show default content or require login)
             }
 
              // Hide the dropdown after logging out/switching
@@ -2121,6 +2349,7 @@
             // Close bottom sheet modals if click is outside its content (on the overlay)
             const bottomSheetModals = document.querySelectorAll('.modal-bottom-sheet');
              bottomSheetModals.forEach(modal => {
+                 // Check if the modal is visible and the click is directly on the modal (not its content)
                  if (!modal.classList.contains('hidden') && modal.classList.contains('show') && event.target === modal) {
                      closeModal(modal.id);
                  }
@@ -2255,11 +2484,38 @@
              // Optional: Focus the input when the search bar is shown
              if (searchContainer.classList.contains('show')) {
                  searchInput.focus();
+                 // If opening the search, check if there's text and show clear button
+                 if (searchInput.value.trim() !== "") {
+                     clearSearchBtn.style.display = 'inline-block';
+                 }
              } else {
                  // Optional: Clear the search input when the search bar is hidden
                  searchInput.value = '';
-                 handleSearch(); // Re-run search with empty term to show all posts
+                 clearSearchBtn.style.display = 'none'; // Hide clear button when closing
+                 searchLoadingSpinner.style.display = 'none'; // Hide spinner when closing
+                 performSearch(); // Re-run search with empty term to show all posts
              }
+        });
+
+        // Add touch event listeners to ALL modal header handle elements
+        modalHeaderHandles.forEach(handleElement => {
+             handleElement.addEventListener('touchstart', (event) => {
+                 touchstartY = event.touches[0].clientY;
+             });
+
+             handleElement.addEventListener('touchend', (event) => {
+                 const touchendY = event.changedTouches[0].clientY;
+                 const deltaY = touchendY - touchstartY;
+                 const swipeThreshold = 50; // Minimum distance for a swipe
+
+                 // Find the parent modal element to get its ID
+                 const modalElement = handleElement.closest('.modal-bottom-sheet');
+
+                 // Close if swiping down on the handle
+                 if (modalElement && deltaY > swipeThreshold) {
+                     closeModal(modalElement.id);
+                 }
+             });
         });
 
 
@@ -2295,8 +2551,14 @@
                      // call loadUserProfile again to ensure correct header state
                      // and display initial posts.
                      loadUserProfile(); // Re-run to set header based on final loggedInUser state (this will also load the correct history and render continue watching)
-                     displayInitialPosts(); // Display posts and add skeleton effect
-                     removeSkeletonEffect(); // Remove skeleton effect after a delay
+
+                     // Initial display of posts (shuffled)
+                     shuffleAndDisplayPosts();
+
+                     // Start the hourly shuffle interval
+                     // 3600000 milliseconds = 1 hour
+                     setInterval(shuffleAndDisplayPosts, 3600000);
+
                 }, 500); // Match CSS transition duration
             }, 3000); // 3 seconds delay for initial loading screen
         };
