@@ -1184,7 +1184,7 @@
     <script>
         // Data for initial posts (before search)
         let initialPosts = [ // Changed to 'let' so it can be shuffled
-                         { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ZJ6mD8c41yfKCkzMB31PjOc4lQAHsjBtPblEk8rgFZEKA55VOrvPLaB7Xu7n9NQmvq9H4AMSCMTSE4w6K0DYegjEluUG8aXeNgf3DQEtGga8kbesrTn58botILFHXORCDCEIN7Ar8Q1jn0FDNrOw_orbasxl6jyZE1l9BvDJQO9Mnb3Ae0aut25qCAji/s320/images%20(16).jpeg", url: "https://anitoono45.github.io/super-mario-bros/" },
+                                                { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ZJ6mD8c41yfKCkzMB31PjOc4lQAHsjBtPblEk8rgFZEKA55VOrvPLaB7Xu7n9NQmvq9H4AMSCMTSE4w6K0DYegjEluUG8aXeNgf3DQEtGga8kbesrTn58botILFHXORCDCEIN7Ar8Q1jn0FDNrOw_orbasxl6jyZE1l9BvDJQO9Mnb3Ae0aut25qCAji/s320/images%20(16).jpeg", url: "https://anitoono45.github.io/super-mario-bros/" },
             { id: 2, title: "The glassworker", content: "click to watch.", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIUXm_1t8BPBw1giZXIo-ng9wBEWN1sqEUmWBJAb6pgNaR3foGxYsMwOEhV5bfZ01wlB6nRPqOl6A06lmy1VE3BaGVM8QTUotS2fc3ol_dI8XYfCu9BRxYCcDFf0_a-5IujAMnzmvayUeuCNwRVcg6Fx3XwgbTJo5CXiXp2B9yBmZip2vymSkQjIGdeizN/s320/images%20(17).jpeg", url: "https://anitoono45.github.io/The-glassworker/" },
              { id: 4, title: "The luck Movie", content: "click to watch",imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhryblKlxmlDovuvylSoutki5vxx7v4iz6MxWj7Wz46Ba0sveY27m_D29YQ7HohFTKNJloAZ_ridH8WwS1RVgxjgngCsWsgr2fKOy4s4MF_kaoYeME1BvtQ-032EEZmPRAj0juQNKO1wEnWmpat39zB62uiFbTdQxcLPx0jLtxWzLW0lE0F1kkzP1m1sEAX/s371/Luck_(2022)_poster.png", url: "https://anitoono45.github.io/The-Luck-Movie/" },
             { id: 4, title: "Anime Title r", content: "Anime description 4.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+4", url: "watch.html?id=4" },
@@ -1464,15 +1464,50 @@
             return array;
         }
 
+        // Function to get the list of posts to display in the main section
+        function getPostsForDisplay() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let postsToDisplay = initialPosts;
+
+            // 1. Filter by search term if present
+            if (searchTerm !== "") {
+                postsToDisplay = initialPosts.filter((post) =>
+                    post.title.toLowerCase().includes(searchTerm)
+                );
+            } else {
+                // 2. If no search term, filter out posts in "Continue Watching" if enabled and logged in
+                if (loggedInUser && userSettings.enableContinueWatching && userSettings.saveHistory) {
+                    // Load the latest history for the current user
+                    viewHistory = JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || [];
+                    postsToDisplay = initialPosts.filter(post =>
+                        !viewHistory.some(historyItem => historyItem.id === post.id)
+                    );
+                } else {
+                     // If not logged in, continue watching disabled, or history saving disabled, show all initial posts
+                     postsToDisplay = initialPosts;
+                }
+            }
+
+             // 3. Shuffle the resulting list (only if no search term, or if you want search results shuffled too)
+             // For now, let's only shuffle when there's no search term
+             if (searchTerm === "") {
+                 postsToDisplay = shuffleArray(postsToDisplay);
+             }
+
+
+            return postsToDisplay;
+        }
+
 
         function displayPosts(postsToDisplay) {
             postContainer.innerHTML = ""; // Clear previous posts
-            noResultsMessage.style.display = 'none'; // Hide no results message
 
+            // Show/hide no results message based on the result of getPostsForDisplay and search term
             if (postsToDisplay.length === 0 && searchInput.value.trim() !== "") {
-                 noResultsMessage.style.display = 'block'; // Show no results message if search has no results
+                 noResultsMessage.style.display = 'block';
             } else {
-                postsToDisplay.forEach((post) => {
+                 noResultsMessage.style.display = 'none';
+                 postsToDisplay.forEach((post) => {
                     const postElement = createPostElement(post, false); // Pass false for isContinueWatching
                     postContainer.appendChild(postElement);
                 });
@@ -1511,7 +1546,7 @@
             postElement.addEventListener("click", () => {
                 // Redirect to the post URL when clicked
                 window.location.href = post.url;
-                updateViewHistory(post);
+                updateViewHistory(post); // Update history when a post is clicked
             });
 
 
@@ -1559,14 +1594,29 @@
          function updateViewHistory(post) {
             if (loggedInUser && userSettings.saveHistory) { // Only update history if a user is logged in AND history saving is enabled
                 // Check if the post is already in history
-                const postInHistory = viewHistory.find(item => item.id === post.id);
-                if (!postInHistory) {
-                    viewHistory.push(post);
-                    // Save history to localStorage using the logged-in user's email as key
-                    localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
-                     // Update continue watching section immediately after adding to history
-                    renderContinueWatching();
+                const postInHistoryIndex = viewHistory.findIndex(item => item.id === post.id);
+
+                if (postInHistoryIndex !== -1) {
+                    // If already in history, remove the old entry
+                    viewHistory.splice(postInHistoryIndex, 1);
                 }
+
+                // Add the post to the end (most recent)
+                viewHistory.push(post);
+
+                // Optional: Limit history size (e.g., to 20 items)
+                const historyLimit = 20;
+                if (viewHistory.length > historyLimit) {
+                    viewHistory = viewHistory.slice(viewHistory.length - historyLimit);
+                }
+
+
+                // Save history to localStorage using the logged-in user's email as key
+                localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
+                 // Update continue watching section immediately after adding to history
+                renderContinueWatching();
+                 // Update main posts display to remove the watched item
+                displayPosts(getPostsForDisplay());
             }
         }
 
@@ -1582,6 +1632,8 @@
                  if (!historyModal.classList.contains('hidden')) {
                      renderHistory();
                  }
+                 // Re-render the main posts display to potentially add the removed item back
+                 displayPosts(getPostsForDisplay());
              }
         }
 
@@ -1611,7 +1663,7 @@
         function renderContinueWatching() {
              continueWatchingContainer.innerHTML = ""; // Clear previous continue watching posts
 
-            if (loggedInUser && userSettings.enableContinueWatching && viewHistory.length > 0) { // Check if continue watching is enabled
+            if (loggedInUser && userSettings.enableContinueWatching && viewHistory.length > 0) { // Check if continue watching is enabled and history is not empty
                  continueWatchingSection.classList.remove('hidden'); // Show the section
 
                  // Filter initialPosts to find the ones in the current user's history
@@ -1628,6 +1680,7 @@
 
             } else {
                  continueWatchingSection.classList.add('hidden'); // Hide the section if no user, continue watching disabled, or empty history
+                 continueWatchingContainer.innerHTML = ""; // Ensure container is empty
             }
         }
 
@@ -1684,29 +1737,18 @@
 
         // Actual search logic
         function performSearch() {
-            const searchTerm = searchInput.value.toLowerCase().trim(); // Trim whitespace
+            // performSearch now just triggers a re-render of the main posts based on the current search input
+            displayPosts(getPostsForDisplay());
 
-            // Show spinner, hide clear button
-            clearSearchBtn.style.display = 'none';
-            searchLoadingSpinner.style.display = 'inline-block';
+            // Hide spinner (assuming search is fast or handled elsewhere)
+            searchLoadingSpinner.style.display = 'none';
 
-            // Simulate a slight delay for search (remove in real API call)
-            setTimeout(() => {
-                const filteredPosts = initialPosts.filter((post) =>
-                    post.title.toLowerCase().includes(searchTerm)
-                );
-
-                displayPosts(filteredPosts); // Use the displayPosts function
-
-                // Hide spinner
-                searchLoadingSpinner.style.display = 'none';
-
-                // Show clear button if input is not empty
-                if (searchTerm !== "") {
-                    clearSearchBtn.style.display = 'inline-block';
-                }
-
-            }, 300); // Simulate 300ms search time
+            // Show clear button if input is not empty
+            if (searchInput.value.trim() !== "") {
+                clearSearchBtn.style.display = 'inline-block';
+            } else {
+                 clearSearchBtn.style.display = 'none';
+            }
         }
 
         // Debounced version of performSearch
@@ -1851,8 +1893,9 @@
                                 closeModal('switch-account-modal');
                                 // Reload profile and posts for the new user
                                 loadUserProfile(); // Update header and links (this will also load the correct history and render continue watching)
-                                // Re-shuffle and display posts for the new user
-                                shuffleAndDisplayPosts(); // Use the new shuffle and display function
+                                // Re-render main posts for the new user (respects new history)
+                                displayPosts(getPostsForDisplay());
+
 
                                  // Remove loading indicator (optional, as modal closes)
                                  accountOption.classList.remove('switching');
@@ -1906,8 +1949,9 @@
         function shuffleAndDisplayPosts() {
              // Only shuffle and display if the search input is empty
             if (searchInput.value.trim() === "") {
-                initialPosts = shuffleArray(initialPosts); // Shuffle the main posts array
-                displayPosts(initialPosts); // Display the shuffled posts
+                // Get posts for display (which includes filtering out history and shuffling)
+                const postsToDisplay = getPostsForDisplay();
+                displayPosts(postsToDisplay); // Display the shuffled and filtered posts
             } else {
                  // If there's a search term, just re-display the current filtered posts
                  performSearch(); // Use performSearch directly without debounce for immediate display after other actions
@@ -1998,7 +2042,7 @@
                 closeModal('login-modal');
                  // Re-run loadUserProfile after successful login to update header and account links (this will also load the correct history and render continue watching)
                 loadUserProfile();
-                shuffleAndDisplayPosts(); // Shuffle and display posts after successful login
+                displayPosts(getPostsForDisplay()); // Display main posts after successful login (respects new history)
 
             } else {
                 displayMessage(loginForm, 'Invalid credentials. Please try again.', 'error');
@@ -2104,7 +2148,7 @@
 
             closeModal('signup-modal');
             loadUserProfile(); // Call loadUserProfile after successful signup to update header and account links and render continue watching
-            shuffleAndDisplayPosts(); // Shuffle and display posts after successful signup
+            displayPosts(getPostsForDisplay()); // Display main posts after successful signup (respects new history)
         });
 
         logoutBtn.addEventListener("click", (event) => {
@@ -2136,7 +2180,7 @@
                          loadingOverlay.style.opacity = '1';
                          mainContentDiv.style.display = 'block';
                          loadUserProfile(); // Update header and links based on the new loggedInUser (this will also load the correct history and render continue watching)
-                         shuffleAndDisplayPosts(); // Shuffle and display posts for the new user
+                         displayPosts(getPostsForDisplay()); // Display main posts for the new user (respects new history)
                      }, 500);
                  }, 1000); // Simulate 1 second switch time
 
@@ -2148,7 +2192,7 @@
                 viewHistory = []; // Clear history when no user is logged in
                  userSettings = { enableContinueWatching: true, saveHistory: true }; // Reset settings to default
                 loadUserProfile(); // Call loadUserProfile to update UI (show login icon) and hide continue watching
-                shuffleAndDisplayPosts(); // Shuffle and display posts (might show default content or require login)
+                displayPosts(getPostsForDisplay()); // Display main posts (will show all initial posts as no user is logged in)
             }
 
              // Hide the dropdown after logging out/switching
@@ -2188,7 +2232,7 @@
             }
 
             // Check if the new username is already taken by another user
-            const usernameExists = users.some(user => user.username === newUsername && user.email !== loggedInUser.email);
+            const usernameExists = users.some(user => loggedInUser && user.email !== loggedInUser.email && user.username === newUsername);
             if (usernameExists) {
                  changeUsernameError.textContent = "Username already exists";
                  changeUsernameError.style.display = "block";
@@ -2201,7 +2245,7 @@
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
 
                 // Update the username in the main users array
-                const userIndex = users.findIndex(user => user.email === loggedInUser.email);
+                const userIndex = users.findIndex(user => loggedInUser && user.email === loggedInUser.email);
                 if (userIndex !== -1) {
                     users[userIndex].username = newUsername;
                     localStorage.setItem("users", JSON.stringify(users));
@@ -2234,6 +2278,8 @@
                 localStorage.removeItem(`history_${loggedInUser.email}`); // Remove history for this specific user
                 renderHistory(); // Re-render history to show it's empty
                  renderContinueWatching(); // Update continue watching section
+                displayPosts(getPostsForDisplay()); // Update main posts display
+
 
                 const historyModalContent = historyModal.querySelector('.modal-content');
                 displayMessage(historyModalContent, 'View history cleared!', 'success');
@@ -2256,7 +2302,7 @@
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
 
                 // Update the avatar in the main users array
-                 const userIndex = users.findIndex(user => user.email === loggedInUser.email);
+                 const userIndex = users.findIndex(user => loggedInUser && user.email === loggedInUser.email);
                 if (userIndex !== -1) {
                     users[userIndex].avatar = newAvatar;
                     localStorage.setItem("users", JSON.stringify(users));
@@ -2282,6 +2328,7 @@
                      userSettings.enableContinueWatching = true;
                      saveUserSettings();
                      renderContinueWatching(); // Update the display based on the new setting
+                     displayPosts(getPostsForDisplay()); // Update main posts display
                      updateSettingsButtonStates(); // Update button appearance
                  }
              });
@@ -2291,6 +2338,7 @@
                      userSettings.enableContinueWatching = false;
                      saveUserSettings();
                      renderContinueWatching(); // Update the display based on the new setting
+                     displayPosts(getPostsForDisplay()); // Update main posts display
                      updateSettingsButtonStates(); // Update button appearance
                  }
              });
@@ -2300,6 +2348,9 @@
                      userSettings.saveHistory = true;
                      saveUserSettings();
                      updateSettingsButtonStates(); // Update button appearance
+                     // Re-render continue watching and main posts based on potentially re-enabled history
+                     renderContinueWatching();
+                     displayPosts(getPostsForDisplay());
                  }
              });
 
@@ -2310,6 +2361,9 @@
                      // Note: Disabling save history doesn't clear existing history,
                      // it just stops adding new items. Clearing history is a separate action.
                      updateSettingsButtonStates(); // Update button appearance
+                      // Re-render continue watching and main posts based on potentially disabled history
+                     renderContinueWatching();
+                     displayPosts(getPostsForDisplay());
                  }
              }
              );
@@ -2414,7 +2468,7 @@
             // Update the password (simulated)
             loggedInUser.password = newPasscode; // In a real app, hash and save the new password
             // Find the user in the users array and update their password
-            const userIndex = users.findIndex(user => user.email === loggedInUser.email);
+            const userIndex = users.findIndex(user => loggedInUser && user.email === loggedInUser.email);
             if (userIndex !== -1) {
                 users[userIndex].password = newPasscode;
                 localStorage.setItem("users", JSON.stringify(users));
@@ -2552,12 +2606,16 @@
                      // and display initial posts.
                      loadUserProfile(); // Re-run to set header based on final loggedInUser state (this will also load the correct history and render continue watching)
 
-                     // Initial display of posts (shuffled)
-                     shuffleAndDisplayPosts();
+                     // Initial display of main posts (filtered and shuffled)
+                     displayPosts(getPostsForDisplay());
 
-                     // Start the hourly shuffle interval
+                     // Start the hourly shuffle interval for main posts (only if not searching)
                      // 3600000 milliseconds = 1 hour
-                     setInterval(shuffleAndDisplayPosts, 3600000);
+                     setInterval(() => {
+                         if (searchInput.value.trim() === "") {
+                              shuffleAndDisplayPosts();
+                         }
+                     }, 3600000);
 
                 }, 500); // Match CSS transition duration
             }, 3000); // 3 seconds delay for initial loading screen
