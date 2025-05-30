@@ -125,7 +125,7 @@
              margin-right: 1rem; /* More space between icon and text */
              width: 1.2rem; /* Fixed width for icons */
              text-align: center; /* Center icon */
-             color: #f87171; /* Red color for icons */
+             color: #f9fafb; /* Changed to white */
         }
         #profile-dropdown a:hover {
             color: #f9fafb; /* White text on hover */
@@ -170,7 +170,7 @@
             top: 1.25rem; /* Adjusted position */
             right: 1.25rem; /* Adjusted position */
             font-size: 1.75rem; /* Larger close icon */
-            color: #94a3b8; /* Light gray color */
+            color: #f9fafb; /* Changed to white */
             cursor: pointer;
             transition: color 0.2s ease;
         }
@@ -183,7 +183,7 @@
         .auth-icon {
             width: 28px; /* Adjust size as needed */
             height: 28px; /* Adjust size as needed */
-            color: #cbd5e1; /* Light gray color */
+            color: #f9fafb; /* Changed to white */
             cursor: pointer;
             transition: color 0.3s ease;
         }
@@ -219,7 +219,7 @@
         #notification-button {
             background: none;
             border: none;
-            color: #cbd5e1; /* Light gray */
+            color: #f9fafb; /* Changed to white */
             cursor: pointer;
             padding: 0.3rem; /* Reduced padding */
             font-size: 1.3rem; /* Slightly smaller icon */
@@ -240,7 +240,7 @@
          #search-button {
             background: none;
             border: none;
-            color: #cbd5e1; /* Light gray */
+            color: #f9fafb; /* Changed to white */
             cursor: pointer;
             padding: 0.3rem; /* Reduced padding */
             font-size: 1.3rem; /* Slightly smaller icon */
@@ -640,7 +640,7 @@
             right: 1.5rem; /* Adjusted right position */
             transform: translateY(-50%); /* Adjust for vertical centering */
             font-size: 1.5rem; /* Slightly smaller icon */
-            color: #cbd5e1; /* Light gray color */
+            color: #f9fafb; /* Changed to white */
             cursor: pointer;
             transition: color 0.2s ease;
              z-index: 2; /* Ensure it's above the handle indicator */
@@ -748,7 +748,7 @@
             top: 8px; /* Adjust position as needed */
             right: 8px; /* Adjust position as needed */
             background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
-            color: #ef4444; /* Red icon color */
+            color: #f9fafb; /* Changed to white */
             border: none;
             border-radius: 50%; /* Make it round */
             width: 28px; /* Size of the button */
@@ -760,18 +760,20 @@
             font-size: 1rem; /* Icon size */
             transition: background-color 0.2s ease, color 0.2s ease;
             z-index: 5; /* Ensure it's above the image and content */
-            opacity: 0; /* Initially hidden */
-            pointer-events: none; /* Disable clicks when hidden */
+            /* Always visible for continue watching posts */
+            opacity: 1; /* Changed from 0 to 1 */
+            pointer-events: auto; /* Changed from none to auto */
         }
 
+        /* Remove the hover effect for opacity/pointer-events, as it's always visible now */
         .post-card:hover .remove-from-history-btn {
-            opacity: 1; /* Show on hover */
-            pointer-events: auto; /* Enable clicks on hover */
+            /* opacity: 1; */ /* No longer needed */
+            /* pointer-events: auto; */ /* No longer needed */
         }
 
         .remove-from-history-btn:hover {
             background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
-            color: #f87171; /* Lighter red on hover */
+            color: #f1f5f9; /* Lighter white on hover */
         }
 
         /* Profile Details Modal Specific Styles */
@@ -865,7 +867,7 @@
          }
 
          .clear-search-btn, .search-loading-spinner {
-             color: #94a3b8; /* Light gray color */
+             color: #f9fafb; /* Changed to white */
              cursor: pointer;
              font-size: 1.2rem; /* Icon size */
              transition: color 0.2s ease;
@@ -873,7 +875,7 @@
          }
 
          .clear-search-btn:hover {
-             color: #f1f5f9; /* Lighter gray on hover */
+             color: #f1f5f9; /* Lighter white on hover */
          }
 
          .search-loading-spinner {
@@ -890,6 +892,197 @@
              display: none; /* Initially hidden */
          }
 
+        /* Sidebar Navigation Styles */
+        #sidebar-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px; /* Fixed width for the sidebar */
+            max-width: 80%; /* Max width for smaller screens */
+            height: 100%;
+            background-color: #1e293b; /* Dark gray background */
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5); /* Shadow to the right */
+            z-index: 100; /* Higher than other modals */
+            transform: translateX(-100%); /* Initially hidden off-screen to the left */
+            transition: transform 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            overflow-y: auto; /* Allow scrolling for content */
+        }
+
+        #sidebar-nav.show {
+            transform: translateX(0); /* Slide into view */
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+            z-index: 99; /* Below sidebar, above main content */
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.75rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #f87171;
+        }
+
+        .sidebar-close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem; /* Larger close icon */
+            color: #f9fafb;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .sidebar-close-btn:hover {
+            color: #f1f5f9;
+        }
+
+        .sidebar-menu {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.2s ease;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 1rem;
+            width: 1.5rem;
+            text-align: center;
+            color: #f9fafb;
+        }
+
+        .sidebar-menu a:hover {
+            color: #f9fafb;
+        }
+
+        .trending-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f87171;
+            margin-bottom: 1rem;
+        }
+
+        .trending-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .trending-item {
+            display: flex;
+            align-items: center;
+            background-color: #334155;
+            border-radius: 0.375rem;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .trending-item:hover {
+            background-color: #475569;
+        }
+
+        .trending-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 0.25rem;
+            object-fit: cover;
+            margin-right: 0.75rem;
+            border: 2px solid #ef4444;
+        }
+
+        .trending-item span {
+            font-size: 1rem;
+            color: #f1f5f9;
+            font-weight: 500;
+        }
+
+        /* Loader Dot Pulse for Dropdown and Search */
+        .loader-dot-pulse {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%; /* Take full height of dropdown */
+            min-height: 100px; /* Ensure visibility */
+            width: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .loader-dot-pulse div {
+            width: 12px;
+            height: 12px;
+            background-color: white; /* White color */
+            border-radius: 50%;
+            margin: 0 4px;
+            animation: dotPulse 1.2s infinite ease-in-out;
+        }
+
+        .loader-dot-pulse div:nth-child(1) {
+            animation-delay: -0.2s;
+        }
+
+        .loader-dot-pulse div:nth-child(2) {
+            animation-delay: 0s;
+        }
+
+        .loader-dot-pulse div:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% {
+                transform: scale(0.7);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Hide dropdown menu items initially */
+        #profile-dropdown .dropdown-menu-items {
+            display: none;
+        }
+
+        /* Search Loader specific styles */
+        #search-results-loader {
+            display: none; /* Hidden by default */
+            margin-top: 2rem;
+            min-height: 80px; /* Ensure space for loader */
+        }
 
     </style>
 </head>
@@ -905,37 +1098,53 @@
 
     <div id="main-content">
         <header class="bg-gray-800 py-2 flex justify-between items-center shadow-md sticky top-0 z-10 rounded-md">
-            <div class="logo text-red-500 text-xl font-semibold ml-4">Anitoono</div> <div class="mr-4 flex items-center space-x-3"> <button id="search-button"> <i class="fas fa-search"></i>
+            <div class="logo ml-4 flex items-center">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgzNxZB8zMg7tekPLIKgQjGUMhdEDcry8A6DjXdwNZUgvbyQ5_x8Vxl_AG4zkZxKUqyAEsapZ7GGzmxHasw_Qa7NLPjqB0sesrIhezPj57rD5rBHST1r6C5SMaVb_bC-COODZ5xmK_wC4W-KKctdoHyynjfPGGSP-QgZH-PJvAXPzSylr7VJp1kF2wjiivy/s3264/20250528_192410.png" alt="Anitoono Logo" class="h-10 w-auto object-contain">
+            </div>
+            <div class="mr-4 flex items-center space-x-3">
+                <button id="search-button">
+                    <i class="fas fa-search"></i>
                  </button>
                  <button id="notification-button">
-                     <i class="fas fa-bell"></i> </button>
+                     <i class="fas fa-bell"></i>
+                 </button>
                 <div id="login-icon" class="auth-icon hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
                 </div>
                 <div id="user-profile" class="hidden">
-                    <img id="avatar-img" src="" alt="Avatar" class="w-8 h-8 rounded-full mr-1 border-2 border-red-500"> <span id="username" class="text-gray-300 font-semibold text-sm"></span> <div id="profile-dropdown" class="hidden">
-                        <a href="#" id="view-profile-link">
-                             <i class="fas fa-user-circle"></i> Profile
-                        </a>
-                         <a href="#" id="settings-link">
-                            <i class="fas fa-cog"></i> Settings
-                        </a>
-                         <a href="#" id="history-link">
-                            <i class="fas fa-history"></i> History
-                        </a>
-                         <a href="#" id="reset-passcode-link">
-                            <i class="fas fa-key"></i> Reset Passcode
-                        </a>
-                        <a href="#" id="add-account-link" class="hidden">
-                            <i class="fas fa-user-plus"></i> Add Account
-                        </a>
-                        <a href="#" id="switch-account-link" class="hidden">
-                             <i class="fas fa-users"></i> Switch Account
-                        </a>
-                        <a href="#" id="logout-btn">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </a>
+                    <img id="avatar-img" src="" alt="Avatar" class="w-8 h-8 rounded-full mr-1 border-2 border-red-500">
+                    <span id="username" class="text-gray-300 font-semibold text-sm"></span>
+                    <div id="profile-dropdown" class="hidden">
+                        <div class="loader-dot-pulse hidden" id="dropdown-loader">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <div class="dropdown-menu-items">
+                            <a href="#" id="view-profile-link">
+                                <i class="fas fa-user-circle"></i> Profile
+                            </a>
+                            <a href="#" id="settings-link">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                            <a href="#" id="history-link">
+                                <i class="fas fa-history"></i> History
+                            </a>
+                            <a href="#" id="reset-passcode-link">
+                                <i class="fas fa-key"></i> Reset Passcode
+                            </a>
+                            <a href="#" id="add-account-link" class="hidden">
+                                <i class="fas fa-user-plus"></i> Add Account
+                            </a>
+                            <a href="#" id="switch-account-link" class="hidden">
+                                <i class="fas fa-users"></i> Switch Account
+                            </a>
+                            <a href="#" id="logout-btn">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -958,6 +1167,12 @@
                  </div>
             </div>
 
+            <div class="loader-dot-pulse hidden" id="search-results-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+
             <div id="no-results-message" role="alert">
                 No results found for your search.
             </div>
@@ -973,9 +1188,45 @@
         </main>
     </div>
 
+    <div id="sidebar-nav" class="hidden">
+        <div class="sidebar-header">
+            <h2>Anitoono Menu</h2>
+            <button class="sidebar-close-btn">&times;</button>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" id="sidebar-view-profile-link">
+                <i class="fas fa-user-circle"></i> Profile
+            </a>
+            <a href="#" id="sidebar-settings-link">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+            <a href="#" id="sidebar-history-link">
+                <i class="fas fa-history"></i> History
+            </a>
+            <a href="#" id="sidebar-reset-passcode-link">
+                <i class="fas fa-key"></i> Reset Passcode
+            </a>
+            <a href="#" id="sidebar-add-account-link" class="hidden">
+                <i class="fas fa-user-plus"></i> Add Account
+            </a>
+            <a href="#" id="sidebar-switch-account-link" class="hidden">
+                <i class="fas fa-users"></i> Switch Account
+            </a>
+            <a href="#" id="sidebar-logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+        <div class="trending-section mt-auto"> <h3>Trending Anime</h3>
+            <ul id="trending-list" class="trending-list">
+                </ul>
+        </div>
+    </div>
+    <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
+
+
     <div id="login-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-             <span class="modal-close-button" onclick="closeModal('login-modal')">&times;</span>
+             <span class="modal-close-button" data-modal-id="login-modal">&times;</span>
         </div>
         <div class="modal-content">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Login to Anitoono</h2>
@@ -1000,7 +1251,7 @@
 
     <div id="signup-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-             <span class="modal-close-button" onclick="closeModal('signup-modal')">&times;</span>
+             <span class="modal-close-button" data-modal-id="signup-modal">&times;</span>
          </div>
         <div class="modal-content">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Sign Up for Anitoono</h2>
@@ -1037,18 +1288,18 @@
 
     <div id="post-details-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-             <span class="modal-close-button" onclick="closeModal('post-details-modal')">&times;</span>
+             <span class="modal-close-button" data-modal-id="post-details-modal">&times;</span>
          </div>
         <div class="modal-content max-w-2xl">
             <h2 id="post-details-title" class="text-2xl font-semibold mb-4 text-red-500"></h2>
             <div id="post-details-content" class="text-gray-300 mb-6"></div>
-            <button onclick="closeModal('post-details-modal')" class="btn btn-secondary w-full">Close</button>
+            <button id="post-details-close-btn" class="btn btn-secondary w-full">Close</button>
         </div>
     </div>
 
     <div id="settings-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-            <span class="modal-close-button" onclick="closeModal('settings-modal')">&times;</span>
+            <span class="modal-close-button" data-modal-id="settings-modal">&times;</span>
         </div>
         <div class="modal-content">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Settings</h2>
@@ -1086,27 +1337,27 @@
                 </div>
 
 
-                <button onclick="closeModal('settings-modal')" class="btn btn-secondary w-full mt-6">Close</button>
+                <button id="settings-close-btn" class="btn btn-secondary w-full mt-6">Close</button>
             </div>
         </div>
     </div>
 
     <div id="history-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-             <span class="modal-close-button" onclick="closeModal('history-modal')">&times;</span>
+             <span class="modal-close-button" data-modal-id="history-modal">&times;</span>
          </div>
         <div class="modal-content max-lg">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Viewing History</h2>
             <ul id="history-list" class="mb-6">
                 </ul>
              <button id="clear-history-btn-history-modal" class="btn btn-primary w-full mb-4">Clear History</button>
-            <button onclick="closeModal('history-modal')" class="btn btn-secondary w-full">Close</button>
+            <button id="history-close-btn" class="btn btn-secondary w-full">Close</button>
              <div id="history-message" class="text-center mt-4 text-green-500" style="display: none;"></div> </div>
     </div>
 
     <div id="notification-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-             <span class="modal-close-button" onclick="closeModal('notification-modal')">&times;</span>
+             <span class="modal-close-button" data-modal-id="notification-modal">&times;</span>
         </div>
         <div class="modal-content max-sm">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Notifications</h2>
@@ -1121,26 +1372,26 @@
                     Welcome to Anitoono!
                 </li>
             </ul>
-            <button onclick="closeModal('notification-modal')" class="btn btn-secondary w-full mt-6">Close</button>
+            <button id="notification-close-btn" class="btn btn-secondary w-full mt-6">Close</button>
         </div>
     </div>
 
     <div id="profile-details-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-             <span class="modal-close-button" onclick="closeModal('profile-details-modal')">&times;</span>
+             <span class="modal-close-button" data-modal-id="profile-details-modal">&times;</span>
          </div>
         <div class="modal-content max-sm">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">My Profile</h2>
              <img id="profile-modal-avatar" src="" alt="User Avatar">
              <p><strong>Username:</strong> <span id="profile-modal-username"></span></p>
              <p><strong>Email:</strong> <span id="profile-modal-email"></span></p>
-            <button onclick="closeModal('profile-details-modal')" class="btn btn-secondary w-full mt-6">Close</button>
+            <button id="profile-details-close-btn" class="btn btn-secondary w-full mt-6">Close</button>
         </div>
     </div>
 
     <div id="reset-passcode-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-            <span class="modal-close-button" onclick="closeModal('reset-passcode-modal')">&times;</span>
+            <span class="modal-close-button" data-modal-id="reset-passcode-modal">&times;</span>
         </div>
         <div class="modal-content">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Reset Passcode</h2>
@@ -1167,7 +1418,7 @@
 
      <div id="switch-account-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-            <span class="modal-close-button" onclick="closeModal('switch-account-modal')">&times;</span>
+            <span class="modal-close-button" data-modal-id="switch-account-modal">&times;</span>
         </div>
         <div class="modal-content">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Switch Account</h2>
@@ -1176,48 +1427,26 @@
         </div>
     </div>
 
+    <div id="logout-confirmation-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 class="text-2xl font-semibold mb-4 text-red-500 text-center">Confirm Logout</h2>
+            <p class="text-gray-300 mb-6 text-center">Are you sure you want to log out?</p>
+            <div class="flex justify-center space-x-4">
+                <button id="confirm-logout-btn" class="btn btn-primary">Yes, Logout</button>
+                <button id="cancel-logout-btn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <button id="scroll-to-top-btn" title="Go to top">
         <i class="fas fa-arrow-up"></i>
     </button>
 
 
-    <script>
-        // Data for initial posts (before search)
-        let initialPosts = [ // Changed to 'let' so it can be shuffled
-                                                { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ZJ6mD8c41yfKCkzMB31PjOc4lQAHsjBtPblEk8rgFZEKA55VOrvPLaB7Xu7n9NQmvq9H4AMSCMTSE4w6K0DYegjEluUG8aXeNgf3DQEtGga8kbesrTn58botILFHXORCDCEIN7Ar8Q1jn0FDNrOw_orbasxl6jyZE1l9BvDJQO9Mnb3Ae0aut25qCAji/s320/images%20(16).jpeg", url: "https://anitoono45.github.io/super-mario-bros/" },
-            { id: 2, title: "The glassworker", content: "click to watch.", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIUXm_1t8BPBw1giZXIo-ng9wBEWN1sqEUmWBJAb6pgNaR3foGxYsMwOEhV5bfZ01wlB6nRPqOl6A06lmy1VE3BaGVM8QTUotS2fc3ol_dI8XYfCu9BRxYCcDFf0_a-5IujAMnzmvayUeuCNwRVcg6Fx3XwgbTJo5CXiXp2B9yBmZip2vymSkQjIGdeizN/s320/images%20(17).jpeg", url: "https://anitoono45.github.io/The-glassworker/" },
-             { id: 3, title: "The luck Movie", content: "click to watch",imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhryblKlxmlDovuvylSoutki5vxx7v4iz6MxWj7Wz46Ba0sveY27m_D29YQ7HohFTKNJloAZ_ridH8WwS1RVgxjgngCsWsgr2fKOy4s4MF_kaoYeME1BvtQ-032EEZmPRAj0juQNKO1wEnWmpat39zB62uiFbTdQxcLPx0jLtxWzLW0lE0F1kkzP1m1sEAX/s371/Luck_(2022)_poster.png", url: "https://anitoono45.github.io/The-Luck-Movie/" },
-            { id: 4, title: "SPY x FAMILY CODE:White", content: "click to watch.", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhHCdMPKcKBnqo69cZwJmZbAy4coDX1b6r7mpclu_FUjTBmCo00Qe6peg8VkxiVG65aSXrnvMXHTxdz2pBtyryOk0ufnb5q3gI0mPL27E0IF_hMfcaYE0LrtaUEZlysSvp0aPzj25tUjZtPeOgsCrLOUzxnwEDy54Qa6I5xrH2nyRC9jmpysv2PDv4L2KNp/s350/Spy_%C3%97_Family_Code_White_movie_poster.png", url: "https://anitoono45.github.io/SPY-x-FAMILY-CODE-White/" },
-            { id: 5, title: "Doraemon Nobita's Sky Utopia", content: "click to watch.", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXN_8lHhbcggDCqkeLRW6McMGFaFzZe1C6E-Z38rF2ceSIh-QV3-lOc-FUETvXkvQJ7p3JxG4EaejdRNsU93Ww7IYUaTVgFqFDKKhyphenhyphenvVGzJrDEHZpnH05aKy78Aef2Cz3zV3asGhq2XPz3I8idv4Hb8aeOEzT7JVT3WOznPt9zKGEew2HVFNesFMvojV2p/s659/images%20(15).jpeg",url: "https://anitoono45.github.io/Doraemon-the-Movie-Nobita-s-Sky-Utopia/" },
-            { id: 6, title: "Anime Title 6", content: "Anime description 6.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+6", url: "watch.html?id=6" },
-            { id: 7, title: "Anime Title 7", content: "Anime description 7.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+7", url: "watch.html?id=7" },
-            { id: 8, title: "Anime Title 8", content: "Anime description 8.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+8", url: "watch.html?id=8" },
-            { id: 9, title: "Anime Title 9", content: "Anime description 9.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+9", url: "watch.html?id=9" },
-            { id: 10, title: "Anime Title 10", content: "Anime description 10.", imageUrl: "https://placehold.co/400x550/EEE/31343C?text=Poster+10", url: "watch.html?id=10" },
-            // Add your new posts here, like this:
-            // { id: 11, title: "New Anime Title 1", content: "Description for new anime.", imageUrl: "URL_OF_YOUR_IMAGE", url: "watch.html?id=11" },
-            // { id: 12, title: "New Anime Title 2", content: "Another great show.", imageUrl: "URL_OF_ANOTHER_IMAGE", url: "watch.html?id=12" },
-        ];
-
-        const avatarImages = [
-                                              "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh_ca_A9wrVuMNYNAdMBEAmVr38Yjmag2WlX0UUf5N_WxpNAGw4qb9dNUfCxLwM1rBM0l1QOxUmETHQAdqiOHFfUEQMg9aXBIthMj7K1AA8s4Tz9iW6n4jTLJ9rA_BgmJjWLljrdzH5QBlrhILastYFv-xqUGaX2Qb3tGZlSUDu9KIkqoTukabVotXeerZB/s320/images%20(12).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjjXN0Bpdhj1_h9DlhuWzNEe3YTNtlszbxSmVPJW_r6qgd7gayt8DFCct7Sx8DgwAbcWv1jJc2LpB1HbcpnUrjAUHbqYZQwVlBiyACPWRqmmiej278Qi30ohOejsqUmntWcanAy26k6McmKMRrqIjpq3KpakAJsaY3Jh29zMnoqzgEf0sBk8NuvdDzWdGT_/s320/images%20(11).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLywX0IbfA4QLd_SuOlEfXVoS0b-cCfC7GlTRmVdPFAEzAiqa3tA56ncL-oO_9D1RyY-E7LBNetKRv7QyFXrOUOPnAnONhjzUlfxeSmWyXIyKvu91MrgCeUjn-wW6UuoA6QNU05HHmzGp9lnHFhBYmFR4UOASEcdqiyQs3_5dHLbR9I5wfRGGB9VZoEvxw/s320/images%20(2).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2jwXiTITDNaryWwfg6M9dsQgVubEmdnB7YMCINoo3x461EsIsld575Gd58fcKCqvc-cSefLtfv3nicIEoUFKRshcAjB07SuKx6POHk5aXkjcqZ2YzQDAmB_NXoBDEJQbHcmJOS6gBPc2oNGq9DRegcXKyX1hTs7PlN___6djPc90CADsXu4CoWjmDjnDX/s320/images%20(4).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhaHQZq0-mmCLhwBksZgdP2f4kvb9dhAZQnj18Ybp44gSyuFvBh_s5CqOjknay3J6zqA8mSbPEPHFhF3BXG_nJRC5Rm2lGbhnDlhU2yZ8Zpm7VJa7msj02OxO5nViuX4yryhwklae-z1kB-w77uFzqXYIDtRx-QYNxeFFJbb6C9PErjTsLW0_OXCyTJV6Vp/s320/images%20(5).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjLTZ4ZG3T2qklL16G4WRTFB3BFGN-B5dJViu3UhurzaVqdGueXdeHRevqy6jN5iKDZsxnGpWyjIiRvCbEaX9z3NXbWgxPlOAwl0i7_ZPeQ4GE5iuJBT8yhXjbOmRUnFJ-KXBk2kjRgNBXZDZct9lJUrVdunTW661fbWaEAm4AINsda_jaVgKyEFxYdLlyD/s320/images%20(6).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgj8BQrcI51_OMaNoAGctizntzxqFOnQ5rMrc7nnGcjPvYQFvvCAUK6Kj2UgPwT-JoraIiLylOV6YUhwY_ntMiUw9DbcWDNni5SQrdY5SdhjneuGISPF65zZrePrqQ2YKF5LpFkWjrnnK1sjmo31Y-Y0zzJt7vds5wW7bdNtSoeqfFFqOVTwx8A-Zz-tuaW/s320/images%20(7).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMgph7LCDPbAosa6RR0YKqE59bdCCX94_wjHCNwPAPENrKLcEgJQRUyUoj9baUZVNPzhtW8MF4E61MyhU9Q0Bx-9UI57iLYCnfgxVIcM7tKCRmkYlaOKgMVs8J4Sc2IMx9XGyhjv6pietuw8rAnr1y6SjQ9xjwnhc_XSOyDY_dct1NgvZFCRkF2q0F_RQ_/s320/images%20(8).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj2Vo2WUIjen2aktqxxIhzeFpgII5MEKvZPuzDJBxMeyHrwQzAS615EV-MdV7dcmhyphenhyphenT_9n7hVS6xPTf2PjrPWbySLt7EhDAvcXOVn8WCWU9FZ6vo-hpYzTzIR5LZVGKPmnLmuSJsDZIM9aKkkTmno0B9h-_n8smRp_Wj-DA1dWW3YFNbN7omXDHEJqW97DC/s320/images%20(9).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgEDKdFKhlfGAInoUdFLTdpRZ5OGxi27Vnb_Na4cSB7E86N_AuMOnQbXNel0V4WR7gNauEmzISn6fsn8iLumyv1IHOB3Mnz7UAckriREfy5tmEaFQkLQr62muQHf-hOpj-LtjLbpP1Z9O6vbOZM09xT6Yry0KtojLHcOVIU_KzGhxUm4zbiyf65rB0Ecoav/s320/images%20(10).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjLR8ARIsr_qBu60_6V72A37vnDr5rRbYfRnpaKTFJXBLKvy1yHjSewjNdGBEmcqZ3eJoI6nqQGqyEtTIogd5Is_kvSRMj9oBMXiEackLb3NqZON2LZG36dreOchc80Q87PLoIu3lQ7Mf9QjrfnJN6NMgpZDyVFMW3F5lJnmrz30a8cG9bezDM0HIMEWJ4w/s320/images%20(13).jpeg",
-                       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgbOo5jofekpzVOt7letzrOEiIKeTcZa2GE3Xl6FQzlXB_5pkQdBpHkbMuLjZ-Bv9pxRf8BQvSrR0YAiS3oXDcJg0mdfOWepuwq2CVi0XryrLoAwyz0b8hyGAPlf5XS5pvUAXmowP-nSG8fnSdZAIPBSvjW4UL6nxSPXSxSaPFSimZSbdkRvCh7Ym4bpYqE/s554/images%20(14).jpeg",
-                                              "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjfgnNxaphMQu4635iXGAoBsWv3RVIDt7WYzL7qrHS0YwSy-7PcQprLWzuQIikqkBoVTLpOi-y2Mo4Ke81599Yf0dt41ZQpIOPeQlpl1pH7ALHp16vWJ-_YPY5ZLV3XiuklfK5jXWCnYjN2EEX6mhIavbW_IWvKzlND9FtySuTg8WK9zncqWy9rjvSEaQmJ/s320/91c7465bad4f872e805f6a32ff946461.jpg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiFo74xshPdL1B1MvVmvpdyenYwgJXQ-J1O35J_lY0Jc7usutM_0CjcnRBjElRZUCFfcEakTJooZ4jgc4Ue7uF8PBqoj5Bj_DsBJmVtJIdOXpcPyYAZUGm5AqDM0jDTlotmImDyg1AD6t9Ua265D0TAwVPaoMyU5Hu3ycy0x0p78OXGhyphenhyphenvyCrJxmbIlENPQ/s320/b7889fadbcb5ba406e459ceaafe63ec7.jpg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwIJ9ntvynjV7W8iCtPYT6wEft5HVfKXpaKTvjnTLlpj012mOXAkB6c1kd8w823fZv93mLzPZJ5zN0O8UDHd6woKMyEygwU6WqXS6Q9di9CrUATTQ7kqlacvlYKkjbPeBJVxG6EOUWwvMt15wT3WzmQi4rhQo-7UK0O7fhimF5WpgzMxfZK3RKlqcshjGH/s736/674a3c41f18db2e52b81632d54efca75.jpg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhz8YpI3dFaT6hsN3uDhat7OrCLhY7SZk9mwb8sTz1rGcYx8pDNDyUjpO_PfMQPXnheGfyMyrRa1f3ZP7N1UTPvVLMhuqVNQTzcly9xMH_8lii3VozgUNgwhFwdxeyXXgmyzNTGeDP-0zHLPKx6wqWB-h4_1g7_KBrIz_9daUj0J4MUCg54930HQ21PUX59/s320/10ed0c3d6a489f246dddf84788115520.jpg",
-        ];
-
+    <script type="module">
+        // Import data from separate files
+        import { initialPosts, trendingAnime } from './posts.js';
+        import { avatarImages } from './avatars.js';
 
         const postContainer = document.getElementById("post-container");
         const searchInput = document.getElementById("search-input");
@@ -1247,7 +1476,7 @@
         const resetPasscodeModal = document.getElementById("reset-passcode-modal");
         const resetPasscodeForm = document.getElementById("reset-passcode-form");
         const currentPasscodeInput = document.getElementById("current-passcode");
-        const newPasscodeInput = document.getElementById("new-passcode");
+        const newPasscodeInput = document.getElementById("new-passcode"); // Corrected assignment
         const confirmNewPasscodeInput = document.getElementById("confirm-new-passcode");
         const currentPasscodeError = document.getElementById("current-passcode-error");
         const newPasscodeError = document.getElementById("new-passcode-error");
@@ -1300,9 +1529,41 @@
         const clearSearchBtn = document.getElementById('clear-search-btn'); // Get the clear search button
         const searchLoadingSpinner = document.getElementById('search-loading-spinner'); // Get the search loading spinner
         const noResultsMessage = document.getElementById('no-results-message'); // Get the no results message element
+        const searchResultsLoader = document.getElementById('search-results-loader'); // New search results loader
 
         // Get all modal header handle elements for swipe gestures
         const modalHeaderHandles = document.querySelectorAll('.modal-bottom-sheet .modal-header-handle');
+
+        // New Logout Confirmation Modal Elements
+        const logoutConfirmationModal = document.getElementById('logout-confirmation-modal');
+        const confirmLogoutBtn = document.getElementById('confirm-logout-btn');
+        const cancelLogoutBtn = document.getElementById('cancel-logout-btn');
+
+        // Sidebar Elements
+        const sidebarNav = document.getElementById('sidebar-nav');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const sidebarCloseBtn = document.querySelector('.sidebar-close-btn');
+        const trendingList = document.getElementById('trending-list');
+
+        // Sidebar Menu Links (for easy access and event delegation)
+        const sidebarViewProfileLink = document.getElementById('sidebar-view-profile-link');
+        const sidebarSettingsLink = document.getElementById('sidebar-settings-link');
+        const sidebarHistoryLink = document.getElementById('sidebar-history-link');
+        const sidebarResetPasscodeLink = document.getElementById('sidebar-reset-passcode-link');
+        const sidebarAddAccountLink = document.getElementById('sidebar-add-account-link');
+        const sidebarSwitchAccountLink = document.getElementById('sidebar-switch-account-link');
+        const sidebarLogoutBtn = document.getElementById('sidebar-logout-btn');
+
+        // Dropdown Loader Elements
+        const dropdownLoader = document.getElementById('dropdown-loader');
+        const dropdownMenuItems = document.querySelector('#profile-dropdown .dropdown-menu-items');
+
+        // Specific "Close" buttons within modals (for event listeners)
+        const postDetailsCloseBtn = document.getElementById('post-details-close-btn');
+        const settingsCloseBtn = document.getElementById('settings-close-btn');
+        const historyCloseBtn = document.getElementById('history-close-btn');
+        const notificationCloseBtn = document.getElementById('notification-close-btn');
+        const profileDetailsCloseBtn = document.getElementById('profile-details-close-btn');
 
 
         let users = JSON.parse(localStorage.getItem("users")) || [];
@@ -1416,6 +1677,8 @@
                  // No form fields to clear in the notification modal
             } else if (modalId === 'profile-details-modal') {
                  // No form fields to clear in the profile details modal
+            } else if (modalId === 'logout-confirmation-modal') {
+                // No specific fields to clear for confirmation modal
             }
         }
 
@@ -1505,8 +1768,10 @@
             // Show/hide no results message based on the result of getPostsForDisplay and search term
             if (postsToDisplay.length === 0 && searchInput.value.trim() !== "") {
                  noResultsMessage.style.display = 'block';
+                 postContainer.style.display = 'none'; // Hide post container if no results
             } else {
                  noResultsMessage.style.display = 'none';
+                 postContainer.style.display = 'grid'; // Show post container if results
                  postsToDisplay.forEach((post) => {
                     const postElement = createPostElement(post, false); // Pass false for isContinueWatching
                     postContainer.appendChild(postElement);
@@ -1542,14 +1807,6 @@
             postElement.classList.add("post-card"); // Use the new post-card class
             postElement.dataset.postId = post.id; // Add data attribute for post ID
 
-            // Add click listener to the post card
-            postElement.addEventListener("click", () => {
-                // Redirect to the post URL when clicked
-                window.location.href = post.url;
-                updateViewHistory(post); // Update history when a post is clicked
-            });
-
-
             const imageElement = document.createElement("img");
             imageElement.src = post.imageUrl;
             imageElement.alt = post.title;
@@ -1570,6 +1827,13 @@
             contentElement.appendChild(descriptionElement);
             postElement.appendChild(imageElement);
             postElement.appendChild(contentElement);
+
+            // Add click listener to the post card
+            postElement.addEventListener("click", () => {
+                // Redirect to the post URL when clicked
+                window.location.href = post.url;
+                updateViewHistory(post); // Update history when a post is clicked
+            });
 
             // Add remove button if it's for the Continue Watching section
             if (isContinueWatching) {
@@ -1737,18 +2001,26 @@
 
         // Actual search logic
         function performSearch() {
-            // performSearch now just triggers a re-render of the main posts based on the current search input
-            displayPosts(getPostsForDisplay());
+            // Show loader and hide posts immediately
+            searchResultsLoader.classList.remove('hidden');
+            postContainer.style.display = 'none';
+            noResultsMessage.style.display = 'none';
 
-            // Hide spinner (assuming search is fast or handled elsewhere)
-            searchLoadingSpinner.style.display = 'none';
+            setTimeout(() => {
+                // After a simulated delay, hide loader and display posts
+                searchResultsLoader.classList.add('hidden');
+                displayPosts(getPostsForDisplay()); // Re-display posts based on current search term
 
-            // Show clear button if input is not empty
-            if (searchInput.value.trim() !== "") {
-                clearSearchBtn.style.display = 'inline-block';
-            } else {
-                 clearSearchBtn.style.display = 'none';
-            }
+                // Hide spinner (assuming search is fast or handled elsewhere)
+                searchLoadingSpinner.style.display = 'none';
+
+                // Show clear button if input is not empty
+                if (searchInput.value.trim() !== "") {
+                    clearSearchBtn.style.display = 'inline-block';
+                } else {
+                    clearSearchBtn.style.display = 'none';
+                }
+            }, 500); // Simulate 500ms search time
         }
 
         // Debounced version of performSearch
@@ -1799,16 +2071,20 @@
                  // Load settings for the logged-in user
                 loadUserSettings();
 
-                // Show/hide Add Account and Switch Account links based on user count
+                // Show/hide Add Account and Switch Account links based on user count for both dropdown and sidebar
                 if (users.length < ACCOUNT_LIMIT) {
                     addAccountLink.classList.remove('hidden');
+                    sidebarAddAccountLink.classList.remove('hidden');
                 } else {
                     addAccountLink.classList.add('hidden');
+                    sidebarAddAccountLink.classList.add('hidden');
                 }
                 if (users.length > 1) {
                      switchAccountLink.classList.remove('hidden');
+                     sidebarSwitchAccountLink.classList.remove('hidden');
                 } else {
                      switchAccountLink.classList.add('hidden');
+                     sidebarSwitchAccountLink.classList.add('hidden');
                 }
 
                 // Render continue watching section for the logged-in user (respects settings)
@@ -1836,9 +2112,11 @@
                  userSettings = { enableContinueWatching: true, saveHistory: true }; // Reset settings to default
 
 
-                 // Hide multi-account links
+                 // Hide multi-account links for both dropdown and sidebar
                  addAccountLink.classList.add('hidden');
                  switchAccountLink.classList.add('hidden');
+                 sidebarAddAccountLink.classList.add('hidden');
+                 sidebarSwitchAccountLink.classList.add('hidden');
 
                  // Hide continue watching section when not logged in
                  continueWatchingSection.classList.add('hidden');
@@ -1958,6 +2236,96 @@
             }
         }
 
+        // Function to perform logout logic
+        function performLogout() {
+            // Store the email of the user being logged out
+            const loggedOutUserEmail = loggedInUser ? loggedInUser.email : null;
+
+            // Filter out the logged-out user from the users array
+            users = users.filter(user => user.email !== loggedOutUserEmail);
+            localStorage.setItem("users", JSON.stringify(users)); // Update users in local storage
+
+            // Check if there are any remaining accounts
+            if (users.length > 0) {
+                // Switch to the first available account in the updated users array
+                loggedInUser = users[0];
+                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+                 // Simulate a brief loading state
+                 loadingOverlay.style.display = 'flex';
+                 mainContentDiv.style.display = 'none';
+                 loadingAvatarImg.src = loggedInUser.avatar;
+                 loadingUsernameSpan.textContent = `Switching to ${loggedInUser.username}...`;
+
+                 setTimeout(() => {
+                     loadingOverlay.style.opacity = '0';
+                     setTimeout(() => {
+                         loadingOverlay.style.display = 'none';
+                         loadingOverlay.style.opacity = '1';
+                         mainContentDiv.style.display = 'block';
+                         loadUserProfile(); // Update header and links based on the new loggedInUser (this will also load the correct history and render continue watching)
+                         displayPosts(getPostsForDisplay()); // Display main posts for the new user (respects new history)
+                     }, 500);
+                 }, 1000); // Simulate 1 second switch time
+
+
+            } else {
+                // No other accounts, proceed with regular logout
+                loggedInUser = null;
+                localStorage.removeItem("loggedInUser");
+                viewHistory = []; // Clear history when no user is logged in
+                 userSettings = { enableContinueWatching: true, saveHistory: true }; // Reset settings to default
+                loadUserProfile(); // Call loadUserProfile to update UI (show login icon) and hide continue watching
+                displayPosts(getPostsForDisplay()); // Display main posts (will show all initial posts as no user is logged in)
+            }
+
+             // Hide the dropdown after logging out/switching
+            profileDropdown.classList.remove('show'); // Ensure dropdown is hidden
+            closeModal('logout-confirmation-modal'); // Close the confirmation modal
+            closeSidebar(); // Close sidebar if open
+        }
+
+        // Function to open the sidebar
+        function openSidebar() {
+            sidebarNav.classList.remove('hidden');
+            sidebarOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                sidebarNav.classList.add('show');
+                sidebarOverlay.classList.add('show');
+                document.body.classList.add('modal-open'); // Disable body scroll
+            }, 10); // Small delay to ensure display property is applied
+            renderTrendingAnime(); // Render trending anime when sidebar opens
+        }
+
+        // Function to close the sidebar
+        function closeSidebar() {
+            sidebarNav.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            setTimeout(() => {
+                sidebarNav.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+                document.body.classList.remove('modal-open'); // Re-enable body scroll
+            }, 300); // Match CSS transition duration
+        }
+
+        // Function to render trending anime list
+        function renderTrendingAnime() {
+            trendingList.innerHTML = ""; // Clear previous items
+            trendingAnime.forEach(anime => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('trending-item');
+                listItem.innerHTML = `
+                    <img src="${anime.imageUrl}" alt="${anime.title}" class="w-12 h-12 rounded object-cover border-2 border-red-500">
+                    <span>${anime.title}</span>
+                `;
+                listItem.addEventListener('click', () => {
+                    window.location.href = anime.url; // Redirect to anime URL
+                    closeSidebar(); // Close sidebar after clicking
+                });
+                trendingList.appendChild(listItem);
+            });
+        }
+
 
         // Event Listeners
         // Use the debounced search function for input events
@@ -1988,6 +2356,37 @@
         loginIcon.addEventListener("click", () => {
             openModal('login-modal');
         });
+
+        // Modified userProfileDiv click to show loader then dropdown options
+        userProfileDiv.addEventListener('click', () => {
+            if (loggedInUser) {
+                // Toggle visibility of the dropdown itself
+                profileDropdown.classList.toggle('show');
+
+                if (profileDropdown.classList.contains('show')) {
+                    // If dropdown is now visible, show loader and hide menu items
+                    dropdownLoader.classList.remove('hidden');
+                    dropdownMenuItems.style.display = 'none';
+
+                    // After a delay, hide loader and show menu items
+                    setTimeout(() => {
+                        dropdownLoader.classList.add('hidden');
+                        dropdownMenuItems.style.display = 'block';
+                    }, 500); // 500ms delay for the loader
+                } else {
+                    // If dropdown is being hidden, ensure menu items are hidden immediately
+                    dropdownMenuItems.style.display = 'none';
+                    dropdownLoader.classList.add('hidden'); // Also hide loader if it was somehow visible
+                }
+            }
+        });
+
+
+        // Sidebar close button
+        sidebarCloseBtn.addEventListener('click', closeSidebar);
+        // Sidebar overlay click to close
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
 
         switchToSignupBtn.addEventListener("click", (event) => {
             event.preventDefault(); // Prevent default link behavior
@@ -2151,57 +2550,27 @@
             displayPosts(getPostsForDisplay()); // Display main posts after successful signup (respects new history)
         });
 
+        // Modified logout button to show confirmation modal
         logoutBtn.addEventListener("click", (event) => {
              event.preventDefault(); // Prevent default link behavior
-
-            // Store the email of the user being logged out
-            const loggedOutUserEmail = loggedInUser ? loggedInUser.email : null;
-
-            // Filter out the logged-out user from the users array
-            users = users.filter(user => user.email !== loggedOutUserEmail);
-            localStorage.setItem("users", JSON.stringify(users)); // Update users in local storage
-
-            // Check if there are any remaining accounts
-            if (users.length > 0) {
-                // Switch to the first available account in the updated users array
-                loggedInUser = users[0];
-                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
-
-                 // Simulate a brief loading state
-                 loadingOverlay.style.display = 'flex';
-                 mainContentDiv.style.display = 'none';
-                 loadingAvatarImg.src = loggedInUser.avatar;
-                 loadingUsernameSpan.textContent = `Switching to ${loggedInUser.username}...`;
-
-                 setTimeout(() => {
-                     loadingOverlay.style.opacity = '0';
-                     setTimeout(() => {
-                         loadingOverlay.style.display = 'none';
-                         loadingOverlay.style.opacity = '1';
-                         mainContentDiv.style.display = 'block';
-                         loadUserProfile(); // Update header and links based on the new loggedInUser (this will also load the correct history and render continue watching)
-                         displayPosts(getPostsForDisplay()); // Display main posts for the new user (respects new history)
-                     }, 500);
-                 }, 1000); // Simulate 1 second switch time
-
-
-            } else {
-                // No other accounts, proceed with regular logout
-                loggedInUser = null;
-                localStorage.removeItem("loggedInUser");
-                viewHistory = []; // Clear history when no user is logged in
-                 userSettings = { enableContinueWatching: true, saveHistory: true }; // Reset settings to default
-                loadUserProfile(); // Call loadUserProfile to update UI (show login icon) and hide continue watching
-                displayPosts(getPostsForDisplay()); // Display main posts (will show all initial posts as no user is logged in)
-            }
-
-             // Hide the dropdown after logging out/switching
-            profileDropdown.classList.remove('show'); // Ensure dropdown is hidden
+             openModal('logout-confirmation-modal'); // Open the confirmation modal
         });
+        sidebarLogoutBtn.addEventListener("click", (event) => {
+             event.preventDefault(); // Prevent default link behavior
+             openModal('logout-confirmation-modal'); // Open the confirmation modal
+        });
+
+
+        // Event listener for "Yes, Logout" button in confirmation modal
+        confirmLogoutBtn.addEventListener('click', () => {
+            performLogout(); // Call the actual logout function
+        });
+
 
         settingsBtn.addEventListener("click", (event) => {
             event.preventDefault(); // Prevent default link behavior
             profileDropdown.classList.remove('show'); // Hide the dropdown
+            dropdownMenuItems.style.display = 'none'; // Ensure menu items are hidden
              // Load current settings before opening the modal
             loadUserSettings();
             openModal('settings-modal');
@@ -2212,6 +2581,20 @@
                 changeUsernameInput.value = loggedInUser.username;
             }
         });
+        sidebarSettingsLink.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            closeSidebar(); // Close sidebar
+             // Load current settings before opening the modal
+            loadUserSettings();
+            openModal('settings-modal');
+             // Render avatar options for settings, pre-selecting the current avatar
+            if(loggedInUser) {
+                renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, loggedInUser.avatar);
+                 // Set the current username in the input field
+                changeUsernameInput.value = loggedInUser.username;
+            }
+        });
+
 
         // Event listener for saving username change
         saveUsernameBtn.addEventListener('click', () => {
@@ -2267,9 +2650,17 @@
         historyLink.addEventListener('click', (event) => {
             event.preventDefault(); // Prevent default link behavior
             profileDropdown.classList.remove('show'); // Hide the dropdown
+            dropdownMenuItems.style.display = 'none'; // Ensure menu items are hidden
             renderHistory(); // Render the history list for the current user
             openModal('history-modal'); // Open the history modal
         });
+        sidebarHistoryLink.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            closeSidebar(); // Hide the sidebar
+            renderHistory(); // Render the history list for the current user
+            openModal('history-modal'); // Open the history modal
+        });
+
 
         // Event listener for the Clear History button in the History modal
         clearHistoryBtn.addEventListener("click", () => {
@@ -2373,23 +2764,25 @@
         viewProfileLink.addEventListener('click', (event) => {
             event.preventDefault(); // Prevent default link behavior
             profileDropdown.classList.remove('show'); // Hide the dropdown
+            dropdownMenuItems.style.display = 'none'; // Ensure menu items are hidden
+            populateProfileDetailsModal(); // Populate the modal with current user data
+            openModal('profile-details-modal'); // Open the profile details modal
+        });
+        sidebarViewProfileLink.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            closeSidebar(); // Hide the sidebar
             populateProfileDetailsModal(); // Populate the modal with current user data
             openModal('profile-details-modal'); // Open the profile details modal
         });
 
-
-        userProfileDiv.addEventListener('click', () => {
-             // Only toggle dropdown visibility if a user is logged in
-            if (loggedInUser) {
-                 profileDropdown.classList.toggle('show');
-            }
-        });
 
         // Modified window click listener to close modals including bottom sheets
         window.addEventListener('click', (event) => {
             // Close dropdown if click is outside user profile and dropdown
             if (!userProfileDiv.contains(event.target) && !profileDropdown.contains(event.target)) {
                 profileDropdown.classList.remove('show');
+                dropdownMenuItems.style.display = 'none'; // Ensure menu items are hidden
+                dropdownLoader.classList.add('hidden'); // Ensure loader is hidden
             }
 
             // Close regular modals if click is outside modal content (but inside modal overlay)
@@ -2413,8 +2806,15 @@
         resetPasscodeLink.addEventListener('click', (event) => {
             event.preventDefault(); // Prevent the default link behavior
             profileDropdown.classList.remove('show'); // Hide the dropdown
+            dropdownMenuItems.style.display = 'none'; // Ensure menu items are hidden
             openModal('reset-passcode-modal'); // Show the reset passcode modal
         });
+        sidebarResetPasscodeLink.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent the default link behavior
+            closeSidebar(); // Hide the sidebar
+            openModal('reset-passcode-modal'); // Show the reset passcode modal
+        });
+
 
         resetPasscodeForm.addEventListener('submit', (event) => {
             event.preventDefault();
@@ -2496,6 +2896,21 @@
         addAccountLink.addEventListener('click', (event) => {
             event.preventDefault();
             profileDropdown.classList.remove('show'); // Hide dropdown
+            dropdownMenuItems.style.display = 'none'; // Ensure menu items are hidden
+            // Check account limit before opening signup
+            if (users.length < ACCOUNT_LIMIT) {
+                 openModal('signup-modal');
+                 signupAvatarInput.value = ''; // Clear previous avatar selection
+                 renderAvatarOptions(avatarOptionsContainer, signupAvatarInput);
+            } else {
+                 // Optionally display a message to the user that the limit is reached
+                 // This could be a temporary message or a modal
+                 alert(`Account limit (${ACCOUNT_LIMIT}) reached. Cannot create more accounts.`);
+            }
+        });
+        sidebarAddAccountLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            closeSidebar(); // Hide sidebar
             // Check account limit before opening signup
             if (users.length < ACCOUNT_LIMIT) {
                  openModal('signup-modal');
@@ -2512,9 +2927,17 @@
         switchAccountLink.addEventListener('click', (event) => {
             event.preventDefault();
             profileDropdown.classList.remove('show'); // Hide dropdown
+            dropdownMenuItems.style.display = 'none'; // Ensure menu items are hidden
             renderSwitchAccountOptions(); // Populate the switch account modal
             openModal('switch-account-modal'); // Open the switch account modal
         });
+        sidebarSwitchAccountLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            closeSidebar(); // Hide sidebar
+            renderSwitchAccountOptions(); // Populate the switch account modal
+            openModal('switch-account-modal'); // Open the switch account modal
+        });
+
 
         // Scroll to top button logic
         window.addEventListener('scroll', () => {
@@ -2571,6 +2994,24 @@
                  }
              });
         });
+
+        // --- NEW EVENT LISTENERS FOR MODAL CLOSE BUTTONS ---
+        // Get all modal close buttons (cross icons)
+        const allModalCloseButtons = document.querySelectorAll('.modal-close-button');
+        allModalCloseButtons.forEach(button => {
+            const modalId = button.dataset.modalId; // Get modal ID from data attribute
+            if (modalId) {
+                button.addEventListener('click', () => closeModal(modalId));
+            }
+        });
+
+        // Add event listeners for specific "Close" buttons
+        if (postDetailsCloseBtn) postDetailsCloseBtn.addEventListener('click', () => closeModal('post-details-modal'));
+        if (settingsCloseBtn) settingsCloseBtn.addEventListener('click', () => closeModal('settings-modal'));
+        if (historyCloseBtn) historyCloseBtn.addEventListener('click', () => closeModal('history-modal'));
+        if (notificationCloseBtn) notificationCloseBtn.addEventListener('click', () => closeModal('notification-modal'));
+        if (profileDetailsCloseBtn) profileDetailsCloseBtn.addEventListener('click', () => closeModal('profile-details-modal'));
+        if (cancelLogoutBtn) cancelLogoutBtn.addEventListener('click', () => closeModal('logout-confirmation-modal'));
 
 
         // Initial setup on page load
