@@ -1,5 +1,5 @@
 // posts.js
-// This file contains the initial data for anime posts.
+// This file contains the initial data for anime post.
 
 export const initialPosts = [
                                                     { id: 1, title: "Super Mario Bros Movie", content: "click to watch", imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ZJ6mD8c41yfKCkzMB31PjOc4lQAHsjBtPblEk8rgFZEKA55VOrvPLaB7Xu7n9NQmvq9H4AMSCMTSE4w6K0DYegjEluUG8aXeNgf3DQEtGga8kbesrTn58botILFHXORCDCEIN7Ar8Q1jn0FDNrOw_orbasxl6jyZE1l9BvDJQO9Mnb3Ae0aut25qCAji/s320/images%20(16).jpeg", url: "https://anitoono45.github.io/super-mario-bros/" },
