@@ -460,13 +460,40 @@
             color: #f87171; /* Match heading color */
         }
 
+        /* Modified for Horizontal Scrolling */
         #continue-watching-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid */
+            display: flex; /* Use flexbox for horizontal layout */
+            overflow-x: auto; /* Enable horizontal scrolling */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
             gap: 1rem; /* Space between items */
-             /* Ensure grid items stretch to fill the row height */
-            align-items: stretch;
+            padding-bottom: 1rem; /* Add some padding for scrollbar */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: #ef4444 #1e293b; /* Firefox thumb and track */
         }
+
+        /* Webkit scrollbar styles */
+        #continue-watching-container::-webkit-scrollbar {
+            height: 8px; /* Height of horizontal scrollbar */
+        }
+
+        #continue-watching-container::-webkit-scrollbar-track {
+            background: #1e293b; /* Track color */
+            border-radius: 10px;
+        }
+
+        #continue-watching-container::-webkit-scrollbar-thumb {
+            background-color: #ef4444; /* Thumb color */
+            border-radius: 10px;
+            border: 2px solid #1e293b; /* Padding around thumb */
+        }
+
+        #continue-watching-container .post-card {
+            flex-shrink: 0; /* Prevent items from shrinking */
+            width: 150px; /* Fixed width for horizontal items */
+            min-width: 150px; /* Ensure minimum width */
+            height: auto; /* Let height adjust naturally */
+        }
+
 
          /* Main Post Container Styles */
         #post-container {
@@ -1476,7 +1503,7 @@
         const resetPasscodeModal = document.getElementById("reset-passcode-modal");
         const resetPasscodeForm = document.getElementById("reset-passcode-form");
         const currentPasscodeInput = document.getElementById("current-passcode");
-        const newPasscodeInput = document.getElementById("new-passcode"); // Corrected assignment
+        const newPasscodeInput = document.getElementById("new-passcode");
         const confirmNewPasscodeInput = document.getElementById("confirm-new-passcode");
         const currentPasscodeError = document.getElementById("current-passcode-error");
         const newPasscodeError = document.getElementById("new-passcode-error");
@@ -1738,25 +1765,9 @@
                     post.title.toLowerCase().includes(searchTerm)
                 );
             } else {
-                // 2. If no search term, filter out posts in "Continue Watching" if enabled and logged in
-                if (loggedInUser && userSettings.enableContinueWatching && userSettings.saveHistory) {
-                    // Load the latest history for the current user
-                    viewHistory = JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || [];
-                    postsToDisplay = initialPosts.filter(post =>
-                        !viewHistory.some(historyItem => historyItem.id === post.id)
-                    );
-                } else {
-                     // If not logged in, continue watching disabled, or history saving disabled, show all initial posts
-                     postsToDisplay = initialPosts;
-                }
+                // If no search term, always show all initial posts, but shuffled
+                postsToDisplay = shuffleArray([...initialPosts]); // Create a copy to shuffle
             }
-
-             // 3. Shuffle the resulting list (only if no search term, or if you want search results shuffled too)
-             // For now, let's only shuffle when there's no search term
-             if (searchTerm === "") {
-                 postsToDisplay = shuffleArray(postsToDisplay);
-             }
-
 
             return postsToDisplay;
         }
@@ -1880,7 +1891,7 @@
                  // Update continue watching section immediately after adding to history
                 renderContinueWatching();
                  // Update main posts display to remove the watched item
-                displayPosts(getPostsForDisplay());
+                // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
             }
         }
 
@@ -1897,7 +1908,7 @@
                      renderHistory();
                  }
                  // Re-render the main posts display to potentially add the removed item back
-                 displayPosts(getPostsForDisplay());
+                 // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
              }
         }
 
@@ -2169,16 +2180,7 @@
                                 loggedInUser = user;
                                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
                                 closeModal('switch-account-modal');
-                                // Reload profile and posts for the new user
-                                loadUserProfile(); // Update header and links (this will also load the correct history and render continue watching)
-                                // Re-render main posts for the new user (respects new history)
-                                displayPosts(getPostsForDisplay());
-
-
-                                 // Remove loading indicator (optional, as modal closes)
-                                 accountOption.classList.remove('switching');
-                                 loadingText.remove();
-
+                                startAppSequence(); // Start the full app sequence with loading screen
                             }, 500); // 500ms delay
                         });
                     }
@@ -2719,7 +2721,7 @@
                      userSettings.enableContinueWatching = true;
                      saveUserSettings();
                      renderContinueWatching(); // Update the display based on the new setting
-                     displayPosts(getPostsForDisplay()); // Update main posts display
+                     // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
                      updateSettingsButtonStates(); // Update button appearance
                  }
              });
@@ -2729,7 +2731,7 @@
                      userSettings.enableContinueWatching = false;
                      saveUserSettings();
                      renderContinueWatching(); // Update the display based on the new setting
-                     displayPosts(getPostsForDisplay()); // Update main posts display
+                     // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
                      updateSettingsButtonStates(); // Update button appearance
                  }
              });
@@ -2741,7 +2743,7 @@
                      updateSettingsButtonStates(); // Update button appearance
                      // Re-render continue watching and main posts based on potentially re-enabled history
                      renderContinueWatching();
-                     displayPosts(getPostsForDisplay());
+                     // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
                  }
              });
 
@@ -2754,7 +2756,7 @@
                      updateSettingsButtonStates(); // Update button appearance
                       // Re-render continue watching and main posts based on potentially disabled history
                      renderContinueWatching();
-                     displayPosts(getPostsForDisplay());
+                     // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
                  }
              }
              );
@@ -3014,25 +3016,21 @@
         if (cancelLogoutBtn) cancelLogoutBtn.addEventListener('click', () => closeModal('logout-confirmation-modal'));
 
 
-        // Initial setup on page load
-        window.onload = function() {
-             // Always show loading overlay initially
+        // Function to handle the loading screen and main app display sequence
+        function startAppSequence() {
+            // Show loading overlay
             loadingOverlay.style.display = 'flex';
-            mainContentDiv.style.display = 'none'; // Hide main content
+            mainContentDiv.style.display = 'none';
 
-            // Determine loading screen content based on login status
-            loadUserProfile(); // This now only sets the loading screen details and header elements' visibility state
-
-             // Set loading screen avatar and username based on loggedInUser or default
+            // Set loading screen avatar and username based on loggedInUser
             if (loggedInUser) {
                 loadingAvatarImg.src = loggedInUser.avatar;
-                loadingUsernameSpan.textContent = loggedInUser.username;
+                loadingUsernameSpan.textContent = `Welcome, ${loggedInUser.username}!`;
             } else {
-                 // Use a default avatar and text if not logged in
-                 loadingAvatarImg.src = avatarImages[0]; // Or any default image
-                 loadingUsernameSpan.textContent = 'Loading...';
+                // Fallback if somehow called without loggedInUser (shouldn't happen here)
+                loadingAvatarImg.src = avatarImages[0];
+                loadingUsernameSpan.textContent = 'Loading Anitoono...';
             }
-
 
             // Hide loading screen and show main content after 3 seconds
             setTimeout(() => {
@@ -3042,24 +3040,49 @@
                     loadingOverlay.style.opacity = '1'; // Reset opacity for next load
                     mainContentDiv.style.display = 'block'; // Show main content
 
-                     // Now that the loading is done and main content is visible,
-                     // call loadUserProfile again to ensure correct header state
-                     // and display initial posts.
-                     loadUserProfile(); // Re-run to set header based on final loggedInUser state (this will also load the correct history and render continue watching)
+                    // Now that the loading is done and main content is visible,
+                    // call loadUserProfile again to ensure correct header state
+                    // and display initial posts.
+                    loadUserProfile(); // Re-run to set header based on final loggedInUser state (this will also load the correct history and render continue watching)
 
-                     // Initial display of main posts (filtered and shuffled)
-                     displayPosts(getPostsForDisplay());
+                    // Initial display of main posts (filtered and shuffled)
+                    displayPosts(getPostsForDisplay());
 
-                     // Start the hourly shuffle interval for main posts (only if not searching)
-                     // 3600000 milliseconds = 1 hour
-                     setInterval(() => {
-                         if (searchInput.value.trim() === "") {
-                              shuffleAndDisplayPosts();
-                         }
-                     }, 3600000);
+                    // Start the hourly shuffle interval for main posts (only if not searching)
+                    setInterval(() => {
+                        if (searchInput.value.trim() === "") {
+                            shuffleAndDisplayPosts();
+                        }
+                    }, 3600000);
 
                 }, 500); // Match CSS transition duration
             }, 3000); // 3 seconds delay for initial loading screen
+        }
+
+        // Initial setup on page load
+        window.onload = function() {
+            // Ensure main content and loading overlay are hidden initially for a clean start
+            mainContentDiv.style.display = 'none';
+            loadingOverlay.style.display = 'none';
+
+            // Re-fetch users and loggedInUser from localStorage
+            users = JSON.parse(localStorage.getItem("users")) || [];
+            loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+            // Robust check for loggedInUser validity
+            if (loggedInUser && (!loggedInUser.email || !loggedInUser.username || !loggedInUser.password || !loggedInUser.avatar)) {
+                loggedInUser = null;
+                localStorage.removeItem("loggedInUser");
+            }
+
+            if (loggedInUser) {
+                // If a valid loggedInUser exists, start the app sequence
+                startAppSequence();
+            } else {
+                // If no valid loggedInUser, show the login modal
+                openModal('login-modal');
+                // No loading screen for initial login/signup
+            }
         };
 
     </script>
