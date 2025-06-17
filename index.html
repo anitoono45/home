@@ -1110,6 +1110,96 @@
             margin-top: 2rem;
             min-height: 80px; /* Ensure space for loader */
         }
+        /* Global Notification Box Styles */
+        #global-notification-box {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100; /* Ensure it's on top of everything */
+            background-color: #10b981; /* Tailwind green-500 */
+            color: #f9fafb; /* White text */
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none; /* Allows clicks to pass through when hidden */
+            display: none; /* Initially hidden */
+            min-width: 200px; /* Ensure it's not too small */
+        }
+
+        #global-notification-box.show {
+            opacity: 1;
+            pointer-events: auto; /* Allow interaction when visible */
+        }
+
+        /* Welcome Back Modal Styles */
+        #welcome-back-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0f172a; /* Dark background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 101; /* Higher than other modals */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        #welcome-back-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #welcome-back-avatar {
+            width: 180px; /* Larger avatar */
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid #ef4444; /* Red border */
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.6); /* Glowing effect */
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite ease-in-out; /* Add subtle pulse animation */
+        }
+
+        #welcome-back-username {
+            font-size: 2.5rem; /* Larger text */
+            font-weight: 700;
+            color: #f1f5f9;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            margin-bottom: 3rem;
+        }
+
+        #welcome-back-enter-btn {
+            padding: 1rem 3rem;
+            font-size: 1.5rem;
+            border-radius: 50px; /* Pill shape */
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+        }
+
+        #welcome-back-enter-btn:hover {
+            background-color: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.6);
+        }
+
+        #welcome-back-enter-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+        }
 
     </style>
 </head>
@@ -1330,14 +1420,15 @@
         </div>
         <div class="modal-content">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Settings</h2>
+            
+
             <div class="space-y-4">
                  <div class="setting-option">
                     <label for="change-username">Change Username:</label>
                     <input type="text" id="change-username" class="form-input flex-grow ml-4">
                     </div>
                  <div id="change-username-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
-                 <button id="save-username-btn" class="btn btn-primary w-full mt-4">Save Username</button>
-
+                
 
                 <div class="setting-option flex-col items-start">
                     <label for="change-avatar" class="mb-2">Change Avatar:</label>
@@ -1362,9 +1453,9 @@
                         <button class="btn btn-secondary" id="disable-save-history-btn">Disable</button>
                     </div>
                 </div>
+                 <button id="save-all-changes-btn" class="btn btn-primary w-full mt-6">Save All Changes</button>
 
-
-                <button id="settings-close-btn" class="btn btn-secondary w-full mt-6">Close</button>
+                <button id="settings-close-btn" class="btn btn-secondary w-full mt-2">Close</button>
             </div>
         </div>
     </div>
@@ -1469,6 +1560,18 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <!-- Global Notification Box -->
+    <div id="global-notification-box" class="message-box success">
+        Changes are saved!
+    </div>
+
+    <!-- Welcome Back Modal (New Feature) -->
+    <div id="welcome-back-modal" class="hidden">
+        <img id="welcome-back-avatar" src="" alt="User Avatar">
+        <span id="welcome-back-username"></span>
+        <button id="welcome-back-enter-btn">Enter</button>
+    </div>
+
 
     <script type="module">
         // Import data from separate files
@@ -1509,7 +1612,6 @@
         const newPasscodeError = document.getElementById("new-passcode-error");
         const confirmNewPasscodeError = document.getElementById("confirm-new-passcode-error");
         const changeUsernameInput = document.getElementById("change-username");
-        const saveUsernameBtn = document.getElementById("save-username-btn");
         const changeUsernameError = document.getElementById("change-username-error");
         const historyLink = document.getElementById("history-link");
         const historyModal = document.getElementById("history-modal");
@@ -1592,6 +1694,18 @@
         const notificationCloseBtn = document.getElementById('notification-close-btn');
         const profileDetailsCloseBtn = document.getElementById('profile-details-close-btn');
 
+        // Global Notification Element
+        const globalNotificationBox = document.getElementById('global-notification-box');
+
+        // The "Save All Changes" button
+        const saveAllChangesBtn = document.getElementById('save-all-changes-btn');
+
+        // New Welcome Back Modal Elements
+        const welcomeBackModal = document.getElementById('welcome-back-modal');
+        const welcomeBackAvatar = document.getElementById('welcome-back-avatar');
+        const welcomeBackUsername = document.getElementById('welcome-back-username');
+        const welcomeBackEnterBtn = document.getElementById('welcome-back-enter-btn');
+
 
         let users = JSON.parse(localStorage.getItem("users")) || [];
         // More robust check for loggedInUser on initial load
@@ -1605,8 +1719,14 @@
         // Initialize viewHistory based on loggedInUser
         let viewHistory = loggedInUser ? (JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || []) : [];
 
-        // Initialize settings based on loggedInUser or defaults
+        // Initialize userSettings based on loggedInUser or defaults
         let userSettings = loggedInUser ? (JSON.parse(localStorage.getItem(`settings_${loggedInUser.email}`)) || { enableContinueWatching: true, saveHistory: true }) : { enableContinueWatching: true, saveHistory: true };
+
+        // Temporary variables to hold unsaved settings changes
+        let tempUsername = loggedInUser ? loggedInUser.username : '';
+        let tempAvatar = loggedInUser ? loggedInUser.avatar : '';
+        let tempEnableContinueWatching = userSettings.enableContinueWatching;
+        let tempSaveHistory = userSettings.saveHistory;
 
 
         // Sample notification data (for demo)
@@ -1691,11 +1811,15 @@
                  // Clear username input and error on close
                  changeUsernameInput.value = '';
                  changeUsernameError.style.display = 'none';
-                 // Remove any previous messages
-                 const existingMessage = settingsModal.querySelector('.modal-content').querySelector('.message-box');
-                 if (existingMessage) {
-                     existingMessage.remove();
+
+                 // IMPORTANT: Discard unsaved changes by reloading original settings if modal is closed without saving
+                 loadUserSettings(); // Reloads userSettings and updates temp variables to saved state
+                 if (loggedInUser) {
+                    tempUsername = loggedInUser.username;
+                    tempAvatar = loggedInUser.avatar;
                  }
+                 updateSettingsButtonStates(); // Update UI to reflect loaded settings
+                 renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, tempAvatar); // Re-render avatar selection with original avatar
             } else if (modalId === 'history-modal') {
                  // Clear history message on close
                  historyMessageDiv.style.display = 'none';
@@ -1709,7 +1833,7 @@
             }
         }
 
-         // Helper function to display messages (errors or success)
+         // Helper function to display messages (errors or success) within specific containers
          function displayMessage(containerElement, message, type) {
             // Remove any existing message boxes within the specific container
             const existingMessage = containerElement.querySelector('.message-box');
@@ -1724,6 +1848,27 @@
              // Insert message at the beginning of the container
              containerElement.insertBefore(messageDiv, containerElement.firstChild);
          }
+
+        // New helper function to display global notifications
+        function showGlobalNotification(message, type = 'success') {
+            // Clear any existing class or text
+            globalNotificationBox.classList.remove('success', 'error');
+            globalNotificationBox.textContent = message;
+            globalNotificationBox.classList.add(type);
+
+            globalNotificationBox.style.display = 'block'; // Make it visible (display)
+            setTimeout(() => {
+                globalNotificationBox.classList.add('show'); // Trigger opacity transition
+            }, 10); // Small delay to ensure display property is applied first
+
+            setTimeout(() => {
+                globalNotificationBox.classList.remove('show'); // Start fade out
+                setTimeout(() => {
+                    globalNotificationBox.style.display = 'none'; // Hide completely after transition
+                    globalNotificationBox.textContent = ''; // Clear text
+                }, 300); // Match CSS transition duration for opacity
+            }, 3000); // Display for 3 seconds
+        }
 
 
         function validateEmail(email) {
@@ -1747,7 +1892,7 @@
                 currentIndex--;
 
                 // And swap it with the current element.
-                [array[currentIndex], array[randomIndex]] = [
+                [array[currentIndex], array[currentIndex]] = [
                 array[randomIndex], array[currentIndex]];
             }
 
@@ -1959,12 +2104,14 @@
             }
         }
 
+        // Saves the current state of tempUserSettings to localStorage
         function saveUserSettings() {
              if (loggedInUser) {
                 localStorage.setItem(`settings_${loggedInUser.email}`, JSON.stringify(userSettings));
              }
         }
 
+        // Loads user settings from localStorage and updates both userSettings and temporary settings variables
         function loadUserSettings() {
              if (loggedInUser) {
                 userSettings = JSON.parse(localStorage.getItem(`settings_${loggedInUser.email}`)) || { enableContinueWatching: true, saveHistory: true };
@@ -1972,13 +2119,20 @@
                  // Default settings if not logged in
                  userSettings = { enableContinueWatching: true, saveHistory: true };
              }
+             // Update temporary variables to reflect the loaded settings
+             tempEnableContinueWatching = userSettings.enableContinueWatching;
+             tempSaveHistory = userSettings.saveHistory;
+             if (loggedInUser) {
+                tempUsername = loggedInUser.username;
+                tempAvatar = loggedInUser.avatar;
+             }
              // Update the button states in the settings modal when loaded
              updateSettingsButtonStates();
         }
 
          function updateSettingsButtonStates() {
              if (enableContinueWatchingBtn && disableContinueWatchingBtn) {
-                 if (userSettings.enableContinueWatching) {
+                 if (tempEnableContinueWatching) { // Use temp variable for UI state
                      enableContinueWatchingBtn.classList.add('active');
                      disableContinueWatchingBtn.classList.remove('active');
                  } else {
@@ -1987,7 +2141,7 @@
                  }
              }
              if (enableSaveHistoryBtn && disableSaveHistoryBtn) {
-                 if (userSettings.saveHistory) {
+                 if (tempSaveHistory) { // Use temp variable for UI state
                      enableSaveHistoryBtn.classList.add('active');
                      disableSaveHistoryBtn.classList.remove('active');
                  } else {
@@ -2060,6 +2214,7 @@
                     }
                     avatarOption.classList.add("selected");
                     selectedAvatarInput.value = avatar; // Update the hidden input field
+                    tempAvatar = avatar; // Update temp avatar
                 });
                 container.appendChild(avatarOption);
             });
@@ -2275,6 +2430,7 @@
                 // No other accounts, proceed with regular logout
                 loggedInUser = null;
                 localStorage.removeItem("loggedInUser");
+                localStorage.removeItem("lastActivityTime"); // Clear activity time if no user
                 viewHistory = []; // Clear history when no user is logged in
                  userSettings = { enableContinueWatching: true, saveHistory: true }; // Reset settings to default
                 loadUserProfile(); // Call loadUserProfile to update UI (show login icon) and hide continue watching
@@ -2326,6 +2482,47 @@
                 });
                 trendingList.appendChild(listItem);
             });
+        }
+
+        // Function to show the welcome back screen
+        function showWelcomeBackScreen() {
+            if (loggedInUser) {
+                mainContentDiv.style.display = 'none'; // Hide main content
+                loadingOverlay.style.display = 'none'; // Hide loading overlay
+                welcomeBackModal.classList.remove('hidden'); // Show welcome back modal
+                setTimeout(() => {
+                    welcomeBackModal.classList.add('show'); // Trigger fade in
+                }, 10);
+
+                welcomeBackAvatar.src = loggedInUser.avatar;
+                welcomeBackUsername.textContent = `Welcome back, ${loggedInUser.username}!`;
+                document.body.classList.add('modal-open'); // Prevent scrolling
+            }
+        }
+
+        // Function to hide loading screen and show main content
+        function hideLoadingScreenAndShowMainContent() {
+            loadingOverlay.style.opacity = '0'; // Start fade out
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none'; // Hide completely after fade
+                loadingOverlay.style.opacity = '1'; // Reset opacity for next load
+                mainContentDiv.style.display = 'block'; // Show main content
+
+                // Now that the loading is done and main content is visible,
+                // call loadUserProfile again to ensure correct header state
+                // and display initial posts.
+                loadUserProfile(); // Re-run to set header based on final loggedInUser state (this will also load the correct history and render continue watching)
+
+                // Initial display of main posts (filtered and shuffled)
+                displayPosts(getPostsForDisplay());
+
+                // Start the hourly shuffle interval for main posts (only if not searching)
+                setInterval(() => {
+                    if (searchInput.value.trim() === "") {
+                        shuffleAndDisplayPosts();
+                    }
+                }, 3600000); // 1 hour in ms (3600000)
+            }, 500); // Match CSS transition duration
         }
 
 
@@ -2440,6 +2637,7 @@
             if (user) {
                 loggedInUser = user;
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+                localStorage.setItem("lastActivityTime", Date.now()); // Update last activity on login
                 closeModal('login-modal');
                  // Re-run loadUserProfile after successful login to update header and account links (this will also load the correct history and render continue watching)
                 loadUserProfile();
@@ -2537,6 +2735,7 @@
             localStorage.setItem("users", JSON.stringify(users));
             loggedInUser = newUser; // Automatically log in the new user
             localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+            localStorage.setItem("lastActivityTime", Date.now()); // Update last activity on signup
 
              // Initialize history for the new user
             viewHistory = [];
@@ -2573,78 +2772,105 @@
             event.preventDefault(); // Prevent default link behavior
             profileDropdown.classList.remove('show'); // Hide the dropdown
             dropdownMenuItems.style.display = 'none'; // Ensure menu items are hidden
-             // Load current settings before opening the modal
+             // Load current settings from localStorage into userSettings AND temp variables
             loadUserSettings();
+             // Populate the username input with the current temp username
+            changeUsernameInput.value = tempUsername;
+             // Render avatar options for settings, pre-selecting the current temp avatar
+            renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, tempAvatar);
+            updateSettingsButtonStates(); // Ensure buttons reflect temp states
             openModal('settings-modal');
-             // Render avatar options for settings, pre-selecting the current avatar
-            if(loggedInUser) {
-                renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, loggedInUser.avatar);
-                 // Set the current username in the input field
-                changeUsernameInput.value = loggedInUser.username;
-            }
         });
         sidebarSettingsLink.addEventListener("click", (event) => {
             event.preventDefault(); // Prevent default link behavior
             closeSidebar(); // Close sidebar
-             // Load current settings before opening the modal
+             // Load current settings from localStorage into userSettings AND temp variables
             loadUserSettings();
+             // Populate the username input with the current temp username
+            changeUsernameInput.value = tempUsername;
+             // Render avatar options for settings, pre-selecting the current temp avatar
+            renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, tempAvatar);
+            updateSettingsButtonStates(); // Ensure buttons reflect temp states
             openModal('settings-modal');
-             // Render avatar options for settings, pre-selecting the current avatar
-            if(loggedInUser) {
-                renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, loggedInUser.avatar);
-                 // Set the current username in the input field
-                changeUsernameInput.value = loggedInUser.username;
-            }
+        });
+
+        // Event listener for username input (updates tempUsername)
+        changeUsernameInput.addEventListener('input', (event) => {
+             tempUsername = event.target.value.trim();
         });
 
 
-        // Event listener for saving username change
-        saveUsernameBtn.addEventListener('click', () => {
-            const newUsername = changeUsernameInput.value.trim();
-             // Clear previous messages and errors within the settings modal content
-            const settingsModalContent = settingsModal.querySelector('.modal-content');
-            const existingMessage = settingsModalContent.querySelector('.message-box');
-             if (existingMessage) {
-                 existingMessage.remove();
-             }
-            changeUsernameError.style.display = 'none';
-
-
-            if (!newUsername) {
-                changeUsernameError.textContent = "Username cannot be empty";
-                changeUsernameError.style.display = "block";
-                return;
-            }
-
-            // Check if the new username is already taken by another user
-            const usernameExists = users.some(user => loggedInUser && user.email !== loggedInUser.email && user.username === newUsername);
-            if (usernameExists) {
-                 changeUsernameError.textContent = "Username already exists";
-                 changeUsernameError.style.display = "block";
+        // Event listener for the new "Save All Changes" button
+        saveAllChangesBtn.addEventListener('click', () => {
+            console.log("Save All Changes button clicked.");
+            if (!loggedInUser) {
+                 showGlobalNotification('You must be logged in to save settings.', 'error');
                  return;
             }
 
+            let hasError = false;
 
-            if (loggedInUser) {
-                loggedInUser.username = newUsername;
-                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+            // Clear previous errors before re-validating
+            changeUsernameError.style.display = 'none';
+            document.getElementById("settings-avatar-error").style.display = "none";
 
-                // Update the username in the main users array
-                const userIndex = users.findIndex(user => loggedInUser && user.email === loggedInUser.email);
-                if (userIndex !== -1) {
-                    users[userIndex].username = newUsername;
-                    localStorage.setItem("users", JSON.stringify(users));
+
+            // 1. Validate Username
+            if (!tempUsername) {
+                changeUsernameError.textContent = "Username cannot be empty";
+                changeUsernameError.style.display = "block";
+                hasError = true;
+            } else {
+                 // Check if the new username is already taken by another user
+                const usernameExists = users.some(user => loggedInUser && user.email !== loggedInUser.email && user.username === tempUsername);
+                if (usernameExists) {
+                    changeUsernameError.textContent = "Username already exists";
+                    changeUsernameError.style.display = "block";
+                    hasError = true;
                 }
-
-                usernameSpan.textContent = newUsername; // Update header username immediately
-
-                displayMessage(settingsModalContent, 'Username updated successfully!', 'success');
-
-                // Optionally, close the modal after a delay
-                setTimeout(() => {
-                     closeModal('settings-modal');
-                }, 2000); // Close after 2 seconds
             }
+
+            // 2. Validate Avatar (ensure one is selected if it was changed)
+            if (!tempAvatar) {
+                document.getElementById("settings-avatar-error").textContent = "Please select an avatar";
+                document.getElementById("settings-avatar-error").style.display = "block";
+                hasError = true;
+            }
+
+
+            if (hasError) {
+                 showGlobalNotification('Please fix the errors before saving.', 'error');
+                return;
+            }
+
+            // --- If no errors, proceed to save all changes ---
+            console.log("No errors. Proceeding to save changes.");
+
+            // Update loggedInUser with temp values
+            loggedInUser.username = tempUsername;
+            loggedInUser.avatar = tempAvatar;
+            localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+            // Update userSettings with temp values
+            userSettings.enableContinueWatching = tempEnableContinueWatching;
+            userSettings.saveHistory = tempSaveHistory;
+            saveUserSettings(); // Save userSettings to localStorage
+
+            // Update the main 'users' array with changes to the current loggedInUser
+            const userIndex = users.findIndex(user => loggedInUser && user.email === loggedInUser.email);
+            if (userIndex !== -1) {
+                users[userIndex].username = loggedInUser.username;
+                users[userIndex].avatar = loggedInUser.avatar;
+                localStorage.setItem("users", JSON.stringify(users));
+            }
+
+            // Update UI elements that reflect the saved changes
+            usernameSpan.textContent = loggedInUser.username;
+            avatarImg.src = loggedInUser.avatar;
+            renderContinueWatching(); // Re-render continue watching based on new settings
+
+            console.log("Settings saved successfully. Displaying message.");
+            showGlobalNotification('Changes are saved!', 'success');
         });
 
 
@@ -2686,77 +2912,49 @@
         });
 
 
-        // Event listener for avatar selection in settings
+        // Event listener for avatar selection in settings (updates tempAvatar)
         settingsAvatarOptionsContainer.addEventListener('click', (event) => {
             const target = event.target.closest('.avatar-option');
             if (target && loggedInUser) {
-                const newAvatar = target.dataset.avatar;
-                loggedInUser.avatar = newAvatar;
-                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
-
-                // Update the avatar in the main users array
-                 const userIndex = users.findIndex(user => loggedInUser && user.email === loggedInUser.email);
-                if (userIndex !== -1) {
-                    users[userIndex].avatar = newAvatar;
-                    localStorage.setItem("users", JSON.stringify(users));
+                // Remove selection from any previously selected avatar
+                const selectedAvatar = settingsAvatarOptionsContainer.querySelector(".avatar-option.selected");
+                if (selectedAvatar) {
+                    selectedAvatar.classList.remove("selected");
                 }
-
-
-                avatarImg.src = newAvatar; // Update the avatar in the header immediately
-
-                const settingsModalContent = settingsModal.querySelector('.modal-content');
-                displayMessage(settingsModalContent, 'Avatar updated successfully!', 'success');
-
-                // Optionally, close the modal after a delay
-                setTimeout(() => {
-                     closeModal('settings-modal');
-                }, 2000); // Close after 2 seconds
+                target.classList.add("selected");
+                settingsAvatarInput.value = target.dataset.avatar; // Update the hidden input field
+                tempAvatar = target.dataset.avatar; // Update temp avatar
+                document.getElementById("settings-avatar-error").style.display = "none"; // Clear avatar error on selection
             }
         });
 
-        // Event listeners for the new settings buttons
+        // Event listeners for the new settings buttons (update temp variables)
         if (enableContinueWatchingBtn && disableContinueWatchingBtn && enableSaveHistoryBtn && disableSaveHistoryBtn) {
              enableContinueWatchingBtn.addEventListener('click', () => {
                  if (loggedInUser) {
-                     userSettings.enableContinueWatching = true;
-                     saveUserSettings();
-                     renderContinueWatching(); // Update the display based on the new setting
-                     // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
-                     updateSettingsButtonStates(); // Update button appearance
+                     tempEnableContinueWatching = true; // Update temp variable
+                     updateSettingsButtonStates(); // Update button appearance based on temp variable
                  }
              });
 
              disableContinueWatchingBtn.addEventListener('click', () => {
                  if (loggedInUser) {
-                     userSettings.enableContinueWatching = false;
-                     saveUserSettings();
-                     renderContinueWatching(); // Update the display based on the new setting
-                     // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
-                     updateSettingsButtonStates(); // Update button appearance
+                     tempEnableContinueWatching = false; // Update temp variable
+                     updateSettingsButtonStates(); // Update button appearance based on temp variable
                  }
              });
 
              enableSaveHistoryBtn.addEventListener('click', () => {
                  if (loggedInUser) {
-                     userSettings.saveHistory = true;
-                     saveUserSettings();
-                     updateSettingsButtonStates(); // Update button appearance
-                     // Re-render continue watching and main posts based on potentially re-enabled history
-                     renderContinueWatching();
-                     // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
+                     tempSaveHistory = true; // Update temp variable
+                     updateSettingsButtonStates(); // Update button appearance based on temp variable
                  }
              });
 
              disableSaveHistoryBtn.addEventListener('click', () => {
                  if (loggedInUser) {
-                     userSettings.saveHistory = false;
-                     saveUserSettings();
-                     // Note: Disabling save history doesn't clear existing history,
-                     // it just stops adding new items. Clearing history is a separate action.
-                     updateSettingsButtonStates(); // Update button appearance
-                      // Re-render continue watching and main posts based on potentially disabled history
-                     renderContinueWatching();
-                     // displayPosts(getPostsForDisplay()); // Removed this as per user's request to show on both sides
+                     tempSaveHistory = false; // Update temp variable
+                     updateSettingsButtonStates(); // Update button appearance based on temp variable
                  }
              }
              );
@@ -2875,6 +3073,7 @@
                 users[userIndex].password = newPasscode;
                 localStorage.setItem("users", JSON.stringify(users));
                 localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser)); // Update logged in user in storage
+                localStorage.setItem("lastActivityTime", Date.now()); // Update last activity on passcode reset
             }
 
             displayMessage(resetPasscodeModal.querySelector('.modal-content'), 'Passcode reset successfully!', 'success');
@@ -3015,6 +3214,18 @@
         if (profileDetailsCloseBtn) profileDetailsCloseBtn.addEventListener('click', () => closeModal('profile-details-modal'));
         if (cancelLogoutBtn) cancelLogoutBtn.addEventListener('click', () => closeModal('logout-confirmation-modal'));
 
+        // Event listener for the "Enter" button on the welcome back screen
+        welcomeBackEnterBtn.addEventListener('click', () => {
+            welcomeBackModal.classList.remove('show'); // Fade out
+            setTimeout(() => {
+                welcomeBackModal.classList.add('hidden'); // Hide completely after fade
+                document.body.classList.remove('modal-open'); // Re-enable scrolling
+                localStorage.setItem('lastActivityTime', Date.now()); // Update last activity time
+                loadUserProfile(); // Re-run to update UI if necessary
+                displayPosts(getPostsForDisplay()); // Re-render main content
+                mainContentDiv.style.display = 'block'; // Show main content
+            }, 500); // Match CSS transition duration
+        });
 
         // Function to handle the loading screen and main app display sequence
         function startAppSequence() {
@@ -3032,59 +3243,65 @@
                 loadingUsernameSpan.textContent = 'Loading Anitoono...';
             }
 
-            // Hide loading screen and show main content after 3 seconds
+            // Hide loading screen and determine next step after 3 seconds
             setTimeout(() => {
-                loadingOverlay.style.opacity = '0'; // Start fade out
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none'; // Hide completely after fade
-                    loadingOverlay.style.opacity = '1'; // Reset opacity for next load
-                    mainContentDiv.style.display = 'block'; // Show main content
+                const lastActivityTime = localStorage.getItem('lastActivityTime');
+                const currentTime = Date.now();
+                const twoHoursInMs = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+                // For demonstration, you can change to 2 minutes: const twoHoursInMs = 2 * 60 * 1000;
 
-                    // Now that the loading is done and main content is visible,
-                    // call loadUserProfile again to ensure correct header state
-                    // and display initial posts.
-                    loadUserProfile(); // Re-run to set header based on final loggedInUser state (this will also load the correct history and render continue watching)
-
-                    // Initial display of main posts (filtered and shuffled)
-                    displayPosts(getPostsForDisplay());
-
-                    // Start the hourly shuffle interval for main posts (only if not searching)
-                    setInterval(() => {
-                        if (searchInput.value.trim() === "") {
-                            shuffleAndDisplayPosts();
-                        }
-                    }, 3600000);
-
-                }, 500); // Match CSS transition duration
+                if (loggedInUser && lastActivityTime && (currentTime - parseInt(lastActivityTime)) > twoHoursInMs) {
+                    // Show welcome back screen instead of main content
+                    loadingOverlay.style.opacity = '0'; // Immediately fade out loading screen
+                    setTimeout(() => {
+                         loadingOverlay.style.display = 'none';
+                         loadingOverlay.style.opacity = '1'; // Reset opacity for next use
+                         showWelcomeBackScreen();
+                    }, 500); // Match loading overlay fade-out duration
+                } else {
+                    // Proceed with regular app loading (hide loading, show main content)
+                    hideLoadingScreenAndShowMainContent();
+                }
             }, 3000); // 3 seconds delay for initial loading screen
         }
 
         // Initial setup on page load
         window.onload = function() {
+            console.log("Window loaded.");
             // Ensure main content and loading overlay are hidden initially for a clean start
             mainContentDiv.style.display = 'none';
             loadingOverlay.style.display = 'none';
+            welcomeBackModal.classList.add('hidden'); // Ensure welcome back modal is hidden on load
 
             // Re-fetch users and loggedInUser from localStorage
             users = JSON.parse(localStorage.getItem("users")) || [];
             loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-            // Robust check for loggedInUser validity
+            console.log("Users from localStorage:", users);
+            console.log("loggedInUser from localStorage (before validation):", loggedInUser);
+
+            // Robust check for loggedInUser validity: if it exists but is missing crucial data, clear it.
             if (loggedInUser && (!loggedInUser.email || !loggedInUser.username || !loggedInUser.password || !loggedInUser.avatar)) {
+                console.warn("Invalid loggedInUser data found. Clearing it.");
                 loggedInUser = null;
                 localStorage.removeItem("loggedInUser");
             }
 
+            console.log("loggedInUser after validation:", loggedInUser);
+
+            // If a valid loggedInUser exists, proceed to the main app sequence.
+            // Otherwise, show the login modal to prompt for login/signup.
             if (loggedInUser) {
-                // If a valid loggedInUser exists, start the app sequence
+                console.log("Valid loggedInUser found. Starting app sequence.");
                 startAppSequence();
             } else {
-                // If no valid loggedInUser, show the login modal
+                console.log("No valid loggedInUser found. Opening login modal.");
                 openModal('login-modal');
-                // No loading screen for initial login/signup
+                // No loading screen for initial login/signup when no user is found
             }
         };
 
     </script>
 </body>
 </html>
+
