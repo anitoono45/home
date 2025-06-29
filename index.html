@@ -281,6 +281,7 @@
                             <a href="#" id="view-profile-link"><i class="fas fa-user-circle"></i> Profile</a>
                             <a href="#" id="settings-link"><i class="fas fa-cog"></i> Settings</a>
                             <a href="#" id="continue-watching-link"><i class="fas fa-play-circle"></i> Continue Watching</a>
+                            <a href="https://anitoono45.github.io/discussion-Area/" target="_blank" id="anitoono-chat-zone-link-dropdown"><i class="fas fa-comments"></i> Anitoono Chat Zone</a>
                             <a href="#" id="reset-passcode-link"><i class="fas fa-key"></i> Reset Passcode</a>
                             <a href="#" id="add-account-link" class="hidden"><i class="fas fa-user-plus"></i> Add Account</a>
                             <a href="#" id="switch-account-link" class="hidden"><i class="fas fa-users"></i> Switch Account</a>
@@ -332,6 +333,7 @@
             <a href="#" id="sidebar-view-profile-link"><i class="fas fa-user-circle"></i> Profile</a>
             <a href="#" id="sidebar-settings-link"><i class="fas fa-cog"></i> Settings</a>
             <a href="#" id="sidebar-continue-watching-link"><i class="fas fa-play-circle"></i> Continue Watching</a>
+            <a href="https://anitoono45.github.io/discussion-Area/" target="_blank" id="sidebar-anitoono-chat-zone-link"><i class="fas fa-comments"></i> Anitoono Chat Zone</a>
             <a href="#" id="sidebar-reset-passcode-link"><i class="fas fa-key"></i> Reset Passcode</a>
             <a href="#" id="sidebar-add-account-link" class="hidden"><i class="fas fa-user-plus"></i> Add Account</a>
             <a href="#" id="sidebar-switch-account-link" class="hidden"><i class="fas fa-users"></i> Switch Account</a>
@@ -542,6 +544,9 @@
         const randomButton = document.getElementById('random-button');
         const sidebarRandomLink = document.getElementById('sidebar-random-link');
         const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+        // New elements for Anitoono Chat Zone links
+        const anitoonoChatZoneLinkDropdown = document.getElementById('anitoono-chat-zone-link-dropdown');
+        const sidebarAnitoonoChatZoneLink = document.getElementById('sidebar-anitoono-chat-zone-link');
 
         // Admin Panel Elements
         const adminPanel = document.getElementById('admin-panel');
@@ -670,7 +675,7 @@
             searchResultsLoader.classList.remove('hidden');
             postContainer.style.display='none';
             noResultsMessage.style.display='none';
-            
+
             // Hide continue watching section when search is active
             if (searchTerm !== "") {
                 continueWatchingSection.classList.add('hidden');
@@ -691,7 +696,7 @@
         const debouncedSearch=debounce(performSearch,300);function renderAvatarOptions(container,selectedAvatarInput,currentAvatar=null){container.innerHTML="";avatarImages.forEach((avatar,index)=>{const avatarOption=document.createElement("div");avatarOption.classList.add("avatar-option","rounded-full","cursor-pointer","transition-all","duration-200","border-2","border-transparent");avatarOption.innerHTML=`<img src="${avatar}" alt="Avatar ${index+1}" class="w-10 h-10 rounded-full object-cover">`;avatarOption.dataset.avatar=avatar;if(currentAvatar&&currentAvatar===avatar){avatarOption.classList.add("selected");selectedAvatarInput.value=avatar;}
             avatarOption.addEventListener("click",()=>{const selectedAvatar=container.querySelector(".avatar-option.selected");if(selectedAvatar){selectedAvatar.classList.remove("selected");}
                 avatarOption.classList.add("selected");selectedAvatarInput.value=avatar;tempAvatar=avatar;});container.appendChild(avatarOption);});}
-        
+
         // Function to truncate username for display
         function truncateUsername(username, maxLength = 6) {
             if (username.length > maxLength) {
@@ -721,7 +726,7 @@
         */
         function showWelcomeBackScreen(){if(loggedInUser){mainContentDiv.style.display='none';loadingOverlay.style.display='none';welcomeBackModal.classList.remove('hidden');setTimeout(()=>{welcomeBackModal.classList.add('show');},10);welcomeBackAvatar.src=loggedInUser.avatar?loggedInUser.avatar:avatarImages[0];welcomeBackUsername.textContent=`Welcome back, ${loggedInUser.username?loggedInUser.username:'Guest'}!`;document.body.classList.add('modal-open');}}
         function hideLoadingScreenAndShowMainContent(){loadingOverlay.style.opacity='0';setTimeout(()=>{loadingOverlay.style.display='none';loadingOverlay.style.opacity='1';mainContentDiv.style.display='block';loadUserProfile();displayPosts(getPostsForDisplay());setInterval(()=>{if(searchInput.value.trim()===""){shuffleAndDisplayPosts();}},3600000);},500);}
-        
+
         // Function to redirect to a random post
         function redirectToRandomPost() {
             if (initialPosts.length > 0) {
@@ -769,9 +774,9 @@
             searchInput.focus();
         });
         loginIcon.addEventListener("click",()=>{openModal('login-modal');});userProfileDiv.addEventListener('click',()=>{if(loggedInUser){profileDropdown.classList.toggle('show');if(profileDropdown.classList.contains('show')){dropdownLoader.classList.remove('hidden');dropdownMenuItems.style.display='none';setTimeout(()=>{dropdownLoader.classList.add('hidden');dropdownMenuItems.style.display='block';},500);}else{dropdownMenuItems.style.display='none';dropdownLoader.classList.add('hidden');}}});
-        
+
         sidebarToggleBtn.addEventListener('click', openSidebar);
-        
+
         sidebarCloseBtn.addEventListener('click',closeSidebar);sidebarOverlay.addEventListener('click',closeSidebar);switchToSignupBtn.addEventListener("click",(event)=>{event.preventDefault();closeModal('login-modal');signupAvatarInput.value='';openModal('signup-modal');renderAvatarOptions(avatarOptionsContainer,signupAvatarInput);});switchToLoginBtn.addEventListener("click",(event)=>{event.preventDefault();closeModal('signup-modal');openModal('login-modal');});loginForm.addEventListener("submit",(event)=>{event.preventDefault();const email=document.getElementById("login-email").value.trim();const password=document.getElementById("login-password").value.trim();let hasErrors=false;const existingMessage=loginForm.querySelector('.message-box.error');if(existingMessage){existingMessage.remove();}
             if(!validateEmail(email)){document.getElementById("login-email-error").textContent="Invalid email format";document.getElementById("login-email-error").style.display="block";hasErrors=true;}else{document.getElementById("login-email-error").style.display="none";}
             if(!validatePassword(password)){document.getElementById("login-password-error").textContent="Password must be at least 6 characters";document.getElementById("login-password-error").style.display="block";hasErrors=true;}else{document.getElementById("login-password-error").style.display="none";}
