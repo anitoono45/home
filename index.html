@@ -8,9 +8,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Base styles for the body */
         body{background-color:#0f172a;color:#e2e8f0;font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6;overflow-y:auto;}
+        /* Prevent scrolling when modal is open */
         body.modal-open{overflow:hidden;}
+        /* Heading colors */
         h1,h2,h3,h4,h5,h6{color:#f87171;}
+        /* Tailwind overrides/custom colors */
         .text-red-500{color:#ef4444;}
         .bg-red-500{background-color:#ef4444;}
         .hover\:bg-red-600:hover{background-color:#dc2626;}
@@ -18,11 +22,15 @@
         .bg-gray-700{background-color:#334155;}
         .border-red-500{border-color:#ef4444;}
         .focus\:ring-red-500:focus{box-shadow:0 0 0 3px rgba(239,68,68,0.5);}
+        /* Pulse animation for loading/welcome screen */
         .animate-pulse{animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;}
         @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+        /* Container for main content */
         .container{max-width:100%;padding-left:1rem;padding-right:1rem;}
+        /* Avatar selection in signup/settings */
         .avatar-option.selected{border-color:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.7);}
         .avatar-option:hover{transform:scale(1.1);transition:transform 0.2s ease-in-out;}
+        /* User profile dropdown styling */
         #user-profile{position:relative;display:inline-flex;align-items:center;cursor:pointer;padding:0.5rem;border-radius:0.375rem;transition:background-color 0.2s ease;}
         #user-profile:hover{background-color:#334155;}
         #profile-dropdown{position:absolute;top:100%;right:0;background-color:#334155;border:none;border-radius:0.5rem;padding:0.5rem 0;margin-top:0.75rem;min-width:200px;box-shadow:0 6px 12px rgba(0,0,0,0.5);z-index:10;display:none;opacity:0;transform:translateY(-10px);transition:opacity 0.3s ease-out,transform 0.3s ease-out;overflow:hidden;}
@@ -30,19 +38,23 @@
         #profile-dropdown a{display:flex;align-items:center;padding:0.75rem 1.5rem;color:#cbd5e1;text-decoration:none;transition:color 0.2s ease,background-color 0.2s ease;font-size:1rem;}
         #profile-dropdown a i{margin-right:1rem;width:1.2rem;text-align:center;color:#f9fafb;}
         #profile-dropdown a:hover{color:#f9fafb;background-color:#475569;}
+        /* General modal styling */
         .modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(15,23,42,0.95);display:flex;justify-content:center;align-items:center;z-index:50;overflow-y:auto;padding:1rem;}
         .modal-content{background-color:#1e293b;border-radius:0.75rem;box-shadow:0 15px 25px rgba(0,0,0,0.6);padding:2.5rem;width:100%;max-width:32rem;position:relative;animation:fadeInScale 0.3s ease-out;}
         @keyframes fadeInScale{0%{opacity:0;transform:scale(0.95);}100%{opacity:1;transform:scale(1);}}
         .modal-close-button{position:absolute;top:1.25rem;right:1.25rem;font-size:1.75rem;color:#f9fafb;cursor:pointer;transition:color 0.2s ease;}
         .modal-close-button:hover{color:#f1f5f9;}
+        /* Auth icon styling (now used for Signup) */
         .auth-icon{width:28px;height:28px;color:#f9fafb;cursor:pointer;transition:color 0.3s ease;}
         .auth-icon:hover{color:#f1f5f9;}
+        /* History list styling */
         #history-list{list-style:none;padding:0;}
         #history-list li{background-color:#334155;padding:1rem 1.25rem;margin-bottom:0.75rem;border-radius:0.375rem;font-size:1rem;color:#cbd5e1;word-break:break-word;border-left:4px solid #ef4444;transition:background-color 0.2s ease;display:flex;align-items:center;cursor:pointer;position:relative;}
         #history-list li:hover{background-color:#475569;}
         #history-list li:last-child{margin-bottom:0;}
         #history-list li img {width: 60px; height: 60px; object-fit: cover; border-radius: 0.25rem; margin-right: 1rem; border: 2px solid #ef4444;}
         #history-list li span {font-weight: 500; flex-grow: 1;}
+        /* Header button styling */
         #notification-button{background:none;border:none;color:#f9fafb;cursor:pointer;padding:0.3rem;font-size:1.3rem;transition:color 0.3s ease;display:flex;align-items:center;justify-content:center;border-radius:0.375rem;transition:background-color 0.2s ease;}
         #notification-button:hover{color:#f1f5f9;background-color:#334155;}
         #search-button{background:none;border:none;color:#f9fafb;cursor:pointer;padding:0.3rem;font-size:1.3rem;transition:color 0.3s ease;display:flex;align-items:center;justify-content:center;border-radius:0.375rem;transition:background-color 0.2s ease;}
@@ -52,31 +64,107 @@
         #sidebar-toggle-btn {background:none;border:none;color:#f9fafb;cursor:pointer;padding:0.3rem;font-size:1.3rem;transition:color 0.3s ease;display:flex;align-items:center;justify-content:center;border-radius:0.375rem;transition:background-color 0.2s ease;}
         #sidebar-toggle-btn:hover {color:#f1f5f9;background-color:#334155;}
 
+        /* Notification list styling */
         #notification-list{list-style:none;padding:0;margin-top:1.5rem;}
         #notification-list li{background-color:#334155;padding:1rem 1.25rem;margin-bottom:0.75rem;border-radius:0.375rem;font-size:0.95rem;color:#cbd5e1;border-left:4px solid #f87171;transition:background-color 0.2s ease;}
         #notification-list li:hover{background-color:#475569;}
         #notification-list li:last-child{margin-bottom:0;}
+        /* Loading overlay styling */
         #loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#0f172a;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:99;transition:opacity 0.5s ease-in-out;}
         .loading-avatar-container{position:relative;width:100px;height:100px;margin-bottom:1.5rem;}
         #loading-avatar-img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:6px solid #334155;box-shadow:0 0 15px rgba(239,68,68,0.5);}
         .loading-spinner{position:absolute;top:-15px;left:-15px;width:130px;height:130px;border:8px solid rgba(239,68,68,0.2);border-top-color:#ef4444;border-radius:50%;animation:spin 1s linear infinite;}
         @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
         #loading-username{font-size:1.5rem;font-weight:700;color:#f1f5f9;text-shadow:1px 1px 3px rgba(0,0,0,0.3);}
-        #main-content{display:none;}
-        .post-card{background-color:#1e293b;border-radius:0.75rem;box-shadow:0 8px 16px rgba(0,0,0,0.4);overflow:hidden;transition:transform 0.3s ease-in-out,box-shadow 0.3s ease-in-out;cursor:pointer;display:flex;flex-direction:column;width:100%;position:relative;}
-        .post-card:hover{transform:translateY(-5px);box-shadow:0 12px 20px rgba(0,0,0,0.6);}
+
+        /* Updated Post Card Styles */
+        .post-card{
+            background-color:#1e293b; /* Darker background */
+            border-radius:0.5rem; /* Reduced border-radius */
+            box-shadow:none; /* Removed box-shadow */
+            overflow:hidden;
+            transition:transform 0.3s ease-in-out,box-shadow 0.3s ease-in-out;
+            cursor:pointer;
+            display:flex;
+            flex-direction:column;
+            width:100%;
+            position:relative; /* Needed for HD badge positioning */
+        }
+        .post-card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(0,0,0,0.4);} /* Subtle shadow on hover */
         .post-card img{width:100%;height:250px;object-fit:cover;transition:transform 0.3s ease-in-out;}
         .post-card:hover img{transform:scale(1.05);}
-        .post-card-content{padding:1.25rem;flex-grow:1;display:flex;flex-direction:column;}
-        .post-card-content h3{font-size:1.125rem;font-weight:600;color:#f87171;margin-bottom:0.5rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-        .post-card-content p{font-size:0.95rem;color:#cbd5e1;flex-grow:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;}
+        .post-card-content{
+            padding:0.75rem; /* Reduced padding */
+            flex-grow:1;
+            display:flex;
+            flex-direction:column;
+            text-align: left; /* Align text to left */
+        }
+        .post-card-content h3{
+            font-size:1rem; /* Slightly smaller title */
+            font-weight:600;
+            color:#f9fafb; /* White text for title */
+            margin-bottom:0.25rem; /* Reduced margin */
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+        .post-card-details {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem; /* Smaller font for details */
+            color: #cbd5e1; /* Lighter gray for details */
+            margin-bottom: 0.5rem; /* Margin below details */
+        }
+        .post-card-details span {
+            margin-right: 0.5rem;
+        }
+        .post-card-details .dot {
+            width: 4px;
+            height: 4px;
+            background-color: #cbd5e1;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        .post-card-content p{
+            font-size:0.9rem; /* Smaller font for description */
+            color:#cbd5e1;
+            flex-grow:1;
+            display:-webkit-box;
+            -webkit-line-clamp:3;
+            -webkit-box-orient:vertical;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            display: none; /* Hide description as per image */
+        }
+        .post-card .hd-badge {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background-color: #007bff; /* Blue background for HD */
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            z-index: 5;
+        }
+
+        /* Skeleton loading effect for post cards */
         .post-card.skeleton{pointer-events:none;}
-        .post-card.skeleton img,.post-card.skeleton .post-card-content h3,.post-card.skeleton .post-card-content p{background-color:#334155;color:transparent;border-radius:4px;animation:pulse 1.5s infinite ease-in-out;}
+        .post-card.skeleton img,.post-card.skeleton .post-card-content h3,.post-card.skeleton .post-card-content p, .post-card.skeleton .post-card-details span, .post-card.skeleton .post-card-details .dot {background-color:#334155;color:transparent;border-radius:4px;animation:pulse 1.5s infinite ease-in-out;}
         .post-card.skeleton img{height:250px;width:100%;}
         .post-card.skeleton .post-card-content h3{height:1.5rem;width:80%;margin-bottom:0.5rem;}
         .post-card.skeleton .post-card-content p{height:3.5rem;width:95%;}
         .post-card:not(.skeleton) img{background-color:transparent;animation:none;}
-        .post-card:not(.skeleton) .post-card-content h3,.post-card:not(.skeleton) .post-card-content p{background-color:transparent;color:#f87171;color:#cbd5e1;animation:none;}
+        .post-card:not(.skeleton) .post-card-content h3,.post-card:not(.skeleton) .post-card-content p{background-color:transparent;color:#f9fafb;animation:none;}
+        .post-card:not(.skeleton) .post-card-details span, .post-card:not(.skeleton) .post-card-details .dot {
+            background-color: transparent;
+            color: #cbd5e1;
+            animation: none;
+        }
+
+        /* Continue watching section styling */
         #continue-watching-section{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #334155;}
         #continue-watching-section h2{font-size:1.75rem;font-weight:700;margin-bottom:1.5rem;color:#f87171;}
         #continue-watching-container{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:1rem;padding-bottom:1rem;scrollbar-width:thin;scrollbar-color:#ef4444 #1e293b;}
@@ -84,20 +172,26 @@
         #continue-watching-container::-webkit-scrollbar-track{background:#1e293b;border-radius:10px;}
         #continue-watching-container::-webkit-scrollbar-thumb{background-color:#ef4444;border-radius:10px;border:2px solid #1e293b;}
         #continue-watching-container .post-card{flex-shrink:0;width:150px;min-width:150px;height:auto;}
+        /* Grid for main post container */
         #post-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;align-items:stretch;}
+        /* Form input styling */
         .form-input{background-color:#334155;border:1px solid #475569;color:#f1f5f9;padding:0.75rem 1rem;border-radius:0.375rem;width:100%;transition:border-color 0.2s ease,box-shadow 0.2s ease;}
         .form-input:focus{outline:none;border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,0.3);}
-        .btn{display:inline-block;padding:0.75rem 1.5rem;font-weight:600;text-align:center;border-radius:0.375rem;transition:background-color 0.2s ease,transform 0.1s ease;cursor:pointer;}
+        /* Button styling */
+        .btn{display:inline-block;padding:0.75rem 1.5rem;font-weight:600;text-align:center;border-radius:0.375rem;transition:background-color 0.2s ease,transform 0.1s ease;cursor:pointer;border: none;}
         .btn-primary{background-color:#ef4444;color:#f9fafb;}
         .btn-primary:hover{background-color:#dc2626;transform:translateY(-1px);}
         .btn-secondary{background-color:#475569;color:#cbd5e1;}
         .btn-secondary:hover{background-color:#334155;transform:translateY(-1px);}
         .btn:active{transform:translateY(0);}
+        /* Link styling */
         a{color:#f87171;text-decoration:none;transition:color 0.2s ease;}
         a:hover{color:#ef4444;text-decoration:underline;}
+        /* Message box for errors/success */
         .message-box{padding:0.75rem 1rem;margin-top:1rem;border-radius:0.375rem;font-size:0.9rem;text-align:center;}
         .message-box.error{background-color:#fee2e2;color:#b91c1c;border:1px solid #ef4444;}
         .message-box.success{background-color:#d1fae5;color:#065f46;border:1px solid #10b981;}
+        /* Bottom sheet modal styling (for mobile-friendly modals) */
         .modal-bottom-sheet{position:fixed;bottom:0;left:0;width:100%;height:auto;max-height:80%;background-color:#1e293b;border-top-left-radius:1rem;border-top-right-radius:1rem;box-shadow:0 -8px 16px rgba(0,0,0,0.5);z-index:60;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.3s ease-out;overflow-y:hidden;}
         .modal-bottom-sheet.show{transform:translateY(0);}
         .modal-bottom-sheet .modal-content{background-color:transparent;box-shadow:none;padding:0 1.5rem 1.5rem 1.5rem;max-width:none;border-radius:0;animation:none;overflow-y:auto;flex-grow:1;}
@@ -105,6 +199,7 @@
         .modal-header-handle::before{content:'';display:block;width:40px;height:5px;background-color:#475569;border-radius:2.5px;}
         .modal-bottom-sheet .modal-close-button{position:absolute;top:50%;right:1.5rem;transform:translateY(-50%);font-size:1.5rem;color:#f9fafb;cursor:pointer;transition:color 0.2s ease;z-index:2;}
         .modal-bottom-sheet .modal-close-button:hover{color:#f1f5f9;}
+        /* Account option styling in switch account modal */
         .account-option{display:flex;align-items:center;padding:1rem;background-color:#334155;border-radius:0.375rem;margin-bottom:0.75rem;cursor:pointer;transition:background-color 0.2s ease;}
         .account-option:hover{background-color:#475569;}
         .account-option.selected-account{border:2px solid #ef4444;background-color:#1e293b;}
@@ -112,6 +207,7 @@
         .account-option img{width:40px;height:40px;border-radius:50%;object-fit:cover;margin-right:1rem;border:2px solid #ef4444;}
         .account-option span{font-size:1.1rem;color:#f1f5f9;font-weight:500;flex-grow:1;}
         .account-option .loading-text{font-size:0.9rem;color:#f87171;margin-left:1rem;}
+        /* Settings option styling */
         .setting-option{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;border-bottom:1px solid #334155;}
         .setting-option:last-child{border-bottom:none;}
         .setting-option label{font-size:1rem;color:#cbd5e1;flex-grow:1;margin-right:1rem;}
@@ -120,17 +216,21 @@
         .enable-disable-group .btn.active{background-color:#ef4444;color:#f9fafb;}
         .enable-disable-group .btn:not(.active){background-color:#475569;color:#cbd5e1;}
         .enable-disable-group .btn:not(.active):hover{background-color:#334155;}
+        /* Remove from history buttons */
         .remove-from-history-btn{position:absolute;top:8px;right:8px;background-color:rgba(0,0,0,0.6);color:#f9fafb;border:none;border-radius:50%;width:28px;height:28px;display:flex;justify-content:center;align-items:center;cursor:pointer;font-size:1rem;transition:background-color 0.2s ease,color 0.2s ease;z-index:5;opacity:1;pointer-events:auto;}
         .remove-from-history-btn:hover{background-color:rgba(0,0,0,0.8);color:#f1f5f9;}
         .remove-from-history-list-item-btn {position:absolute; top: 12px; right: 12px; background-color: rgba(0,0,0,0.6); color: #f9fafb; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 1rem; transition: background-color 0.2s ease, color 0.2s ease; z-index: 5;}
         .remove-from-history-list-item-btn:hover {background-color: rgba(0,0,0,0.8); color: #f1f5f9;}
+        /* Profile details modal specific styling */
         #profile-details-modal .modal-content{text-align:center;}
         #profile-details-modal .modal-content img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 1.5rem auto;border:4px solid #ef4444;}
         #profile-details-modal .modal-content p{font-size:1.1rem;color:#cbd5e1;margin-bottom:0.75rem;}
         #profile-details-modal .modal-content p strong{color:#f87171;margin-right:0.5rem;}
+        /* Scroll to top button */
         #scroll-to-top-btn{display:none;position:fixed;bottom:20px;right:20px;z-index:90;border:none;outline:none;background-color:#ef4444;color:white;cursor:pointer;width:50px;height:50px;border-radius:50%;font-size:18px;box-shadow:0 4px 8px rgba(0,0,0,0.3);transition:background-color 0.3s ease,opacity 0.3s ease,transform 0.2s ease;opacity:0.7;display:flex;justify-content:center;align-items:center;}
         #scroll-to-top-btn:hover{background-color:#dc2626;opacity:1;transform:translateY(-2px);}
         #scroll-to-top-btn:active{transform:translateY(0);}
+        /* Search container and input styling */
         #search-container{transition:max-height 0.3s ease-in-out,opacity 0.3s ease-in-out;overflow:hidden;max-height:0;opacity:0;position:relative;display:flex;align-items:center;}
         #search-container.show{max-height:100px;opacity:1;}
         #search-input{flex-grow:1;padding-right:2.5rem;}
@@ -139,6 +239,7 @@
         .clear-search-btn:hover{color:#f1f5f9;}
         .search-loading-spinner{animation:spin 1s linear infinite;margin-left:0.5rem;}
         #no-results-message{text-align:center;color:#cbd5e1;font-size:1.1rem;margin-top:2rem;display:none;}
+        /* Sidebar navigation styling */
         #sidebar-nav{position:fixed;top:0;left:0;width:280px;max-width:80%;height:100%;background-color:#1e293b;box-shadow:4px 0 15px rgba(0,0,0,0.5);z-index:100;transform:translateX(-100%);transition:transform 0.3s ease-out;display:flex;flex-direction:column;padding:1.5rem;overflow-y:auto;}
         #sidebar-nav.show{transform:translateX(0);}
         .sidebar-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.7);z-index:99;display:none;opacity:0;transition:opacity 0.3s ease-out;}
@@ -165,22 +266,20 @@
             color:#f9fafb;
             background-color:#475569; /* Darker background on hover */
         }
-        .trending-section h3{font-size:1.5rem;font-weight:600;color:#f87171;margin-bottom:1rem;}
-        .trending-list{list-style:none;padding:0;}
-        .trending-item{display:flex;align-items:center;background-color:#334155;border-radius:0.375rem;margin-bottom:0.75rem;padding:0.75rem;cursor:pointer;transition:background-color 0.2s ease;}
-        .trending-item:hover{background-color:#475569;}
-        .trending-item img{width:50px;height:50px;border-radius:0.25rem;object-fit:cover;margin-right:0.75rem;border:2px solid #ef4444;}
-        .trending-item span{font-size:1rem;color:#f1f5f9;font-weight:500;}
+        /* Loader dot pulse animation */
         .loader-dot-pulse{display:flex;justify-content:center;align-items:center;height:100%;min-height:100px;width:100%;padding:1rem;box-sizing:border-box;}
         .loader-dot-pulse div{width:12px;height:12px;background-color:white;border-radius:50%;margin:0 4px;animation:dotPulse 1.2s infinite ease-in-out;}
         .loader-dot-pulse div:nth-child(1){animation-delay:-0.2s;}
         .loader-dot-pulse div:nth-child(2){animation-delay:0s;}
         .loader-dot-pulse div:nth-child(3){animation-delay:0.2s;}
         @keyframes dotPulse{0%,100%{transform:scale(0.7);opacity:0.5;}50%{transform:scale(1);opacity:1);}}
+        /* Dropdown menu items hidden by default */
         #profile-dropdown .dropdown-menu-items{display:none;}
         #search-results-loader{display:none;margin-top:2rem;min-height:80px;}
+        /* Global notification box */
         #global-notification-box{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:100;background-color:#10b981;color:#f9fafb;padding:12px 20px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);font-weight:500;text-align:center;opacity:0;transition:opacity 0.3s ease-in-out;pointer-events:none;display:none;min-width:200px;}
         #global-notification-box.show{opacity:1;pointer-events:auto;}
+        /* Welcome back modal styling */
         #welcome-back-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#0f172a;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:101;opacity:0;visibility:hidden;transition:opacity 0.5s ease-in-out,visibility 0.5s ease-in-out;}
         #welcome-back-modal.show{opacity:1;visibility:visible;}
         #welcome-back-avatar{width:180px;height:180px;border-radius:50%;object-fit:cover;border:6px solid #ef4444;box-shadow:0 0 25px rgba(239,68,68,0.6);margin-bottom:2rem;animation:pulse 2s infinite ease-in-out;}
@@ -242,6 +341,7 @@
     </style>
 </head>
 <body class="bg-gray-900 text-white">
+    <!-- Loading Overlay - Shown on app start -->
     <div id="loading-overlay">
         <div class="loading-avatar-container">
             <img id="loading-avatar-img" src="" alt="Loading Avatar">
@@ -249,7 +349,10 @@
         </div>
         <span id="loading-username" class="mt-2"></span>
     </div>
-    <div id="main-content">
+
+    <!-- Main Content - Hidden until loaded or logged in -->
+    <div id="main-content" style="display: none;">
+        <!-- Header Section -->
         <header class="bg-gray-800 py-3 flex justify-between items-center shadow-lg sticky top-0 z-10 rounded-md">
             <div class="ml-4 flex items-center">
                 <!-- Sidebar Toggle Button -->
@@ -260,18 +363,13 @@
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgzNxZB8zMg7tekPLIKgQjGUMhdEDcry8A6DjXdwNZUgvbyQ5_x8Vxl_AG4zkZxKUqyAEsapZ7GGzmxHasw_Qa7NLPjqB0sesrIhezPj57rD5rBHST1r6C5SMaVb_bC-COODZ5xmK_wC4W-KKctdoHyynjfPGGSP-QgZH-PJvAXPzSylr7VJp1kF2wjiivy/s3264/20250528_192410.png" alt="Anitoono Logo" class="h-10 w-auto object-contain">
                 </div>
             </div>
-            <div class="mr-4 flex items-center space-x-1 sm:space-x-2 md:space-x-3"> <!-- Adjusted spacing here -->
-                <button id="random-button"><i class="fas fa-random"></i></button>
-                <button id="search-button"><i class="fas fa-search"></i></button>
-                <button id="notification-button"><i class="fas fa-bell"></i></button>
-                <div id="login-icon" class="auth-icon hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                    </svg>
-                </div>
-                <div id="user-profile" class="hidden">
+            <div class="mr-4 flex items-center space-x-1 sm:space-x-2 md:space-x-3">
+                <button id="random-button" aria-label="Random Anime"><i class="fas fa-random"></i></button>
+                <button id="search-button" aria-label="Search"><i class="fas fa-search"></i></button>
+                <button id="notification-button" aria-label="Notifications"><i class="fas fa-bell"></i></button>
+                <!-- User Profile - Shown when logged in (registered or anonymous) -->
+                <div id="user-profile">
                     <img id="avatar-img" src="" alt="Avatar" class="w-8 h-8 rounded-full mr-1 border-2 border-red-500">
-                    <!-- Added max-w, overflow-hidden, and text-overflow-ellipsis for username truncation -->
                     <span id="username" class="text-gray-300 font-semibold text-sm max-w-[70px] overflow-hidden text-ellipsis whitespace-nowrap"></span>
                     <div id="profile-dropdown" class="hidden">
                         <div class="loader-dot-pulse hidden" id="dropdown-loader">
@@ -282,18 +380,20 @@
                             <a href="#" id="settings-link"><i class="fas fa-cog"></i> Settings</a>
                             <a href="#" id="continue-watching-link"><i class="fas fa-play-circle"></i> Continue Watching</a>
                             <a href="https://anitoono45.github.io/discussion-Area/" target="_blank" id="anitoono-chat-zone-link-dropdown"><i class="fas fa-comments"></i> Anitoono Chat Zone</a>
-                            <a href="#" id="reset-passcode-link"><i class="fas fa-key"></i> Reset Passcode</a>
-                            <a href="#" id="add-account-link" class="hidden"><i class="fas fa-user-plus"></i> Add Account</a>
-                            <a href="#" id="switch-account-link" class="hidden"><i class="fas fa-users"></i> Switch Account</a>
-                            <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            <!-- Removed Reset Passcode Link -->
+                            <a href="#" id="add-account-link" class="hidden"><i class="fas fa-user-plus"></i> Register New Account</a>
+                            <!-- Removed Logout Button -->
                         </div>
                     </div>
                 </div>
             </div>
         </header>
+
+        <!-- Main Content Area -->
         <main class="container mx-auto mt-8 p-4">
+            <!-- Search Container -->
             <div id="search-container" class="mb-8 flex justify-center">
-                <input type="text" id="search-input" placeholder="Search for anime..." class="form-input w-full md:w-2/3 lg:w-1/2" aria-label="Search for anime"/>
+                <input type="text" id="search-input" placeholder="Search for anime or enter admin code..." class="form-input w-full md:w-2/3 lg:w-1/2" aria-label="Search for anime"/>
                 <div class="search-icon-container">
                     <button id="clear-search-btn" class="clear-search-btn" aria-label="Clear search input"><i class="fas fa-times-circle"></i></button>
                     <i id="search-loading-spinner" class="fas fa-spinner fa-spin search-loading-spinner"></i>
@@ -313,20 +413,23 @@
                 <p>Total Users: <strong><span id="admin-total-users"></span></strong></p>
                 <h3>All Users:</h3>
                 <ul id="admin-user-list"></ul>
-                <!-- Add other admin features here as needed -->
             </div>
 
+            <!-- Continue Watching Section -->
             <div id="continue-watching-section" class="hidden">
                 <h2>Continue Watching</h2>
                 <div id="continue-watching-container"></div>
             </div>
+            <!-- Main Post Display Area -->
             <div id="post-container"></div>
         </main>
     </div>
+
+    <!-- Sidebar Navigation -->
     <div id="sidebar-nav" class="hidden">
         <div class="sidebar-header">
             <h2>Menu</h2>
-            <button class="sidebar-close-btn">&times;</button>
+            <button class="sidebar-close-btn" aria-label="Close sidebar menu">&times;</button>
         </div>
         <div class="sidebar-menu">
             <a href="#" id="sidebar-random-link"><i class="fas fa-random"></i> Random Anime</a>
@@ -334,76 +437,47 @@
             <a href="#" id="sidebar-settings-link"><i class="fas fa-cog"></i> Settings</a>
             <a href="#" id="sidebar-continue-watching-link"><i class="fas fa-play-circle"></i> Continue Watching</a>
             <a href="https://anitoono45.github.io/discussion-Area/" target="_blank" id="sidebar-anitoono-chat-zone-link"><i class="fas fa-comments"></i> Anitoono Chat Zone</a>
-            <a href="#" id="sidebar-reset-passcode-link"><i class="fas fa-key"></i> Reset Passcode</a>
-            <a href="#" id="sidebar-add-account-link" class="hidden"><i class="fas fa-user-plus"></i> Add Account</a>
-            <a href="#" id="sidebar-switch-account-link" class="hidden"><i class="fas fa-users"></i> Switch Account</a>
-            <a href="#" id="sidebar-logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <!-- Removed Reset Passcode Link -->
+            <a href="#" id="sidebar-add-account-link" class="hidden"><i class="fas fa-user-plus"></i> Register New Account</a>
+            <!-- Removed Logout Button -->
         </div>
-        <!-- Removed Trending Anime Section -->
     </div>
     <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
-    <div id="login-modal" class="modal-bottom-sheet hidden">
+
+    <!-- Register Modal (Bottom Sheet) - Primary entry point for registration -->
+    <div id="register-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-            <span class="modal-close-button" data-modal-id="login-modal">&times;</span>
+            <span class="modal-close-button" data-modal-id="register-modal" aria-label="Close register modal">&times;</span>
         </div>
         <div class="modal-content">
-            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Login to Anitoono</h2>
-            <form id="login-form" class="space-y-6">
+            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Register Your Account</h2>
+            <form id="register-form" class="space-y-6">
                 <div>
-                    <label for="login-email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
-                    <input type="email" id="login-email" class="form-input" required>
-                    <div id="login-email-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
+                    <label for="register-username" class="block text-gray-300 text-sm font-bold mb-2">Name:</label>
+                    <input type="text" id="register-username" class="form-input" required>
+                    <div id="register-username-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
                 <div>
-                    <label for="login-password" class="block text-gray-300 text-sm font-bold mb-2">Password:</label>
-                    <input type="password" id="login-password" class="form-input" required>
-                    <div id="login-password-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
+                    <label for="register-email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
+                    <input type="email" id="register-email" class="form-input" required>
+                    <div id="register-email-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
-                <button type="submit" class="btn btn-primary w-full">Login</button>
-            </form>
-            <div class="mt-6 text-center text-gray-400">
-                <p>Don't have an account? <a href="#" id="switch-to-signup" class="text-red-500 hover:underline">Sign Up</a></p>
-            </div>
-        </div>
-    </div>
-    <div id="signup-modal" class="modal-bottom-sheet hidden">
-        <div class="modal-header-handle">
-            <span class="modal-close-button" data-modal-id="signup-modal">&times;</span>
-        </div>
-        <div class="modal-content">
-            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Sign Up for Anitoono</h2>
-            <form id="signup-form" class="space-y-6">
+                <!-- Password field removed as per user request -->
                 <div>
-                    <label for="signup-email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
-                    <input type="email" id="signup-email" class="form-input" required>
-                    <div id="signup-email-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
-                </div>
-                <div>
-                    <label for="signup-username" class="block text-gray-300 text-sm font-bold mb-2">Username:</label>
-                    <input type="text" id="signup-username" class="form-input" required>
-                    <div id="signup-username-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
-                </div>
-                <div>
-                    <label for="signup-password" class="block text-gray-300 text-sm font-bold mb-2">Password:</label>
-                    <input type="password" id="signup-password" class="form-input" required>
-                    <div id="signup-password-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
-                </div>
-                <div>
-                    <label for="signup-avatar" class="block text-gray-300 text-sm font-bold mb-2">Choose Avatar:</label>
+                    <label for="register-avatar" class="block text-gray-300 text-sm font-bold mb-2">Choose Avatar:</label>
                     <div class="flex flex-wrap gap-3" id="avatar-options-container"></div>
-                    <input type="hidden" id="signup-avatar" name="signup-avatar" value="">
-                    <div id="signup-avatar-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
+                    <input type="hidden" id="register-avatar" name="register-avatar" value="">
+                    <div id="register-avatar-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
                 </div>
-                <button type="submit" class="btn btn-primary w-full">Sign Up</button>
+                <button type="submit" class="btn btn-primary w-full">Register</button>
             </form>
-            <div class="mt-6 text-center text-gray-400">
-                <p>Already have an account? <a href="#" id="switch-to-login" class="text-red-500 hover:underline">Login</a></p>
-            </div>
         </div>
     </div>
+
+    <!-- Post Details Modal (Bottom Sheet) -->
     <div id="post-details-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-            <span class="modal-close-button" data-modal-id="post-details-modal">&times;</span>
+            <span class="modal-close-button" data-modal-id="post-details-modal" aria-label="Close post details modal">&times;</span>
         </div>
         <div class="modal-content max-w-2xl">
             <h2 id="post-details-title" class="text-2xl font-semibold mb-4 text-red-500"></h2>
@@ -411,9 +485,11 @@
             <button id="post-details-close-btn" class="btn btn-secondary w-full">Close</button>
         </div>
     </div>
+
+    <!-- Settings Modal (Bottom Sheet) -->
     <div id="settings-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-            <span class="modal-close-button" data-modal-id="settings-modal">&times;</span>
+            <span class="modal-close-button" data-modal-id="settings-modal" aria-label="Close settings modal">&times;</span>
         </div>
         <div class="modal-content">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Settings</h2>
@@ -436,21 +512,17 @@
                         <button class="btn btn-secondary" id="disable-continue-watching-btn">Disable</button>
                     </div>
                 </div>
-                <div class="setting-option">
-                    <label>Save Viewing History:</label>
-                    <div class="enable-disable-group">
-                        <button class="btn btn-secondary" id="enable-save-history-btn">Enable</button>
-                        <button class="btn btn-secondary" id="disable-save-history-btn">Disable</button>
-                    </div>
-                </div>
+                <!-- Removed Save Viewing History Option -->
                 <button id="save-all-changes-btn" class="btn btn-primary w-full mt-6">Save All Changes</button>
                 <button id="settings-close-btn" class="btn btn-secondary w-full mt-2">Close</button>
             </div>
         </div>
     </div>
+
+    <!-- History Modal (Bottom Sheet) -->
     <div id="history-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-            <span class="modal-close-button" data-modal-id="history-modal">&times;</span>
+            <span class="modal-close-button" data-modal-id="history-modal" aria-label="Close history modal">&times;</span>
         </div>
         <div class="modal-content max-lg">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Viewing History</h2>
@@ -460,9 +532,11 @@
             <div id="history-message" class="text-center mt-4 text-green-500" style="display: none;"></div>
         </div>
     </div>
+
+    <!-- Notification Modal (Bottom Sheet) -->
     <div id="notification-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-            <span class="modal-close-button" data-modal-id="notification-modal">&times;</span>
+            <span class="modal-close-button" data-modal-id="notification-modal" aria-label="Close notifications modal">&times;</span>
         </div>
         <div class="modal-content max-sm">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Notifications</h2>
@@ -474,9 +548,11 @@
             <button id="notification-close-btn" class="btn btn-secondary w-full mt-6">Close</button>
         </div>
     </div>
+
+    <!-- Profile Details Modal (Bottom Sheet) -->
     <div id="profile-details-modal" class="modal-bottom-sheet hidden">
         <div class="modal-header-handle">
-            <span class="modal-close-button" data-modal-id="profile-details-modal">&times;</span>
+            <span class="modal-close-button" data-modal-id="profile-details-modal" aria-label="Close profile details modal">&times;</span>
         </div>
         <div class="modal-content max-sm">
             <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">My Profile</h2>
@@ -486,65 +562,160 @@
             <button id="profile-details-close-btn" class="btn btn-secondary w-full mt-6">Close</button>
         </div>
     </div>
-    <div id="reset-passcode-modal" class="modal-bottom-sheet hidden">
-        <div class="modal-header-handle">
-            <span class="modal-close-button" data-modal-id="reset-passcode-modal">&times;</span>
-        </div>
-        <div class="modal-content">
-            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Reset Passcode</h2>
-            <form id="reset-passcode-form" class="space-y-6">
-                <div>
-                    <label for="current-passcode" class="block text-gray-300 text-sm font-bold mb-2">Current Passcode:</label>
-                    <input type="password" id="current-passcode" class="form-input" required>
-                    <div id="current-passcode-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
-                </div>
-                <div>
-                    <label for="new-passcode" class="block text-gray-300 text-sm font-bold mb-2">New Passcode:</label>
-                    <input type="password" id="new-passcode" class="form-input" required>
-                    <div id="new-passcode-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
-                </div>
-                <div>
-                    <label for="confirm-new-passcode" class="block text-gray-300 text-sm font-bold mb-2">Confirm New Passcode:</label>
-                    <input type="password" id="confirm-new-passcode" class="form-input" required>
-                    <div id="confirm-new-passcode-error" class="text-red-500 text-xs italic mt-1" style="display: none;"></div>
-                </div>
-                <button type="submit" class="btn btn-primary w-full">Reset Passcode</button>
-            </form>
-        </div>
-    </div>
-    <div id="switch-account-modal" class="modal-bottom-sheet hidden">
-        <div class="modal-header-handle">
-            <span class="modal-close-button" data-modal-id="switch-account-modal">&times;</span>
-        </div>
-        <div class="modal-content">
-            <h2 class="text-2xl font-semibold mb-6 text-red-500 text-center">Switch Account</h2>
-            <div id="account-list" class="space-y-4"></div>
-        </div>
-    </div>
-    <div id="logout-confirmation-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2 class="text-2xl font-semibold mb-4 text-red-500 text-center">Confirm Logout</h2>
-            <p class="text-gray-300 mb-6 text-center">Are you sure you want to log out?</p>
-            <div class="flex justify-center space-x-4">
-                <button id="confirm-logout-btn" class="btn btn-primary">Yes, Logout</button>
-                <button id="cancel-logout-btn" class="btn btn-secondary">Cancel</button>
-            </div>
-        </div>
-    </div>
+
+    <!-- Removed Reset Passcode Modal -->
+
+    <!-- Removed Logout Confirmation Modal -->
+
+    <!-- Scroll to Top Button -->
     <button id="scroll-to-top-btn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Global Notification Box -->
     <div id="global-notification-box" class="message-box success">Changes are saved!</div>
+
+    <!-- Welcome Back Modal -->
     <div id="welcome-back-modal" class="hidden">
         <img id="welcome-back-avatar" src="" alt="User Avatar">
         <span id="welcome-back-username"></span>
         <button id="welcome-back-enter-btn">Enter</button>
     </div>
+
     <script type="module">
-        import{initialPosts,trendingAnime}from'./posts.js';import{avatarImages}from'./avatars.js';const postContainer=document.getElementById("post-container");const searchInput=document.getElementById("search-input");const loginIcon=document.getElementById("login-icon");const loginModal=document.getElementById("login-modal");const signupModal=document.getElementById("signup-modal");const loginForm=document.getElementById("login-form");const signupForm=document.getElementById("signup-form");const switchToSignupBtn=document.getElementById("switch-to-signup");const switchToLoginBtn=document.getElementById("switch-to-login");const userProfileDiv=document.getElementById("user-profile");const avatarImg=document.getElementById("avatar-img");const usernameSpan=document.getElementById("username");const logoutBtn=document.getElementById("logout-btn");const postDetailsModal=document.getElementById("post-details-modal");const postDetailsTitle=document.getElementById("post-details-title");const postDetailsContent=document.getElementById("post-details-content");const avatarOptionsContainer=document.getElementById("avatar-options-container");const signupAvatarInput=document.getElementById("signup-avatar");const settingsBtn=document.getElementById("settings-link");const settingsModal=document.getElementById("settings-modal");const clearHistoryBtn=document.getElementById("clear-history-btn-history-modal");const settingsAvatarOptionsContainer=document.getElementById("settings-avatar-options-container");const settingsAvatarInput=document.getElementById("settings-avatar");const profileDropdown=document.getElementById("profile-dropdown");const resetPasscodeLink=document.getElementById("reset-passcode-link");const resetPasscodeModal=document.getElementById("reset-passcode-modal");const resetPasscodeForm=document.getElementById("reset-passcode-form");const currentPasscodeInput=document.getElementById("current-passcode");const newPasscodeInput=document.getElementById("new-passcode");const confirmNewPasscodeInput=document.getElementById("confirm-new-passcode");const currentPasscodeError=document.getElementById("current-passcode-error");const newPasscodeError=document.getElementById("new-passcode-error");const confirmNewPasscodeError=document.getElementById("confirm-new-passcode-error");const changeUsernameInput=document.getElementById("change-username");const changeUsernameError=document.getElementById("change-username-error");const historyLink=document.getElementById("history-link");const historyModal=document.getElementById("history-modal");const historyList=document.getElementById("history-list");const historyMessageDiv=document.getElementById("history-message");const notificationButton=document.getElementById("notification-button");const notificationModal=document.getElementById("notification-modal");const notificationList=document.getElementById("notification-list");const scrollToTopBtn=document.getElementById("scroll-to-top-btn");const continueWatchingSection=document.getElementById('continue-watching-section');const continueWatchingContainer=document.getElementById('continue-watching-container');const enableContinueWatchingBtn=document.getElementById('enable-continue-watching-btn');const disableContinueWatchingBtn=document.getElementById('disable-continue-watching-btn');const enableSaveHistoryBtn=document.getElementById('enable-save-history-btn');const disableSaveHistoryBtn=document.getElementById('disable-save-history-btn');const viewProfileLink=document.getElementById('view-profile-link');const profileDetailsModal=document.getElementById('profile-details-modal');const profileModalAvatar=document.getElementById('profile-modal-avatar');const profileModalUsername=document.getElementById('profile-modal-username');const profileModalEmail=document.getElementById('profile-modal-email');const loadingOverlay=document.getElementById("loading-overlay");const loadingAvatarImg=document.getElementById("loading-avatar-img");const loadingUsernameSpan=document.getElementById("loading-username");const mainContentDiv=document.getElementById("main-content");const addAccountLink=document.getElementById("add-account-link");const switchAccountLink=document.getElementById("switch-account-link");const switchAccountModal=document.getElementById("switch-account-modal");const accountListDiv=document.getElementById("account-list");const searchButton=document.getElementById('search-button');const searchContainer=document.getElementById('search-container');const clearSearchBtn=document.getElementById('clear-search-btn');const searchLoadingSpinner=document.getElementById('search-loading-spinner');const noResultsMessage=document.getElementById('no-results-message');const searchResultsLoader=document.getElementById('search-results-loader');const modalHeaderHandles=document.querySelectorAll('.modal-bottom-sheet .modal-header-handle');const logoutConfirmationModal=document.getElementById('logout-confirmation-modal');const confirmLogoutBtn=document.getElementById('confirm-logout-btn');const cancelLogoutBtn=document.getElementById('cancel-logout-btn');const sidebarNav=document.getElementById('sidebar-nav');const sidebarOverlay=document.getElementById('sidebar-overlay');const sidebarCloseBtn=document.querySelector('.sidebar-close-btn');const trendingList=document.getElementById('trending-list'); // Keep for now, but will remove from sidebar render
-        const sidebarViewProfileLink=document.getElementById('sidebar-view-profile-link');const sidebarSettingsLink=document.getElementById('sidebar-settings-link');const sidebarHistoryLink=document.getElementById('sidebar-history-link');const sidebarResetPasscodeLink=document.getElementById('sidebar-reset-passcode-link');const sidebarAddAccountLink=document.getElementById('sidebar-add-account-link');const sidebarSwitchAccountLink=document.getElementById('sidebar-switch-account-link');const sidebarLogoutBtn=document.getElementById('sidebar-logout-btn');const dropdownLoader=document.getElementById('dropdown-loader');const dropdownMenuItems=document.querySelector('#profile-dropdown .dropdown-menu-items');const postDetailsCloseBtn=document.getElementById('post-details-close-btn');const settingsCloseBtn=document.getElementById('settings-close-btn');const historyCloseBtn=document.getElementById('history-close-btn');const notificationCloseBtn=document.getElementById('notification-close-btn');const profileDetailsCloseBtn=document.getElementById('profile-details-close-btn');const globalNotificationBox=document.getElementById('global-notification-box');const saveAllChangesBtn=document.getElementById('save-all-changes-btn');const welcomeBackModal=document.getElementById('welcome-back-modal');const welcomeBackAvatar=document.getElementById('welcome-back-avatar');const welcomeBackUsername=document.getElementById('welcome-back-username');const welcomeBackEnterBtn=document.getElementById('welcome-back-enter-btn');const continueWatchingLink=document.getElementById('continue-watching-link');const sidebarContinueWatchingLink=document.getElementById('sidebar-continue-watching-link');
+        // Firebase SDK Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variable for avatar images, will be populated on window.onload
+        let avatarImages = [];
+
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9FggT0dT3koZiehO1TZesW40mvH1kSCc",
+            authDomain: "anitoono-77521.firebaseapp.com",
+            databaseURL: "https://anitoono-77521-default-rtdb.firebaseio.com",
+            projectId: "anitoono-77521",
+            storageBucket: "anitoono-77521.firebasestorage.app",
+            messagingSenderId: "175616933698",
+            appId: "1:175616933698:web:3223bc137f8e78886a92db",
+            measurementId: "G-3DK3Z1N4LW"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Derive the appId from the firebaseConfig for Firestore paths
+        const appId = firebaseConfig.appId.split(':')[2];
+
+        // Reference to the 'movies' collection in Firestore (public data)
+        const moviesCollectionRef = collection(db, `artifacts/${appId}/public/data/movies`);
+
+        // --- Global Data Storage ---
+        let animePosts = []; // Stores anime data fetched from Firestore
+        // Load users and loggedInUser from localStorage, they are now persistent
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        // Validate loggedInUser data on script load
+        if (loggedInUser && (!loggedInUser.email || !loggedInUser.username || !loggedInUser.password || !loggedInUser.avatar)) {
+            loggedInUser = null;
+            localStorage.removeItem("loggedInUser");
+        }
+        let viewHistory = loggedInUser ? (JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || []) : [];
+        // userSettings now only contains enableContinueWatching
+        let userSettings = loggedInUser ? (JSON.parse(localStorage.getItem(`settings_${loggedInUser.email}`)) || { enableContinueWatching: true }) : { enableContinueWatching: true };
+        let tempUsername = loggedInUser ? loggedInUser.username : '';
+        let tempAvatar = loggedInUser ? loggedInUser.avatar : '';
+        let tempEnableContinueWatching = userSettings.enableContinueWatching; // Only this one remains
+        const sampleNotifications = ["New episode of 'Awesome Anime' is available!", "Your favorite show 'Cool Series' updated.", "Welcome to Anitoono!", "Check out the new movie releases!", "Maintenance scheduled for tomorrow at 2 AM PKT."];
+        const ACCOUNT_LIMIT = 1; // Maximum number of registered accounts
+        let searchTimeout;
+        let touchstartY = 0;
+
+        // --- DOM Element References ---
+        const postContainer = document.getElementById("post-container");
+        const searchInput = document.getElementById("search-input");
+        const registerModal = document.getElementById("register-modal");
+        const registerForm = document.getElementById("register-form");
+        const registerEmailInput = document.getElementById("register-email");
+        const registerUsernameInput = document.getElementById("register-username");
+        const registerAvatarInput = document.getElementById("register-avatar");
+
+        const registerEmailError = document.getElementById("register-email-error");
+        const registerUsernameError = document.getElementById("register-username-error");
+        const registerAvatarError = document.getElementById("register-avatar-error");
+
+
+        const userProfileDiv = document.getElementById("user-profile");
+        const avatarImg = document.getElementById("avatar-img");
+        const usernameSpan = document.getElementById("username");
+        const postDetailsModal = document.getElementById("post-details-modal");
+        const postDetailsTitle = document.getElementById("post-details-title");
+        const postDetailsContent = document.getElementById("post-details-content");
+        const avatarOptionsContainer = document.getElementById("avatar-options-container");
+        const settingsBtn = document.getElementById("settings-link");
+        const settingsModal = document.getElementById("settings-modal");
+        const clearHistoryBtn = document.getElementById("clear-history-btn-history-modal");
+        const settingsAvatarOptionsContainer = document.getElementById("settings-avatar-options-container");
+        const settingsAvatarInput = document.getElementById("settings-avatar");
+        const profileDropdown = document.getElementById("profile-dropdown");
+        const changeUsernameInput = document.getElementById("change-username");
+        const changeUsernameError = document.getElementById("change-username-error");
+        const historyModal = document.getElementById("history-modal");
+        const historyList = document.getElementById("history-list");
+        const historyMessageDiv = document.getElementById("history-message");
+        const notificationButton = document.getElementById("notification-button");
+        const notificationModal = document.getElementById("notification-modal");
+        const notificationList = document.getElementById("notification-list");
+        const scrollToTopBtn = document.getElementById("scroll-to-top-btn");
+        const continueWatchingSection = document.getElementById('continue-watching-section');
+        const continueWatchingContainer = document.getElementById('continue-watching-container');
+        const enableContinueWatchingBtn = document.getElementById('enable-continue-watching-btn');
+        const disableContinueWatchingBtn = document.getElementById('disable-continue-watching-btn');
+        const viewProfileLink = document.getElementById('view-profile-link');
+        const profileDetailsModal = document.getElementById('profile-details-modal');
+        const profileModalAvatar = document.getElementById('profile-modal-avatar');
+        const profileModalUsername = document.getElementById('profile-modal-username');
+        const profileModalEmail = document.getElementById('profile-modal-email');
+        const loadingOverlay = document.getElementById("loading-overlay");
+        const loadingAvatarImg = document.getElementById("loading-avatar-img");
+        const loadingUsernameSpan = document.getElementById("loading-username");
+        const mainContentDiv = document.getElementById("main-content");
+        const addAccountLink = document.getElementById("add-account-link");
+        const accountListDiv = document.getElementById("account-list");
+        const searchButton = document.getElementById('search-button');
+        const searchContainer = document.getElementById('search-container');
+        const clearSearchBtn = document.getElementById('clear-search-btn');
+        const searchLoadingSpinner = document.getElementById('search-loading-spinner');
+        const noResultsMessage = document.getElementById('no-results-message');
+        const searchResultsLoader = document.getElementById('search-results-loader');
+        const modalHeaderHandles = document.querySelectorAll('.modal-bottom-sheet .modal-header-handle');
+        const sidebarNav = document.getElementById('sidebar-nav');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const sidebarCloseBtn = document.querySelector('.sidebar-close-btn');
+        const sidebarViewProfileLink = document.getElementById('sidebar-view-profile-link');
+        const sidebarSettingsLink = document.getElementById('sidebar-settings-link');
+        const sidebarHistoryLink = document.getElementById('sidebar-history-link');
+        const sidebarAddAccountLink = document.getElementById('sidebar-add-account-link');
+        const dropdownLoader = document.getElementById('dropdown-loader');
+        const dropdownMenuItems = document.querySelector('#profile-dropdown .dropdown-menu-items');
+        const postDetailsCloseBtn = document.getElementById('post-details-close-btn');
+        const settingsCloseBtn = document.getElementById('settings-close-btn');
+        const historyCloseBtn = document.getElementById('history-close-btn');
+        const notificationCloseBtn = document.getElementById('notification-close-btn');
+        const profileDetailsCloseBtn = document.getElementById('profile-details-close-btn');
+        const globalNotificationBox = document.getElementById('global-notification-box');
+        const saveAllChangesBtn = document.getElementById('save-all-changes-btn');
+        const welcomeBackModal = document.getElementById('welcome-back-modal');
+        const welcomeBackAvatar = document.getElementById('welcome-back-avatar');
+        const welcomeBackUsername = document.getElementById('welcome-back-username');
+        const welcomeBackEnterBtn = document.getElementById('welcome-back-enter-btn');
+        const continueWatchingLink = document.getElementById('continue-watching-link');
+        const sidebarContinueWatchingLink = document.getElementById('sidebar-continue-watching-link');
         const randomButton = document.getElementById('random-button');
         const sidebarRandomLink = document.getElementById('sidebar-random-link');
         const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
-        // New elements for Anitoono Chat Zone links
         const anitoonoChatZoneLinkDropdown = document.getElementById('anitoono-chat-zone-link-dropdown');
         const sidebarAnitoonoChatZoneLink = document.getElementById('sidebar-anitoono-chat-zone-link');
 
@@ -555,62 +726,359 @@
         const adminTotalUsers = document.getElementById('admin-total-users');
         const adminUserList = document.getElementById('admin-user-list');
 
+        // --- Global Constants ---
         const ADMIN_CODE = '112234455';
 
-        let users=JSON.parse(localStorage.getItem("users"))||[];let loggedInUser=JSON.parse(localStorage.getItem("loggedInUser"));if(loggedInUser&&(!loggedInUser.email||!loggedInUser.username||!loggedInUser.password||!loggedInUser.avatar)){loggedInUser=null;localStorage.removeItem("loggedInUser");}
-        let viewHistory=loggedInUser?(JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`))||[]):[];
-        let userSettings=loggedInUser?(JSON.parse(localStorage.getItem(`settings_${loggedInUser.email}`))||{enableContinueWatching:true,saveHistory:true}):{enableContinueWatching:true,saveHistory:true};
-        let tempUsername=loggedInUser?loggedInUser.username:'';let tempAvatar=loggedInUser?loggedInUser.avatar:'';let tempEnableContinueWatching=userSettings.enableContinueWatching;let tempSaveHistory=userSettings.saveHistory;const sampleNotifications=["New episode of 'Awesome Anime' is available!","Your favorite show 'Cool Series' updated.","Welcome to Anitoono!","Check out the new movie releases!","Maintenance scheduled for tomorrow at 2 AM PKT."];const ACCOUNT_LIMIT=2;let searchTimeout;let touchstartY=0;function openModal(modalId){const modal=document.getElementById(modalId);modal.classList.remove("hidden");if(modal.classList.contains('modal-bottom-sheet')){setTimeout(()=>{modal.classList.add("show");},10);}
-            document.body.classList.add('modal-open');}
-        function closeModal(modalId){const modal=document.getElementById(modalId);if(modal.classList.contains('modal-bottom-sheet')){modal.classList.remove("show");setTimeout(()=>{modal.classList.add("hidden");document.body.classList.remove('modal-open');},300);}else{modal.classList.add("hidden");document.body.classList.remove('modal-open');}
-            if(modalId==='login-modal'){loginForm.reset();document.getElementById("login-email-error").style.display="none";document.getElementById("login-password-error").style.display="none";const existingMessage=loginForm.querySelector('.message-box.error');if(existingMessage){existingMessage.remove();}}else if(modalId==='signup-modal'){signupForm.reset();document.getElementById("signup-email-error").style.display="none";document.getElementById("signup-username-error").style.display="none";document.getElementById("signup-password-error").style.display="none";document.getElementById("signup-avatar-error").style.display="none";const existingError=signupForm.querySelector('.message-box.error');if(existingError){existingError.remove();}}else if(modalId==='reset-passcode-modal'){resetPasscodeForm.reset();currentPasscodeError.style.display="none";newPasscodeError.style.display="none";confirmNewPasscodeError.style.display="none";const existingMessage=resetPasscodeModal.querySelector('.modal-content').querySelector('.message-box');if(existingMessage){existingMessage.remove();}}else if(modalId==='settings-modal'){changeUsernameInput.value='';changeUsernameError.style.display='none';loadUserSettings();if(loggedInUser){tempUsername=loggedInUser.username;tempAvatar=loggedInUser.avatar;}
-                updateSettingsButtonStates();renderAvatarOptions(settingsAvatarOptionsContainer,settingsAvatarInput,tempAvatar);}else if(modalId==='history-modal'){historyMessageDiv.style.display='none';historyMessageDiv.textContent='';}else if(modalId==='notification-modal'){}else if(modalId==='profile-details-modal'){}else if(modalId==='logout-confirmation-modal'){}
-        }
-        function displayMessage(containerElement,message,type){const existingMessage=containerElement.querySelector('.message-box');if(existingMessage){existingMessage.remove();}
-            const messageDiv=document.createElement('div');messageDiv.classList.add('message-box',type);messageDiv.textContent=message;containerElement.insertBefore(messageDiv,containerElement.firstChild);}
-        function showGlobalNotification(message,type='success'){globalNotificationBox.classList.remove('success','error');globalNotificationBox.textContent=message;globalNotificationBox.classList.add(type);globalNotificationBox.style.display='block';setTimeout(()=>{globalNotificationBox.classList.add('show');},10);setTimeout(()=>{globalNotificationBox.classList.remove('show');setTimeout(()=>{globalNotificationBox.style.display='none';globalNotificationBox.textContent='';},300);},3000);}
-        function validateEmail(email){const re=/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;return re.test(String(email).toLowerCase());}
-        function validatePassword(password){return password.length>=6;}
-        function shuffleArray(array){let currentIndex=array.length,randomIndex;while(currentIndex!==0){randomIndex=Math.floor(Math.random()*currentIndex);currentIndex--;[array[currentIndex],array[currentIndex]]=[array[randomIndex],array[currentIndex]];}
-            return array;}
-        function getPostsForDisplay(){const searchTerm=searchInput.value.toLowerCase().trim();let postsToDisplay=initialPosts;if(searchTerm!==""){postsToDisplay=initialPosts.filter((post)=>post.title.toLowerCase().includes(searchTerm));}else{postsToDisplay=shuffleArray([...initialPosts]);}
-            return postsToDisplay;}
-        function displayPosts(postsToDisplay){
-            // Hide admin panel if it's currently visible
-            adminPanel.style.display = 'none';
-            postContainer.innerHTML="";if(postsToDisplay.length===0&&searchInput.value.trim()!==""){noResultsMessage.style.display='block';postContainer.style.display='none';}else{noResultsMessage.style.display='none';postContainer.style.display='grid';postsToDisplay.forEach((post)=>{const postElement=createPostElement(post,false);postContainer.appendChild(postElement);});addSkeletonEffect();removeSkeletonEffect();}
-        }
-        function addSkeletonEffect(){const postCards=document.querySelectorAll('#post-container .post-card');postCards.forEach(card=>{card.classList.add('skeleton');});}
-        function removeSkeletonEffect(delay=1500){setTimeout(()=>{const postCards=document.querySelectorAll('#post-container .post-card.skeleton');postCards.forEach(card=>{card.classList.remove('skeleton');});},delay);}
-        function createPostElement(post,isContinueWatching=false){const postElement=document.createElement("div");postElement.classList.add("post-card");postElement.dataset.postId=post.id;const imageElement=document.createElement("img");imageElement.src=post.imageUrl;imageElement.alt=post.title;const contentElement=document.createElement("div");contentElement.classList.add("post-card-content");const titleElement=document.createElement("h3");titleElement.textContent=post.title;const descriptionElement=document.createElement("p");descriptionElement.textContent=post.content;contentElement.appendChild(titleElement);contentElement.appendChild(descriptionElement);postElement.appendChild(imageElement);postElement.appendChild(contentElement);
-            // Conditional click behavior based on where the post is being displayed
-            if (isContinueWatching) {
-                postElement.addEventListener("click",()=>{updateViewHistory(post);window.location.href=post.url;}); // Redirect for continue watching
-            } else {
-                postElement.addEventListener("click",()=>{updateViewHistory(post);window.location.href=post.url;}); // Redirect for main posts
+        // --- Modal Functions ---
+        /**
+         * Opens a specified modal.
+         * @param {string} modalId - The ID of the modal to open.
+         */
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove("hidden");
+            if (modal.classList.contains('modal-bottom-sheet')) {
+                setTimeout(() => { modal.classList.add("show"); }, 10);
             }
-            if(isContinueWatching){const removeButton=document.createElement('button');removeButton.classList.add('remove-from-history-btn');removeButton.innerHTML='<i class="fas fa-times"></i>';removeButton.dataset.postId=post.id;removeButton.addEventListener('click',(event)=>{event.stopPropagation();const postIdToRemove=parseInt(event.currentTarget.dataset.postId);removePostFromHistory(postIdToRemove);});postElement.appendChild(removeButton);}
-            return postElement;}
-        function updateViewHistory(post){if(loggedInUser&&userSettings.saveHistory){const postInHistoryIndex=viewHistory.findIndex(item=>item.id===post.id);if(postInHistoryIndex!==-1){viewHistory.splice(postInHistoryIndex,1);}
-            viewHistory.push(post);const historyLimit=20;if(viewHistory.length>historyLimit){viewHistory=viewHistory.slice(viewHistory.length-historyLimit);}
-            localStorage.setItem(`history_${loggedInUser.email}`,JSON.stringify(viewHistory));renderContinueWatching();}}
-        function removePostFromHistory(postId){if(loggedInUser){viewHistory=viewHistory.filter(post=>post.id!==postId);localStorage.setItem(`history_${loggedInUser.email}`,JSON.stringify(viewHistory));renderContinueWatching();if(!historyModal.classList.contains('hidden')){renderHistory();}}}
-        function renderHistory(){historyList.innerHTML="";viewHistory=loggedInUser?(JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`))||[]):[];if(viewHistory.length===0){const listItem=document.createElement("li");listItem.textContent="Your viewing history is empty.";historyList.appendChild(listItem);clearHistoryBtn.classList.add('hidden');}else{clearHistoryBtn.classList.remove('hidden');for(let i=viewHistory.length-1;i>=0;i--){const post=initialPosts.find(p => p.id === viewHistory[i].id);
+            document.body.classList.add('modal-open'); // Prevent body scrolling
+        }
+
+        /**
+         * Closes a specified modal and resets its state if necessary.
+         * @param {string} modalId - The ID of the modal to close.
+         */
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains('modal-bottom-sheet')) {
+                modal.classList.remove("show");
+                setTimeout(() => {
+                    modal.classList.add("hidden");
+                    document.body.classList.remove('modal-open');
+                }, 300); // Match CSS transition duration
+            } else {
+                modal.classList.add("hidden");
+                document.body.classList.remove('modal-open');
+            }
+
+            // Reset specific modal forms/errors
+            if (modalId === 'register-modal') {
+                registerForm.reset();
+                registerEmailError.style.display = "none";
+                registerUsernameError.style.display = "none";
+                registerAvatarError.style.display = "none";
+                const existingError = registerForm.querySelector('.message-box.error');
+                if (existingError) { existingError.remove(); }
+            } else if (modalId === 'settings-modal') {
+                // Revert temp values to loggedInUser's actual values if changes were not saved
+                if (loggedInUser) {
+                    tempUsername = loggedInUser.username;
+                    tempAvatar = loggedInUser.avatar;
+                    tempEnableContinueWatching = userSettings.enableContinueWatching;
+                } else {
+                    // Reset to default for anonymous/no user
+                    tempUsername = '';
+                    tempAvatar = avatarImages[0];
+                    tempEnableContinueWatching = true;
+                }
+                changeUsernameInput.value = tempUsername;
+                changeUsernameError.style.display = 'none';
+                renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, tempAvatar);
+                updateSettingsButtonStates(); // Update button states based on tempEnableContinueWatching
+            } else if (modalId === 'history-modal') {
+                historyMessageDiv.style.display = 'none';
+                historyMessageDiv.textContent = '';
+            }
+        }
+
+        /**
+         * Displays a temporary message box within a container.
+         * @param {HTMLElement} containerElement - The container where the message will be displayed.
+         * @param {string} message - The message text.
+         * @param {'success'|'error'} type - The type of message (for styling).
+         */
+        function displayMessage(containerElement, message, type) {
+            const existingMessage = containerElement.querySelector('.message-box');
+            if (existingMessage) { existingMessage.remove(); } // Remove any existing message first
+
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message-box', type);
+            messageDiv.textContent = message;
+            containerElement.insertBefore(messageDiv, containerElement.firstChild);
+        }
+
+        /**
+         * Shows a global notification at the bottom center of the screen.
+         * @param {string} message - The notification message.
+         * @param {'success'|'error'} [type='success'] - The type of notification (for styling).
+         */
+        function showGlobalNotification(message, type = 'success') {
+            globalNotificationBox.classList.remove('success', 'error');
+            globalNotificationBox.textContent = message;
+            globalNotificationBox.classList.add(type);
+            globalNotificationBox.style.display = 'block';
+            setTimeout(() => { globalNotificationBox.classList.add('show'); }, 10); // Trigger CSS transition
+            setTimeout(() => {
+                globalNotificationBox.classList.remove('show');
+                setTimeout(() => {
+                    globalNotificationBox.style.display = 'none';
+                    globalNotificationBox.textContent = '';
+                }, 300); // Hide after transition
+            }, 3000); // Display duration
+        }
+
+        // --- Validation Functions ---
+        /**
+         * Validates an email address format.
+         * @param {string} email - The email string to validate.
+         * @returns {boolean} True if the email is valid, false otherwise.
+         */
+        function validateEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        /**
+         * Generates a random secure password.
+         * @returns {string} A randomly generated password.
+         * @WARNING This is for demonstration purposes only to fulfill the "no password field" request
+         * while still using Firebase Email/Password auth. Storing this generated password locally
+         * is INSECURE for a real application. Consider Firebase Email Link or other secure methods.
+         */
+        function generateRandomPassword() {
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+            let password = "";
+            const passwordLength = 12; // Recommended minimum length
+            const randomValues = new Uint32Array(passwordLength);
+            window.crypto.getRandomValues(randomValues);
+            for (let i = 0; i < passwordLength; i++) {
+                password += charset[randomValues[i] % charset.length];
+            }
+            return password;
+        }
+
+        // --- Utility Functions ---
+        /**
+         * Shuffles an array in place using the Fisher-Yates (Knuth) algorithm.
+         * @param {Array} array - The array to shuffle.
+         * @returns {Array} The shuffled array.
+         */
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        /**
+         * Gets posts to display based on search term or shuffled if no search.
+         * Uses `animePosts` (from Firestore) instead of `initialPosts`.
+         * @returns {Array} An array of post objects.
+         */
+        function getPostsForDisplay() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let postsToDisplay = animePosts; // Use data from Firestore
+
+            if (searchTerm !== "") {
+                postsToDisplay = animePosts.filter((post) =>
+                    post.title.toLowerCase().includes(searchTerm)
+                );
+            } else {
+                postsToDisplay = shuffleArray([...animePosts]);
+            }
+            return postsToDisplay;
+        }
+
+        /**
+         * Displays posts in the main content area.
+         * @param {Array} postsToDisplay - An array of post objects to display.
+         */
+        function displayPosts(postsToDisplay) {
+            adminPanel.style.display = 'none';
+            postContainer.innerHTML = ""; // Clear existing posts
+
+            if (postsToDisplay.length === 0 && searchInput.value.trim() !== "") {
+                noResultsMessage.style.display = 'block';
+                postContainer.style.display = 'none';
+            } else {
+                noResultsMessage.style.display = 'none';
+                postContainer.style.display = 'grid'; // Ensure grid display for posts
+                postsToDisplay.forEach((post) => {
+                    const postElement = createPostElement(post, false);
+                    postContainer.appendChild(postElement);
+                });
+                addSkeletonEffect(); // Add skeleton effect before content loads
+                removeSkeletonEffect(); // Remove skeleton effect after a delay
+            }
+        }
+
+        /**
+         * Applies skeleton loading effect to post cards.
+         */
+        function addSkeletonEffect() {
+            const postCards = document.querySelectorAll('#post-container .post-card');
+            postCards.forEach(card => {
+                card.classList.add('skeleton');
+            });
+        }
+
+        /**
+         * Removes skeleton loading effect from post cards after a delay.
+         * @param {number} delay - The delay in milliseconds before removing the effect.
+         */
+        function removeSkeletonEffect(delay = 1500) {
+            setTimeout(() => {
+                const postCards = document.querySelectorAll('#post-container .post-card.skeleton');
+                postCards.forEach(card => {
+                    card.classList.remove('skeleton');
+                });
+            }, delay);
+        }
+
+        /**
+         * Creates a DOM element for a single post.
+         * @param {Object} post - The post object.
+         * @param {boolean} isContinueWatching - True if the post is for the continue watching section.
+         * @returns {HTMLElement} The created post element.
+         */
+        function createPostElement(post, isContinueWatching = false) {
+            const postElement = document.createElement("div");
+            postElement.classList.add("post-card");
+            postElement.dataset.postId = post.id;
+
+            const imageElement = document.createElement("img");
+            imageElement.src = post.imageUrl;
+            imageElement.alt = post.title;
+            postElement.appendChild(imageElement);
+
+            // HD Badge
+            const hdBadge = document.createElement("div");
+            hdBadge.classList.add("hd-badge");
+            hdBadge.textContent = "HD";
+            postElement.appendChild(hdBadge);
+
+            const contentElement = document.createElement("div");
+            contentElement.classList.add("post-card-content");
+
+            const titleElement = document.createElement("h3");
+            titleElement.textContent = post.title;
+            contentElement.appendChild(titleElement);
+
+            // Year and Duration details
+            const detailsElement = document.createElement("div");
+            detailsElement.classList.add("post-card-details");
+            const yearSpan = document.createElement("span");
+            yearSpan.textContent = post.year;
+            const dotSpan = document.createElement("span");
+            dotSpan.classList.add("dot");
+            const durationSpan = document.createElement("span");
+            durationSpan.textContent = post.duration;
+            detailsElement.appendChild(yearSpan);
+            detailsElement.appendChild(dotSpan);
+            detailsElement.appendChild(durationSpan);
+            contentElement.appendChild(detailsElement);
+
+            const descriptionElement = document.createElement("p");
+            descriptionElement.textContent = post.content;
+            contentElement.appendChild(descriptionElement);
+
+            postElement.appendChild(contentElement);
+
+            // Event listener for clicking the post card
+            postElement.addEventListener("click", () => {
+                updateViewHistory(post); // Update viewing history
+                window.location.href = post.url; // Redirect to post URL
+            });
+
+            // Add remove button for continue watching items
+            if (isContinueWatching) {
+                const removeButton = document.createElement('button');
+                removeButton.classList.add('remove-from-history-btn');
+                removeButton.innerHTML = '<i class="fas fa-times"></i>';
+                removeButton.dataset.postId = post.id;
+                removeButton.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Prevent opening post details when clicking remove
+                    const postIdToRemove = event.currentTarget.dataset.postId;
+                    removePostFromHistory(postIdToRemove);
+                });
+                postElement.appendChild(removeButton);
+            }
+            return postElement;
+        }
+
+        /**
+         * Updates the user's viewing history in localStorage.
+         * @param {Object} post - The post object that was viewed.
+         */
+        function updateViewHistory(post) {
+            // History is always saved for registered users now
+            if (loggedInUser && loggedInUser.email) {
+                const postInHistoryIndex = viewHistory.findIndex(item => item.id === post.id);
+                if (postInHistoryIndex !== -1) {
+                    viewHistory.splice(postInHistoryIndex, 1); // Remove if already exists to move to end
+                }
+                viewHistory.push(post); // Add to the end
+
+                const historyLimit = 20; // Limit history to 20 items
+                if (viewHistory.length > historyLimit) {
+                    viewHistory = viewHistory.slice(viewHistory.length - historyLimit);
+                }
+                localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
+                renderContinueWatching(); // Re-render continue watching section
+            }
+        }
+
+        /**
+         * Removes a post from the user's viewing history.
+         * @param {string} postId - The ID of the post to remove.
+         */
+        function removePostFromHistory(postId) {
+            if (loggedInUser && loggedInUser.email) { // Ensure it's a registered user
+                viewHistory = viewHistory.filter(post => post.id !== postId);
+                localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
+                renderContinueWatching(); // Update continue watching section
+                if (!historyModal.classList.contains('hidden')) {
+                    renderHistory(); // Re-render history modal if open
+                }
+            }
+        }
+
+        /**
+         * Renders the user's viewing history in the history modal.
+         */
+        function renderHistory() {
+            historyList.innerHTML = ""; // Clear existing list
+            // Only load history if a registered user is logged in
+            viewHistory = (loggedInUser && loggedInUser.email) ? (JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || []) : [];
+
+            if (viewHistory.length === 0) {
+                const listItem = document.createElement("li");
+                listItem.textContent = "Your viewing history is empty.";
+                historyList.appendChild(listItem);
+                clearHistoryBtn.classList.add('hidden'); // Hide clear button if history is empty
+            } else {
+                clearHistoryBtn.classList.remove('hidden'); // Show clear button
+                // Display history in reverse chronological order
+                for (let i = viewHistory.length - 1; i >= 0; i--) {
+                    const post = animePosts.find(p => p.id === viewHistory[i].id); // Use animePosts
                     if (post) {
                         const listItem = document.createElement("li");
                         listItem.dataset.postId = post.id;
                         listItem.innerHTML = `
                             <img src="${post.imageUrl}" alt="${post.title}">
                             <span>${post.title}</span>
-                            <button class="remove-from-history-list-item-btn" data-post-id="${post.id}"><i class="fas fa-times"></i></button>
+                            <button class="remove-from-history-list-item-btn" data-post-id="${post.id}" aria-label="Remove from history"><i class="fas fa-times"></i></button>
                         `;
+                        // Event listener for removing item from history list
                         listItem.querySelector('.remove-from-history-list-item-btn').addEventListener('click', (event) => {
-                            event.stopPropagation(); // Prevent opening post details when clicking the remove button
-                            const postIdToRemove = parseInt(event.currentTarget.dataset.postId);
+                            event.stopPropagation();
+                            const postIdToRemove = event.currentTarget.dataset.postId;
                             removePostFromHistory(postIdToRemove);
                         });
+                        // Event listener for clicking on a history item to view details
                         listItem.addEventListener('click', () => {
-                            // Open post details modal when clicked in history modal
                             postDetailsTitle.textContent = post.title;
                             postDetailsContent.textContent = post.content;
                             openModal('post-details-modal');
@@ -620,27 +1088,119 @@
                 }
             }
         }
-        function renderContinueWatching(){continueWatchingContainer.innerHTML="";if(loggedInUser&&userSettings.enableContinueWatching&&viewHistory.length>0){continueWatchingSection.classList.remove('hidden');const continueWatchingPosts=initialPosts.filter(post=>viewHistory.some(historyItem=>historyItem.id===post.id)).reverse();continueWatchingPosts.forEach(post=>{const postElement=createPostElement(post,true);continueWatchingContainer.appendChild(postElement);});}else{continueWatchingSection.classList.add('hidden');continueWatchingContainer.innerHTML="";}}
-        function saveUserSettings(){if(loggedInUser){localStorage.setItem(`settings_${loggedInUser.email}`,JSON.stringify(userSettings));}}
-        function loadUserSettings(){if(loggedInUser){userSettings=JSON.parse(localStorage.getItem(`settings_${loggedInUser.email}`))||{enableContinueWatching:true,saveHistory:true};}else{userSettings={enableContinueWatching:true,saveHistory:true};}
-            tempEnableContinueWatching=userSettings.enableContinueWatching;tempSaveHistory=userSettings.saveHistory;if(loggedInUser){tempUsername=loggedInUser.username;tempAvatar=loggedInUser.avatar;}
-            updateSettingsButtonStates();}
-        function updateSettingsButtonStates(){if(enableContinueWatchingBtn&&disableContinueWatchingBtn){if(tempEnableContinueWatching){enableContinueWatchingBtn.classList.add('active');disableContinueWatchingBtn.classList.remove('active');}else{enableContinueWatchingBtn.classList.remove('active');disableContinueWatchingBtn.classList.add('active');}}
-            if(enableSaveHistoryBtn&&disableSaveHistoryBtn){if(tempSaveHistory){enableSaveHistoryBtn.classList.add('active');disableSaveHistoryBtn.classList.remove('active');}else{enableSaveHistoryBtn.classList.remove('active');disableSaveHistoryBtn.classList.add('active');}}}
-        function debounce(func,delay){return function(){const context=this;const args=arguments;clearTimeout(searchTimeout);searchTimeout=setTimeout(()=>{func.apply(context,args);},delay);};}
 
-        // Function to render the admin panel content
+        /**
+         * Renders the "Continue Watching" section.
+         */
+        function renderContinueWatching() {
+            continueWatchingContainer.innerHTML = ""; // Clear existing content
+            // Continue watching is shown based on user setting and if there's history
+            if (loggedInUser && loggedInUser.email && userSettings.enableContinueWatching && viewHistory.length > 0) {
+                continueWatchingSection.classList.remove('hidden');
+                // Filter and reverse history to show most recent first
+                const continueWatchingPosts = animePosts.filter(post =>
+                    viewHistory.some(historyItem => historyItem.id === post.id)
+                ).reverse();
+                continueWatchingPosts.forEach(post => {
+                    const postElement = createPostElement(post, true); // Pass true for continue watching
+                    continueWatchingContainer.appendChild(postElement);
+                });
+            } else {
+                continueWatchingSection.classList.add('hidden'); // Hide if no history or setting disabled
+                continueWatchingContainer.innerHTML = "";
+            }
+        }
+
+        /**
+         * Saves user settings to localStorage.
+         */
+        function saveUserSettings() {
+            if (loggedInUser && loggedInUser.email) { // Only save settings for registered users
+                localStorage.setItem(`settings_${loggedInUser.email}`, JSON.stringify(userSettings));
+            }
+        }
+
+        /**
+         * Loads user settings from localStorage.
+         */
+        function loadUserSettings() {
+            if (loggedInUser && loggedInUser.email) {
+                // Only load enableContinueWatching now
+                userSettings = JSON.parse(localStorage.getItem(`settings_${loggedInUser.email}`)) || { enableContinueWatching: true };
+            } else {
+                // Default settings for anonymous or non-existent users
+                userSettings = { enableContinueWatching: true };
+            }
+            tempEnableContinueWatching = userSettings.enableContinueWatching;
+            if (loggedInUser) {
+                tempUsername = loggedInUser.username;
+                tempAvatar = loggedInUser.avatar;
+            }
+            updateSettingsButtonStates();
+        }
+
+        /**
+         * Updates the active/inactive state of settings buttons.
+         */
+        function updateSettingsButtonStates() {
+            if (enableContinueWatchingBtn && disableContinueWatchingBtn) {
+                if (tempEnableContinueWatching) {
+                    enableContinueWatchingBtn.classList.add('active');
+                    disableContinueWatchingBtn.classList.remove('active');
+                } else {
+                    enableContinueWatchingBtn.classList.remove('active');
+                    disableContinueWatchingBtn.classList.add('active');
+                }
+            }
+            // Removed save history button updates
+        }
+
+        /**
+         * Debounces a function call to limit its execution rate.
+         * @param {Function} func - The function to debounce.
+         * @param {number} delay - The debounce delay in milliseconds.
+         * @returns {Function} The debounced function.
+         */
+        function debounce(func, delay) {
+            return function () {
+                const context = this;
+                const args = arguments;
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    func.apply(context, args);
+                }, delay);
+            };
+        }
+
+        // --- Admin Panel Functions ---
+        /**
+         * Renders the content of the admin panel.
+         * NOTE: This is client-side and not secure for production environments.
+         */
         function renderAdminPanel() {
-            adminTotalPosts.textContent = initialPosts.length;
+            // Hide other main content sections
+            postContainer.style.display = 'none';
+            continueWatchingSection.classList.add('hidden');
+            noResultsMessage.style.display = 'none';
+            searchResultsLoader.classList.add('hidden');
+
+            // Display admin panel
+            adminPanel.style.display = 'block';
+
+            // Populate total posts
+            adminTotalPosts.textContent = animePosts.length;
             adminPostList.innerHTML = '';
-            initialPosts.forEach(post => {
+            // List all posts with ID and Title
+            animePosts.forEach(post => {
                 const listItem = document.createElement('li');
-                listItem.textContent = post.title;
+                listItem.textContent = `ID: ${post.id}, Title: ${post.title}`;
                 adminPostList.appendChild(listItem);
             });
 
+            // Populate total users
             adminTotalUsers.textContent = users.length;
             adminUserList.innerHTML = '';
+            // List all registered users with Username and Email
             if (users.length > 0) {
                 users.forEach(user => {
                     const listItem = document.createElement('li');
@@ -652,52 +1212,93 @@
                 listItem.textContent = 'No registered users.';
                 adminUserList.appendChild(listItem);
             }
-
-            adminPanel.style.display = 'block';
-            postContainer.style.display = 'none';
-            continueWatchingSection.classList.add('hidden');
-            noResultsMessage.style.display = 'none';
-            searchResultsLoader.classList.add('hidden');
         }
 
-        function performSearch(){
+        /**
+         * Performs the search operation, including checking for admin code.
+         */
+        function performSearch() {
             const searchTerm = searchInput.value.trim();
 
             if (searchTerm === ADMIN_CODE) {
-                renderAdminPanel();
+                renderAdminPanel(); // Show admin panel if admin code is entered
                 clearSearchBtn.style.display = 'inline-block';
                 searchLoadingSpinner.style.display = 'none';
-                return; // Exit if admin code is entered
+                return; // Exit as we are in admin mode
             } else {
                 adminPanel.style.display = 'none'; // Hide admin panel if search term is not admin code
             }
 
-            searchResultsLoader.classList.remove('hidden');
-            postContainer.style.display='none';
-            noResultsMessage.style.display='none';
+            searchResultsLoader.classList.remove('hidden'); // Show search loader
+            postContainer.style.display = 'none'; // Hide posts temporarily
+            noResultsMessage.style.display = 'none'; // Hide no results message temporarily
 
             // Hide continue watching section when search is active
             if (searchTerm !== "") {
                 continueWatchingSection.classList.add('hidden');
             } else {
-                renderContinueWatching(); // Re-render to show if applicable
+                renderContinueWatching(); // Re-render to show if applicable when search is empty
             }
-            setTimeout(()=>{
-                searchResultsLoader.classList.add('hidden');
-                displayPosts(getPostsForDisplay()); // This will re-display normal posts and hide admin panel
-                searchLoadingSpinner.style.display='none';
-                if(searchInput.value.trim()!==""){
-                    clearSearchBtn.style.display='inline-block';
-                }else{
-                    clearSearchBtn.style.display='none';
-                }
-            },500);
-        }
-        const debouncedSearch=debounce(performSearch,300);function renderAvatarOptions(container,selectedAvatarInput,currentAvatar=null){container.innerHTML="";avatarImages.forEach((avatar,index)=>{const avatarOption=document.createElement("div");avatarOption.classList.add("avatar-option","rounded-full","cursor-pointer","transition-all","duration-200","border-2","border-transparent");avatarOption.innerHTML=`<img src="${avatar}" alt="Avatar ${index+1}" class="w-10 h-10 rounded-full object-cover">`;avatarOption.dataset.avatar=avatar;if(currentAvatar&&currentAvatar===avatar){avatarOption.classList.add("selected");selectedAvatarInput.value=avatar;}
-            avatarOption.addEventListener("click",()=>{const selectedAvatar=container.querySelector(".avatar-option.selected");if(selectedAvatar){selectedAvatar.classList.remove("selected");}
-                avatarOption.classList.add("selected");selectedAvatarInput.value=avatar;tempAvatar=avatar;});container.appendChild(avatarOption);});}
 
-        // Function to truncate username for display
+            // Simulate network delay for search results
+            setTimeout(() => {
+                searchResultsLoader.classList.add('hidden'); // Hide search loader
+                displayPosts(getPostsForDisplay()); // Display filtered/shuffled posts
+                searchLoadingSpinner.style.display = 'none';
+
+                // Manage clear search button visibility
+                if (searchInput.value.trim() !== "") {
+                    clearSearchBtn.style.display = 'inline-block';
+                } else {
+                    clearSearchBtn.style.display = 'none';
+                }
+            }, 500);
+        }
+        const debouncedSearch = debounce(performSearch, 300); // Debounced search function
+
+        /**
+         * Renders avatar options for selection.
+         * @param {HTMLElement} container - The container element for avatars.
+         * @param {HTMLInputElement} selectedAvatarInput - The hidden input to store the selected avatar URL.
+         * @param {string} [currentAvatar=null] - The currently selected avatar URL.
+         */
+        function renderAvatarOptions(container, selectedAvatarInput, currentAvatar = null) {
+            container.innerHTML = ""; // Clear existing options
+            avatarImages.forEach((avatar, index) => {
+                const avatarOption = document.createElement("div");
+                avatarOption.classList.add("avatar-option", "rounded-full", "cursor-pointer", "transition-all", "duration-200", "border-2", "border-transparent");
+                avatarOption.innerHTML = `<img src="${avatar}" alt="Avatar ${index + 1}" class="w-10 h-10 rounded-full object-cover">`;
+                avatarOption.dataset.avatar = avatar;
+
+                // Mark as selected if it's the current avatar
+                if (currentAvatar && currentAvatar === avatar) {
+                    avatarOption.classList.add("selected");
+                    selectedAvatarInput.value = avatar;
+                }
+
+                // Event listener for avatar selection
+                avatarOption.addEventListener("click", () => {
+                    const selectedAvatar = container.querySelector(".avatar-option.selected");
+                    if (selectedAvatar) {
+                        selectedAvatar.classList.remove("selected");
+                    }
+                    avatarOption.classList.add("selected");
+                    selectedAvatarInput.value = avatar;
+                    // Update tempAvatar directly if this is the settings avatar container
+                    if (container.id === 'settings-avatar-options-container') {
+                        tempAvatar = avatar;
+                    }
+                });
+                container.appendChild(avatarOption);
+            });
+        }
+
+        /**
+         * Truncates a username for display in the header.
+         * @param {string} username - The username string.
+         * @param {number} [maxLength=6] - The maximum length before truncation.
+         * @returns {string} The truncated or original username.
+         */
         function truncateUsername(username, maxLength = 6) {
             if (username.length > maxLength) {
                 return username.substring(0, maxLength) + '...';
@@ -705,116 +1306,730 @@
             return username;
         }
 
-        function loadUserProfile(){console.log("loadUserProfile called. loggedInUser:",loggedInUser);if(loggedInUser&&loggedInUser.email&&loggedInUser.username&&loggedInUser.password&&loggedInUser.avatar){console.log("User is logged in. Avatar URL:",loggedInUser.avatar);userProfileDiv.classList.remove("hidden");loginIcon.classList.add("hidden");avatarImg.src=loggedInUser.avatar?loggedInUser.avatar:avatarImages[0];
-            usernameSpan.textContent=truncateUsername(loggedInUser.username); // Apply truncation here
-            viewHistory=JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`))||[];loadUserSettings();if(users.length<ACCOUNT_LIMIT){addAccountLink.classList.remove('hidden');sidebarAddAccountLink.classList.remove('hidden');}else{addAccountLink.classList.add('hidden');sidebarAddAccountLink.classList.add('hidden');}
-            if(users.length>1){switchAccountLink.classList.remove('hidden');sidebarSwitchAccountLink.classList.remove('hidden');}else{switchAccountLink.classList.add('hidden');sidebarSwitchAccountLink.classList.add('hidden');}
-            renderContinueWatching();if(!profileDetailsModal.classList.contains('hidden')){populateProfileDetailsModal();}}else{console.log("User is not logged in.");userProfileDiv.classList.add("hidden");loginIcon.classList.remove("hidden");avatarImg.src=avatarImages[0];usernameSpan.textContent='';profileDropdown.classList.add('hidden');viewHistory=[];userSettings={enableContinueWatching:true,saveHistory:true};addAccountLink.classList.add('hidden');switchAccountLink.classList.add('hidden');sidebarAddAccountLink.classList.add('hidden');sidebarSwitchAccountLink.classList.add('hidden');continueWatchingSection.classList.add('hidden');continueWatchingContainer.innerHTML="";}}
-        function renderSwitchAccountOptions(){accountListDiv.innerHTML="";if(users.length===0){const message=document.createElement('div');message.classList.add('text-center','text-gray-400');message.textContent="No accounts available.";accountListDiv.appendChild(message);}else{users.forEach(user=>{const accountOption=document.createElement('div');accountOption.classList.add('account-option');accountOption.dataset.email=user.email;if(loggedInUser&&user.email===loggedInUser.email){accountOption.classList.add('selected-account');}
-            const avatar=document.createElement('img');avatar.src=user.avatar;avatar.alt=user.username;const username=document.createElement('span');username.textContent=user.username;accountOption.appendChild(avatar);accountOption.appendChild(username);if(!loggedInUser||user.email!==loggedInUser.email){accountOption.addEventListener('click',()=>{accountOption.classList.add('switching');const loadingText=document.createElement('span');loadingText.classList.add('loading-text');loadingText.textContent='Switching...';accountOption.appendChild(loadingText);setTimeout(()=>{loggedInUser=user;localStorage.setItem("loggedInUser",JSON.stringify(loggedInUser));closeModal('switch-account-modal');startAppSequence();},500);});}
-            accountListDiv.appendChild(accountOption);});}}
-        function populateProfileDetailsModal(){if(loggedInUser){profileModalAvatar.src=loggedInUser.avatar?loggedInUser.avatar:avatarImages[0];profileModalUsername.textContent=loggedInUser.username;profileModalEmail.textContent=loggedInUser.email;}else{profileModalAvatar.src=avatarImages[0];profileModalUsername.textContent='N/A';profileModalEmail.textContent='N/A';}}
-        function renderNotifications(notifications){notificationList.innerHTML="";if(notifications.length===0){const listItem=document.createElement("li");listItem.classList.add("bg-gray-700","p-3","rounded-md","text-gray-300");listItem.textContent="No new notifications.";notificationList.appendChild(listItem);}else{notifications.forEach(notificationText=>{const listItem=document.createElement("li");listItem.classList.add("bg-gray-700","p-3","rounded-md","text-gray-300");listItem.textContent=notificationText;notificationList.appendChild(listItem);});}}
-        function shuffleAndDisplayPosts(){if(searchInput.value.trim()===""){const postsToDisplay=getPostsForDisplay();displayPosts(postsToDisplay);renderContinueWatching();}else{performSearch();}}
-        function performLogout(){const loggedOutUserEmail=loggedInUser?loggedInUser.email:null;users=users.filter(user=>user.email!==loggedOutUserEmail);localStorage.setItem("users",JSON.stringify(users));if(users.length>0){loggedInUser=users[0];localStorage.setItem("loggedInUser",JSON.stringify(loggedInUser));loadingOverlay.style.display='flex';mainContentDiv.style.display='none';loadingAvatarImg.src=loggedInUser.avatar?loggedInUser.avatar:avatarImages[0];loadingUsernameSpan.textContent=`Switching to ${loggedInUser.username?loggedInUser.username:'Guest'}...`;setTimeout(()=>{loadingOverlay.style.opacity='0';setTimeout(()=>{loadingOverlay.style.display='none';loadingOverlay.style.opacity='1';mainContentDiv.style.display='block';loadUserProfile();displayPosts(getPostsForDisplay());},500);},1000);}else{loggedInUser=null;localStorage.removeItem("loggedInUser");localStorage.removeItem("lastActivityTime");viewHistory=[];userSettings={enableContinueWatching:true,saveHistory:true};loadUserProfile();displayPosts(getPostsForDisplay());}
-            profileDropdown.classList.remove('show');closeModal('logout-confirmation-modal');closeSidebar();}
-        function openSidebar(){sidebarNav.classList.remove('hidden');sidebarOverlay.classList.remove('hidden');setTimeout(()=>{sidebarNav.classList.add('show');sidebarOverlay.classList.add('show');document.body.classList.add('modal-open');},10);/* Removed renderTrendingAnime(); from here */}
-        function closeSidebar(){sidebarNav.classList.remove('show');sidebarOverlay.classList.remove('show');setTimeout(()=>{sidebarNav.classList.add('hidden');sidebarOverlay.classList.add('hidden');document.body.classList.remove('modal-open');},300);}
-        // Removed renderTrendingAnime function as it's no longer needed in the sidebar
-        /*
-        function renderTrendingAnime(){trendingList.innerHTML="";trendingAnime.forEach(anime=>{const listItem=document.createElement('li');listItem.classList.add('trending-item');listItem.innerHTML=`<img src="${anime.imageUrl}" alt="${anime.title}" class="w-12 h-12 rounded object-cover border-2 border-red-500"><span>${anime.title}</span>`;listItem.addEventListener('click',()=>{window.location.href=anime.url;closeSidebar();});trendingList.appendChild(listItem);});}
-        */
-        function showWelcomeBackScreen(){if(loggedInUser){mainContentDiv.style.display='none';loadingOverlay.style.display='none';welcomeBackModal.classList.remove('hidden');setTimeout(()=>{welcomeBackModal.classList.add('show');},10);welcomeBackAvatar.src=loggedInUser.avatar?loggedInUser.avatar:avatarImages[0];welcomeBackUsername.textContent=`Welcome back, ${loggedInUser.username?loggedInUser.username:'Guest'}!`;document.body.classList.add('modal-open');}}
-        function hideLoadingScreenAndShowMainContent(){loadingOverlay.style.opacity='0';setTimeout(()=>{loadingOverlay.style.display='none';loadingOverlay.style.opacity='1';mainContentDiv.style.display='block';loadUserProfile();displayPosts(getPostsForDisplay());setInterval(()=>{if(searchInput.value.trim()===""){shuffleAndDisplayPosts();}},3600000);},500);}
+        /**
+         * Loads and displays the user profile information in the header and handles account links.
+         * This function now differentiates between registered and anonymous users.
+         */
+        function loadUserProfile() {
+            const currentUser = auth.currentUser; // Get current Firebase user
 
-        // Function to redirect to a random post
+            if (currentUser) {
+                userProfileDiv.classList.remove("hidden"); // Show profile section
+                // If it's an anonymous user, use a generic display
+                if (currentUser.isAnonymous) {
+                    avatarImg.src = avatarImages[0]; // Default avatar for anonymous
+                    usernameSpan.textContent = 'Guest';
+                    // Hide profile dropdown items that require a registered account
+                    document.querySelectorAll('#profile-dropdown a:not(#anitoono-chat-zone-link-dropdown)').forEach(link => link.classList.add('hidden'));
+                    addAccountLink.classList.remove('hidden'); // Allow anonymous user to register
+                    sidebarAddAccountLink.classList.remove('hidden');
+                    continueWatchingSection.classList.add('hidden'); // No history for anonymous
+                    continueWatchingContainer.innerHTML = "";
+                } else {
+                    // It's a registered user (email/password)
+                    // Find the local user object based on Firebase UID/email
+                    loggedInUser = users.find(u => u.uid === currentUser.uid || u.email === currentUser.email);
+                    if (loggedInUser) {
+                        avatarImg.src = loggedInUser.avatar ? loggedInUser.avatar : avatarImages[0];
+                        usernameSpan.textContent = truncateUsername(loggedInUser.username);
+                        // Show all profile dropdown items for registered user
+                        document.querySelectorAll('#profile-dropdown a').forEach(link => link.classList.remove('hidden'));
+                        viewHistory = JSON.parse(localStorage.getItem(`history_${loggedInUser.email}`)) || [];
+                        loadUserSettings(); // Load user settings for continue watching
+                        // Only show "Register New Account" if registered user and limit not reached
+                        if (users.filter(u => !u.isAnonymous).length < ACCOUNT_LIMIT) { addAccountLink.classList.remove('hidden'); sidebarAddAccountLink.classList.remove('hidden'); } else { addAccountLink.classList.add('hidden'); sidebarAddAccountLink.classList.add('hidden'); }
+                        renderContinueWatching();
+                        if (!profileDetailsModal.classList.contains('hidden')) { populateProfileDetailsModal(); }
+                    } else {
+                        // Firebase user exists but no local profile found (e.g., local storage cleared)
+                        // This might happen if a user registers on another device and then accesses this one.
+                        // We'll create a basic local profile for them.
+                        avatarImg.src = avatarImages[0];
+                        usernameSpan.textContent = 'Guest';
+                        document.querySelectorAll('#profile-dropdown a:not(#anitoono-chat-zone-link-dropdown)').forEach(link => link.classList.add('hidden'));
+                        addAccountLink.classList.remove('hidden');
+                        sidebarAddAccountLink.classList.remove('hidden');
+                        continueWatchingSection.classList.add('hidden');
+                        continueWatchingContainer.innerHTML = "";
+                    }
+                }
+            } else {
+                // No user is signed in (neither registered nor anonymous)
+                userProfileDiv.classList.add("hidden"); // Hide profile section
+                avatarImg.src = avatarImages[0];
+                usernameSpan.textContent = '';
+                profileDropdown.classList.add('hidden');
+                viewHistory = [];
+                userSettings = { enableContinueWatching: true }; // Default settings
+                addAccountLink.classList.add('hidden');
+                sidebarAddAccountLink.classList.add('hidden');
+                continueWatchingSection.classList.add('hidden');
+                continueWatchingContainer.innerHTML = "";
+            }
+        }
+
+        /**
+         * Populates the profile details modal with current user's information.
+         */
+        function populateProfileDetailsModal() {
+            if (loggedInUser && loggedInUser.email) { // Only show details for registered users
+                profileModalAvatar.src = loggedInUser.avatar ? loggedInUser.avatar : avatarImages[0];
+                profileModalUsername.textContent = loggedInUser.username;
+                profileModalEmail.textContent = loggedInUser.email;
+            } else {
+                profileModalAvatar.src = avatarImages[0];
+                profileModalUsername.textContent = 'Guest';
+                profileModalEmail.textContent = 'N/A (Register to see email)';
+            }
+        }
+
+        /**
+         * Renders notifications in the notification modal.
+         * @param {Array<string>} notifications - An array of notification strings.
+         */
+        function renderNotifications(notifications) {
+            notificationList.innerHTML = "";
+            if (notifications.length === 0) {
+                const listItem = document.createElement("li");
+                listItem.classList.add("bg-gray-700", "p-3", "rounded-md", "text-gray-300");
+                listItem.textContent = "No new notifications.";
+                notificationList.appendChild(listItem);
+            } else {
+                notifications.forEach(notificationText => {
+                    const listItem = document.createElement("li");
+                    listItem.classList.add("bg-gray-700", "p-3", "rounded-md", "text-gray-300");
+                    listItem.textContent = notificationText;
+                    notificationList.appendChild(listItem);
+                });
+            }
+        }
+
+        /**
+         * Shuffles and displays posts, or performs a search if input is not empty.
+         */
+        function shuffleAndDisplayPosts() {
+            if (searchInput.value.trim() === "") {
+                const postsToDisplay = getPostsForDisplay();
+                displayPosts(postsToDisplay);
+                renderContinueWatching();
+            } else {
+                performSearch();
+            }
+        }
+
+        /**
+         * Opens the sidebar navigation.
+         */
+        function openSidebar() {
+            sidebarNav.classList.remove('hidden');
+            sidebarOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                sidebarNav.classList.add('show');
+                sidebarOverlay.classList.add('show');
+                document.body.classList.add('modal-open');
+            }, 10);
+        }
+
+        /**
+         * Closes the sidebar navigation.
+         */
+        function closeSidebar() {
+            sidebarNav.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            setTimeout(() => {
+                sidebarNav.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+                document.body.classList.remove('modal-open');
+            }, 300);
+        }
+
+        /**
+         * Shows the "Welcome Back" screen for returning users.
+         */
+        function showWelcomeBackScreen() {
+            // This function is only called if loggedInUser is a *registered* user
+            if (loggedInUser) {
+                mainContentDiv.style.display = 'none';
+                loadingOverlay.style.display = 'none';
+                welcomeBackModal.classList.remove('hidden');
+                setTimeout(() => { welcomeBackModal.classList.add('show'); }, 10);
+                welcomeBackAvatar.src = loggedInUser.avatar ? loggedInUser.avatar : avatarImages[0];
+                welcomeBackUsername.textContent = `Welcome back, ${loggedInUser.username ? loggedInUser.username : 'Guest'}!`;
+                document.body.classList.add('modal-open');
+            }
+        }
+
+        /**
+         * Hides the loading screen and shows the main content,
+         * and starts listening for Firebase data.
+         */
+        function hideLoadingScreenAndShowMainContent() {
+            loadingOverlay.style.opacity = '0';
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                loadingOverlay.style.opacity = '1';
+                mainContentDiv.style.display = 'block';
+                loadUserProfile();
+                listenForAnimePosts(); // Start listening for anime data from Firestore
+                setInterval(() => {
+                    if (searchInput.value.trim() === "") {
+                        shuffleAndDisplayPosts();
+                    }
+                }, 3600000); // Shuffle every hour if no search active
+            }, 500);
+        }
+
+        /**
+         * Redirects to a random post from the `animePosts` (Firestore) array.
+         */
         function redirectToRandomPost() {
-            if (initialPosts.length > 0) {
-                const randomIndex = Math.floor(Math.random() * initialPosts.length);
-                const randomPost = initialPosts[randomIndex];
-                updateViewHistory(randomPost); // Update history for the random post
+            if (animePosts.length > 0) {
+                const randomIndex = Math.floor(Math.random() * animePosts.length);
+                const randomPost = animePosts[randomIndex];
+                updateViewHistory(randomPost);
                 window.location.href = randomPost.url;
             } else {
                 showGlobalNotification('No anime posts available to select randomly from.', 'error');
             }
-            closeSidebar(); // Close sidebar if opened from there
-            profileDropdown.classList.remove('show'); // Close profile dropdown if opened from there
-            dropdownMenuItems.style.display='none';
+            closeSidebar();
+            profileDropdown.classList.remove('show');
+            dropdownMenuItems.style.display = 'none';
             dropdownLoader.classList.add('hidden');
         }
 
-        searchInput.addEventListener("input",()=>{
+        /**
+         * Sets up a real-time listener for anime posts from Firestore.
+         * Populates the `animePosts` global array.
+         */
+        function listenForAnimePosts() {
+            const q = query(moviesCollectionRef, orderBy("title")); // Order by title for consistent display
+
+            onSnapshot(q, (snapshot) => {
+                const fetchedPosts = [];
+                snapshot.forEach((doc) => {
+                    fetchedPosts.push({ id: doc.id, ...doc.data() });
+                });
+                animePosts = fetchedPosts; // Update the global animePosts array
+                console.log("Anime posts fetched from Firestore:", animePosts);
+                displayPosts(getPostsForDisplay()); // Re-render posts with new data
+                renderContinueWatching(); // Re-render continue watching with new data
+            }, (error) => {
+                console.error("Error fetching anime posts from Firestore:", error);
+                showGlobalNotification("Failed to load anime posts. Please try again.", "error");
+            });
+        }
+
+        // --- Event Listeners ---
+        searchInput.addEventListener("input", () => {
             const searchTerm = searchInput.value.trim();
             if (searchTerm === ADMIN_CODE) {
                 renderAdminPanel();
-                clearSearchBtn.style.display='inline-block';
-                searchLoadingSpinner.style.display='none';
+                clearSearchBtn.style.display = 'inline-block';
+                searchLoadingSpinner.style.display = 'none';
                 return;
             } else {
-                adminPanel.style.display = 'none'; // Hide admin panel if code is removed
+                adminPanel.style.display = 'none';
             }
-
-            if(searchTerm !== ""){
-                clearSearchBtn.style.display='inline-block';
-                continueWatchingSection.classList.add('hidden'); // Hide on search input
-            }else{
-                clearSearchBtn.style.display='none';
-                renderContinueWatching(); // Show when search input is empty
+            if (searchTerm !== "") {
+                clearSearchBtn.style.display = 'inline-block';
+                continueWatchingSection.classList.add('hidden');
+            } else {
+                clearSearchBtn.style.display = 'none';
+                renderContinueWatching();
             }
-            searchLoadingSpinner.style.display='inline-block';
+            searchLoadingSpinner.style.display = 'inline-block';
             debouncedSearch();
         });
 
-        clearSearchBtn.addEventListener('click',()=>{
-            searchInput.value='';
-            clearSearchBtn.style.display='none';
-            searchLoadingSpinner.style.display='none';
-            adminPanel.style.display = 'none'; // Ensure admin panel is hidden
-            performSearch(); // This will re-display posts and re-render continue watching if applicable
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearSearchBtn.style.display = 'none';
+            searchLoadingSpinner.style.display = 'none';
+            adminPanel.style.display = 'none';
+            performSearch();
             searchInput.focus();
         });
-        loginIcon.addEventListener("click",()=>{openModal('login-modal');});userProfileDiv.addEventListener('click',()=>{if(loggedInUser){profileDropdown.classList.toggle('show');if(profileDropdown.classList.contains('show')){dropdownLoader.classList.remove('hidden');dropdownMenuItems.style.display='none';setTimeout(()=>{dropdownLoader.classList.add('hidden');dropdownMenuItems.style.display='block';},500);}else{dropdownMenuItems.style.display='none';dropdownLoader.classList.add('hidden');}}});
+
+        userProfileDiv.addEventListener('click', () => {
+            if (auth.currentUser && !auth.currentUser.isAnonymous) { // Only show dropdown for registered users
+                profileDropdown.classList.toggle('show');
+                if (profileDropdown.classList.contains('show')) {
+                    dropdownLoader.classList.remove('hidden');
+                    dropdownMenuItems.style.display = 'none';
+                    setTimeout(() => {
+                        dropdownLoader.classList.add('hidden');
+                        dropdownMenuItems.style.display = 'block';
+                    }, 500);
+                } else {
+                    dropdownMenuItems.style.display = 'none';
+                    dropdownLoader.classList.add('hidden');
+                }
+            } else if (auth.currentUser && auth.currentUser.isAnonymous) {
+                // If anonymous user clicks profile, prompt to register
+                openModal('register-modal');
+                renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+            }
+        });
 
         sidebarToggleBtn.addEventListener('click', openSidebar);
+        sidebarCloseBtn.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
 
-        sidebarCloseBtn.addEventListener('click',closeSidebar);sidebarOverlay.addEventListener('click',closeSidebar);switchToSignupBtn.addEventListener("click",(event)=>{event.preventDefault();closeModal('login-modal');signupAvatarInput.value='';openModal('signup-modal');renderAvatarOptions(avatarOptionsContainer,signupAvatarInput);});switchToLoginBtn.addEventListener("click",(event)=>{event.preventDefault();closeModal('signup-modal');openModal('login-modal');});loginForm.addEventListener("submit",(event)=>{event.preventDefault();const email=document.getElementById("login-email").value.trim();const password=document.getElementById("login-password").value.trim();let hasErrors=false;const existingMessage=loginForm.querySelector('.message-box.error');if(existingMessage){existingMessage.remove();}
-            if(!validateEmail(email)){document.getElementById("login-email-error").textContent="Invalid email format";document.getElementById("login-email-error").style.display="block";hasErrors=true;}else{document.getElementById("login-email-error").style.display="none";}
-            if(!validatePassword(password)){document.getElementById("login-password-error").textContent="Password must be at least 6 characters";document.getElementById("login-password-error").style.display="block";hasErrors=true;}else{document.getElementById("login-password-error").style.display="none";}
-            if(hasErrors){return;}
-            const user=users.find((u)=>u.email===email&&u.password===password);if(user){loggedInUser=user;localStorage.setItem("loggedInUser",JSON.stringify(loggedInUser));localStorage.setItem("lastActivityTime",Date.now());closeModal('login-modal');loadUserProfile();displayPosts(getPostsForDisplay());}else{displayMessage(loginForm,'Invalid credentials. Please try again.','error');}});signupForm.addEventListener("submit",(event)=>{event.preventDefault();const email=document.getElementById("signup-email").value.trim();const username=document.getElementById("signup-username").value.trim();const password=document.getElementById("signup-password").value.trim();const avatar=signupAvatarInput.value;let hasErrors=false;const existingMessage=signupForm.querySelector('.message-box.error');if(existingMessage){existingMessage.remove();}
-            if(users.length>=ACCOUNT_LIMIT){displayMessage(signupForm,`Account limit (${ACCOUNT_LIMIT}) reached. Cannot create more accounts.`,'error');return;}
-            if(!validateEmail(email)){document.getElementById("signup-email-error").textContent="Invalid email format";document.getElementById("signup-email-error").style.display="block";hasErrors=true;}else{document.getElementById("signup-email-error").style.display="none";}
-            if(!username){document.getElementById("signup-username-error").textContent="Username is required";document.getElementById("signup-username-error").style.display="block";hasErrors=true;}else{document.getElementById("signup-username-error").style.display="none";}
-            if(!validatePassword(password)){document.getElementById("signup-password-error").textContent="Password must be at least 6 characters";document.getElementById("signup-password-error").style.display="block";hasErrors=true;}else{document.getElementById("signup-password-error").style.display="none";}
-            if(!avatar){document.getElementById("signup-avatar-error").textContent="Please select an avatar";document.getElementById("signup-avatar-error").style.display="block";hasErrors=true;}else{document.getElementById("signup-avatar-error").style.display="none";}
-            if(hasErrors){return;}
-            const emailExists=users.some(user=>user.email===email);if(emailExists){document.getElementById("signup-email-error").textContent="Email already exists";document.getElementById("signup-email-error").style.display="block";return;}
-            const usernameExists=users.some(user=>user.username===username);if(usernameExists){document.getElementById("signup-username-error").textContent="Username already exists";document.getElementById("signup-username-error").style.display="block";return;}
-            const newUser={email,username,password,avatar,};users.push(newUser);localStorage.setItem("users",JSON.stringify(users));loggedInUser=newUser;localStorage.setItem("loggedInUser",JSON.stringify(loggedInUser));localStorage.setItem("lastActivityTime",Date.now());viewHistory=[];localStorage.setItem(`history_${loggedInUser.email}`,JSON.stringify(viewHistory));userSettings={enableContinueWatching:true,saveHistory:true};saveUserSettings();closeModal('signup-modal');loadUserProfile();displayPosts(getPostsForDisplay());});logoutBtn.addEventListener("click",(event)=>{event.preventDefault();openModal('logout-confirmation-modal');});sidebarLogoutBtn.addEventListener("click",(event)=>{event.preventDefault();openModal('logout-confirmation-modal');});confirmLogoutBtn.addEventListener('click',()=>{performLogout();});settingsBtn.addEventListener("click",(event)=>{event.preventDefault();profileDropdown.classList.remove('show');dropdownMenuItems.style.display='none';loadUserSettings();changeUsernameInput.value=tempUsername;renderAvatarOptions(settingsAvatarOptionsContainer,settingsAvatarInput,tempAvatar);updateSettingsButtonStates();openModal('settings-modal');});sidebarSettingsLink.addEventListener("click",(event)=>{event.preventDefault();closeSidebar();loadUserSettings();changeUsernameInput.value=tempUsername;renderAvatarOptions(settingsAvatarOptionsContainer,settingsAvatarInput,tempAvatar);updateSettingsButtonStates();openModal('settings-modal');});changeUsernameInput.addEventListener('input',(event)=>{tempUsername=event.target.value.trim();});saveAllChangesBtn.addEventListener('click',()=>{console.log("Save All Changes button clicked.");if(!loggedInUser){showGlobalNotification('You must be logged in to save settings.','error');return;}
-            let hasError=false;changeUsernameError.style.display='none';document.getElementById("settings-avatar-error").style.display="none";if(!tempUsername){changeUsernameError.textContent="Username cannot be empty";changeUsernameError.style.display="block";hasError=true;}else{const usernameExists=users.some(user=>loggedInUser&&user.email!==loggedInUser.email&&user.username===tempUsername);if(usernameExists){changeUsernameError.textContent="Username already exists";changeUsernameError.style.display="block";hasError=true;}}
-            if(!tempAvatar){document.getElementById("settings-avatar-error").textContent="Please select an avatar";document.getElementById("settings-avatar-error").style.display="block";hasError=true;}
-            if(hasError){showGlobalNotification('Please fix the errors before saving.','error');return;}
-            console.log("No errors. Proceeding to save changes.");loggedInUser.username=tempUsername;loggedInUser.avatar=tempAvatar;localStorage.setItem("loggedInUser",JSON.stringify(loggedInUser));userSettings.enableContinueWatching=tempEnableContinueWatching;userSettings.saveHistory=tempSaveHistory;saveUserSettings();const userIndex=users.findIndex(user=>loggedInUser&&user.email===loggedInUser.email);if(userIndex!==-1){users[userIndex].username=loggedInUser.username;users[userIndex].avatar=loggedInUser.avatar;localStorage.setItem("users",JSON.stringify(users));}
-            usernameSpan.textContent=truncateUsername(loggedInUser.username); // Apply truncation here
-            avatarImg.src=loggedInUser.avatar;renderContinueWatching();console.log("Settings saved successfully. Displaying message.");showGlobalNotification('Changes are saved!','success');});
-            continueWatchingLink.addEventListener('click',(event)=>{event.preventDefault();profileDropdown.classList.remove('show');dropdownMenuItems.style.display='none';renderHistory();openModal('history-modal');});sidebarContinueWatchingLink.addEventListener('click',(event)=>{event.preventDefault();closeSidebar();renderHistory();openModal('history-modal');});clearHistoryBtn.addEventListener("click",()=>{if(loggedInUser){viewHistory=[];localStorage.removeItem(`history_${loggedInUser.email}`);renderHistory();renderContinueWatching();displayPosts(getPostsForDisplay());const historyModalContent=historyModal.querySelector('.modal-content');displayMessage(historyModalContent,'View history cleared!','success');setTimeout(()=>{const messageBox=historyModalContent.querySelector('.message-box');if(messageBox)messageBox.remove();},2000);}});settingsAvatarOptionsContainer.addEventListener('click',(event)=>{const target=event.target.closest('.avatar-option');if(target&&loggedInUser){const selectedAvatar=settingsAvatarOptionsContainer.querySelector(".avatar-option.selected");if(selectedAvatar){selectedAvatar.classList.remove("selected");}
-            target.classList.add("selected");settingsAvatarInput.value=target.dataset.avatar;tempAvatar=target.dataset.avatar;document.getElementById("settings-avatar-error").style.display="none";}});if(enableContinueWatchingBtn&&disableContinueWatchingBtn&&enableSaveHistoryBtn&&disableSaveHistoryBtn){enableContinueWatchingBtn.addEventListener('click',()=>{if(loggedInUser){tempEnableContinueWatching=true;updateSettingsButtonStates();}});disableContinueWatchingBtn.addEventListener('click',()=>{if(loggedInUser){tempEnableContinueWatching=false;updateSettingsButtonStates();}});enableSaveHistoryBtn.addEventListener('click',()=>{if(loggedInUser){tempSaveHistory=true;updateSettingsButtonStates();}});disableSaveHistoryBtn.addEventListener('click',()=>{if(loggedInUser){tempSaveHistory=false;updateSettingsButtonStates();}});}
-        viewProfileLink.addEventListener('click',(event)=>{event.preventDefault();profileDropdown.classList.remove('show');dropdownMenuItems.style.display='none';populateProfileDetailsModal();openModal('profile-details-modal');});sidebarViewProfileLink.addEventListener('click',(event)=>{event.preventDefault();closeSidebar();populateProfileDetailsModal();openModal('profile-details-modal');});window.addEventListener('click',(event)=>{if(!userProfileDiv.contains(event.target)&&!profileDropdown.contains(event.target)){profileDropdown.classList.remove('show');dropdownMenuItems.style.display='none';dropdownLoader.classList.add('hidden');}
-            const regularModals=document.querySelectorAll('.modal:not(.modal-bottom-sheet)');regularModals.forEach(modal=>{if(!modal.classList.contains('hidden')&&event.target===modal){closeModal(modal.id);}});const bottomSheetModals=document.querySelectorAll('.modal-bottom-sheet');bottomSheetModals.forEach(modal=>{if(!modal.classList.contains('hidden')&&modal.classList.contains('show')&&event.target===modal){closeModal(modal.id);}});});resetPasscodeLink.addEventListener('click',(event)=>{event.preventDefault();profileDropdown.classList.remove('show');dropdownMenuItems.style.display='none';openModal('reset-passcode-modal');});sidebarResetPasscodeLink.addEventListener('click',(event)=>{event.preventDefault();closeSidebar();openModal('reset-passcode-modal');});resetPasscodeForm.addEventListener('submit',(event)=>{event.preventDefault();const currentPasscode=currentPasscodeInput.value.trim();const newPasscode=newPasscodeInput.value.trim();const confirmNewPasscode=confirmNewPasscodeInput.value.trim();let hasErrors=false;currentPasscodeError.style.display="none";newPasscodeError.style.display="none";confirmNewPasscodeError.style.display="none";const existingMessage=resetPasscodeModal.querySelector('.modal-content').querySelector('.message-box');if(existingMessage){existingMessage.remove();}
-            if(!loggedInUser){displayMessage(resetPasscodeModal.querySelector('.modal-content'),'You must be logged in to reset your passcode.','error');return;}
-            if(currentPasscode!==loggedInUser.password){currentPasscodeError.textContent="Incorrect current passcode";currentPasscodeError.style.display="block";hasErrors=true;}
-            if(!validatePassword(newPasscode)){newPasscodeError.textContent="New passcode must be at least 6 characters";newPasscodeError.style.display="block";hasErrors=true;}
-            if(newPasscode!==confirmNewPasscode){confirmNewPasscodeError.textContent="New passcodes do not match";confirmNewPasscodeError.style.display="block";hasErrors=true;}
-            if(hasErrors){return;}
-            loggedInUser.password=newPasscode;const userIndex=users.findIndex(user=>loggedInUser&&user.email===loggedInUser.email);if(userIndex!==-1){users[userIndex].password=newPasscode;localStorage.setItem("users",JSON.stringify(users));localStorage.setItem("loggedInUser",JSON.stringify(loggedInUser));localStorage.setItem("lastActivityTime",Date.now());}
-            displayMessage(resetPasscodeModal.querySelector('.modal-content'),'Passcode reset successfully!','success');setTimeout(()=>{closeModal('reset-passcode-modal');},2000);resetPasscodeForm.reset();});notificationButton.addEventListener('click',()=>{renderNotifications(sampleNotifications);openModal('notification-modal');});addAccountLink.addEventListener('click',(event)=>{event.preventDefault();profileDropdown.classList.remove('show');dropdownMenuItems.style.display='none';if(users.length<ACCOUNT_LIMIT){openModal('signup-modal');signupAvatarInput.value='';renderAvatarOptions(avatarOptionsContainer,signupAvatarInput);}else{alert(`Account limit (${ACCOUNT_LIMIT}) reached. Cannot create more accounts.`);}});sidebarAddAccountLink.addEventListener('click',(event)=>{event.preventDefault();closeSidebar();if(users.length<ACCOUNT_LIMIT){openModal('signup-modal');signupAvatarInput.value='';renderAvatarOptions(avatarOptionsContainer,signupAvatarInput);}else{alert(`Account limit (${ACCOUNT_LIMIT}) reached. Cannot create more accounts.`);}});switchAccountLink.addEventListener('click',(event)=>{event.preventDefault();profileDropdown.classList.remove('show');dropdownMenuItems.style.display='none';renderSwitchAccountOptions();openModal('switch-account-modal');});sidebarSwitchAccountLink.addEventListener('click',(event)=>{event.preventDefault();closeSidebar();renderSwitchAccountOptions();openModal('switch-account-modal');});window.addEventListener('scroll',()=>{if(document.body.scrollTop>20||document.documentElement.scrollTop>20){scrollToTopBtn.style.display='flex';}else{scrollToTopBtn.style.display='none';}});scrollToTopBtn.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'});});searchButton.addEventListener('click',()=>{searchContainer.classList.toggle('show');if(searchContainer.classList.contains('show')){searchInput.focus();if(searchInput.value.trim()!==""){clearSearchBtn.style.display='inline-block';}else{clearSearchBtn.style.display='none';}performSearch();}else{searchInput.value='';clearSearchBtn.style.display='none';searchLoadingSpinner.style.display='none';performSearch();}});modalHeaderHandles.forEach(handleElement=>{handleElement.addEventListener('touchstart',(event)=>{touchstartY=event.touches[0].clientY;});handleElement.addEventListener('touchend',(event)=>{const touchendY=event.changedTouches[0].clientY;const deltaY=touchendY-touchstartY;const swipeThreshold=50;const modalElement=handleElement.closest('.modal-bottom-sheet');if(modalElement&&deltaY>swipeThreshold){closeModal(modalElement.id);}});});const allModalCloseButtons=document.querySelectorAll('.modal-close-button');allModalCloseButtons.forEach(button=>{const modalId=button.dataset.modalId;if(modalId){button.addEventListener('click',()=>closeModal(modalId));}});if(postDetailsCloseBtn)postDetailsCloseBtn.addEventListener('click',()=>closeModal('post-details-modal'));if(settingsCloseBtn)settingsCloseBtn.addEventListener('click',()=>closeModal('settings-modal'));if(historyCloseBtn)historyCloseBtn.addEventListener('click',()=>closeModal('history-modal'));if(notificationCloseBtn)notificationCloseBtn.addEventListener('click',()=>closeModal('notification-modal'));if(profileDetailsCloseBtn)profileDetailsCloseBtn.addEventListener('click',()=>closeModal('profile-details-modal'));if(cancelLogoutBtn)cancelLogoutBtn.addEventListener('click',()=>closeModal('logout-confirmation-modal'));welcomeBackEnterBtn.addEventListener('click',()=>{welcomeBackModal.classList.remove('show');setTimeout(()=>{welcomeBackModal.classList.add('hidden');document.body.classList.remove('modal-open');localStorage.setItem('lastActivityTime',Date.now());loadUserProfile();displayPosts(getPostsForDisplay());mainContentDiv.style.display='block';},500);});function startAppSequence(){loadingOverlay.style.display='flex';mainContentDiv.style.display='none';loadingAvatarImg.src=(loggedInUser&&loggedInUser.avatar)?loggedInUser.avatar:avatarImages[0];loadingUsernameSpan.textContent=`Welcome, ${(loggedInUser&&loggedInUser.username)?loggedInUser.username:'Guest'}!`;setTimeout(()=>{const lastActivityTime=localStorage.getItem('lastActivityTime');const currentTime=Date.now();const twoHoursInMs=2*60*60*1000;if(loggedInUser&&lastActivityTime&&(currentTime-parseInt(lastActivityTime))>twoHoursInMs){loadingOverlay.style.opacity='0';setTimeout(()=>{loadingOverlay.style.display='none';loadingOverlay.style.opacity='1';showWelcomeBackScreen();},500);}else{hideLoadingScreenAndShowMainContent();}},3000);}
-        window.onload=function(){console.log("Window loaded.");mainContentDiv.style.display='none';loadingOverlay.style.display='none';welcomeBackModal.classList.add('hidden');users=JSON.parse(localStorage.getItem("users"))||[];loggedInUser=JSON.parse(localStorage.getItem("loggedInUser"));console.log("Users from localStorage:",users);console.log("loggedInUser from localStorage (before validation):",loggedInUser);if(loggedInUser&&(!loggedInUser.email||!loggedInUser.username||!loggedInUser.password||!loggedInUser.avatar)){console.warn("Invalid loggedInUser data found. Clearing it.");loggedInUser=null;localStorage.removeItem("loggedInUser");}
-            console.log("loggedInUser after validation:",loggedInUser);if(loggedInUser){console.log("Valid loggedInUser found. Starting app sequence.");startAppSequence();}else{console.log("No valid loggedInUser found. Opening login modal.");openModal('login-modal');}};
+        registerForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const email = registerEmailInput.value.trim();
+            const username = registerUsernameInput.value.trim();
+            const avatar = registerAvatarInput.value;
+            let hasErrors = false;
+            const existingMessage = registerForm.querySelector('.message-box.error');
+            if (existingMessage) { existingMessage.remove(); }
 
-        // Event listeners for new random buttons
+            if (users.filter(u => !u.isAnonymous).length >= ACCOUNT_LIMIT) {
+                displayMessage(registerForm, `Account limit (${ACCOUNT_LIMIT}) reached. Cannot create more accounts.`, 'error');
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                registerEmailError.textContent = "Invalid email format";
+                registerEmailError.style.display = "block";
+                hasErrors = true;
+            } else {
+                registerEmailError.style.display = "none";
+            }
+            if (!username) {
+                registerUsernameError.textContent = "Name is required";
+                registerUsernameError.style.display = "block";
+                hasErrors = true;
+            } else {
+                registerUsernameError.style.display = "none";
+            }
+            if (!avatar) {
+                registerAvatarError.textContent = "Please select an avatar";
+                registerAvatarError.style.display = "block";
+                hasErrors = true;
+            } else {
+                registerAvatarError.style.display = "none";
+            }
+
+            if (hasErrors) { return; }
+
+            try {
+                // Generate a random password for Firebase authentication (as per user request to remove password field)
+                const generatedPassword = generateRandomPassword();
+
+                // Create user in Firebase Authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, generatedPassword);
+                const firebaseUser = userCredential.user;
+
+                // Create local user profile
+                const newUser = {
+                    email: firebaseUser.email,
+                    username: username,
+                    password: generatedPassword, // WARNING: Storing password locally is INSECURE and only for local storage persistence
+                    avatar: avatar,
+                    uid: firebaseUser.uid // Store Firebase UID
+                };
+
+                // Remove any existing anonymous user from local storage if they were browsing
+                users = users.filter(u => !u.isAnonymous); // Keep only registered users, remove anonymous
+                users.push(newUser);
+                localStorage.setItem("users", JSON.stringify(users));
+
+                loggedInUser = newUser; // Set the newly registered user as loggedInUser
+                localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+                localStorage.setItem("lastActivityTime", Date.now());
+                viewHistory = []; // Initialize empty history for new user
+                localStorage.setItem(`history_${loggedInUser.email}`, JSON.stringify(viewHistory));
+                userSettings = { enableContinueWatching: true }; // Default for new user
+
+                closeModal('register-modal');
+                showGlobalNotification('Account registered and logged in!', 'success');
+                // Directly show the main content after successful registration
+                hideLoadingScreenAndShowMainContent();
+
+            } catch (error) {
+                console.error("Registration Error:", error);
+                let errorMessage = "Registration failed. Please try again.";
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = "This email is already in use. Please use a different email.";
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = "Internal password generated is too weak. This should not happen."; // Should not happen with generateRandomPassword
+                }
+                displayMessage(registerForm, errorMessage, 'error');
+            }
+        });
+
+        settingsBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+            // Only allow settings for registered users
+            if (loggedInUser && loggedInUser.email) {
+                profileDropdown.classList.remove('show');
+                dropdownMenuItems.style.display = 'none';
+                loadUserSettings(); // Load current settings including tempEnableContinueWatching
+                changeUsernameInput.value = tempUsername;
+                renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, tempAvatar);
+                updateSettingsButtonStates();
+                openModal('settings-modal');
+            } else {
+                showGlobalNotification('Please register to access settings.', 'error');
+                openModal('register-modal');
+                renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+            }
+        });
+        sidebarSettingsLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            closeSidebar();
+            if (loggedInUser && loggedInUser.email) {
+                loadUserSettings(); // Load current settings including tempEnableContinueWatching
+                changeUsernameInput.value = tempUsername;
+                renderAvatarOptions(settingsAvatarOptionsContainer, settingsAvatarInput, tempAvatar);
+                updateSettingsButtonStates();
+                openModal('settings-modal');
+            } else {
+                showGlobalNotification('Please register to access settings.', 'error');
+                openModal('register-modal');
+                renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+            }
+        });
+        changeUsernameInput.addEventListener('input', (event) => { tempUsername = event.target.value.trim(); });
+        saveAllChangesBtn.addEventListener('click', async () => {
+            if (!loggedInUser || !loggedInUser.email) { // Ensure it's a registered user
+                showGlobalNotification('You must be registered to save settings.', 'error');
+                return;
+            }
+            let hasError = false;
+            changeUsernameError.style.display = 'none';
+            document.getElementById("settings-avatar-error").style.display = "none";
+
+            if (!tempUsername) {
+                changeUsernameError.textContent = "Username cannot be empty";
+                changeUsernameError.style.display = "block";
+                hasError = true;
+            } else {
+                // Check if the new username already exists for another user
+                const usernameExists = users.some(user => loggedInUser && user.email !== loggedInUser.email && user.username === tempUsername);
+                if (usernameExists) {
+                    changeUsernameError.textContent = "Username already exists";
+                    changeUsernameError.style.display = "block";
+                    hasError = true;
+                }
+            }
+            if (!tempAvatar) {
+                document.getElementById("settings-avatar-error").textContent = "Please select an avatar";
+                document.getElementById("settings-avatar-error").style.display = "block";
+                hasError = true;
+            }
+            if (hasError) {
+                showGlobalNotification('Please fix the errors before saving.', 'error');
+                return;
+            }
+
+            // Update local user data
+            loggedInUser.username = tempUsername;
+            loggedInUser.avatar = tempAvatar;
+            localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+            // Update userSettings for enableContinueWatching
+            userSettings.enableContinueWatching = tempEnableContinueWatching;
+            saveUserSettings();
+
+            const userIndex = users.findIndex(user => loggedInUser && user.email === loggedInUser.email);
+            if (userIndex !== -1) {
+                users[userIndex].username = loggedInUser.username;
+                users[userIndex].avatar = loggedInUser.avatar;
+                localStorage.setItem("users", JSON.stringify(users));
+            }
+            usernameSpan.textContent = truncateUsername(loggedInUser.username);
+            avatarImg.src = loggedInUser.avatar;
+            renderContinueWatching();
+            showGlobalNotification('Changes are saved!', 'success');
+        });
+
+        continueWatchingLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (loggedInUser && loggedInUser.email) { // Only show history for registered users
+                profileDropdown.classList.remove('show');
+                dropdownMenuItems.style.display = 'none';
+                renderHistory();
+                openModal('history-modal');
+            } else {
+                showGlobalNotification('Please register to view your history.', 'error');
+                openModal('register-modal');
+                renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+            }
+        });
+        sidebarContinueWatchingLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            closeSidebar();
+            if (loggedInUser && loggedInUser.email) {
+                renderHistory();
+                openModal('history-modal');
+            } else {
+                showGlobalNotification('Please register to view your history.', 'error');
+                openModal('register-modal');
+                renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+            }
+        });
+        clearHistoryBtn.addEventListener("click", () => {
+            if (loggedInUser && loggedInUser.email) { // Only clear history for registered users
+                viewHistory = [];
+                localStorage.removeItem(`history_${loggedInUser.email}`);
+                renderHistory();
+                renderContinueWatching();
+                displayPosts(getPostsForDisplay());
+                const historyModalContent = historyModal.querySelector('.modal-content');
+                displayMessage(historyModalContent, 'View history cleared!', 'success');
+                setTimeout(() => { const messageBox = historyModalContent.querySelector('.message-box'); if (messageBox) messageBox.remove(); }, 2000);
+            }
+        });
+        settingsAvatarOptionsContainer.addEventListener('click', (event) => {
+            const target = event.target.closest('.avatar-option');
+            if (target) { // Allow avatar change for any user, but only save if loggedInUser is registered
+                const selectedAvatar = settingsAvatarOptionsContainer.querySelector(".avatar-option.selected");
+                if (selectedAvatar) { selectedAvatar.classList.remove("selected"); }
+                target.classList.add("selected");
+                settingsAvatarInput.value = target.dataset.avatar;
+                tempAvatar = target.dataset.avatar; // Update tempAvatar directly
+                document.getElementById("settings-avatar-error").style.display = "none";
+            }
+        });
+        if (enableContinueWatchingBtn && disableContinueWatchingBtn) {
+            enableContinueWatchingBtn.addEventListener('click', () => { if (loggedInUser && loggedInUser.email) { tempEnableContinueWatching = true; updateSettingsButtonStates(); } else { showGlobalNotification('Please register to enable this feature.', 'error'); } });
+            disableContinueWatchingBtn.addEventListener('click', () => { if (loggedInUser && loggedInUser.email) { tempEnableContinueWatching = false; updateSettingsButtonStates(); } else { showGlobalNotification('Please register to disable this feature.', 'error'); } });
+        }
+        viewProfileLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (loggedInUser && loggedInUser.email) { // Only show profile for registered users
+                profileDropdown.classList.remove('show');
+                dropdownMenuItems.style.display = 'none';
+                populateProfileDetailsModal();
+                openModal('profile-details-modal');
+            } else {
+                showGlobalNotification('Please register to view your profile.', 'error');
+                openModal('register-modal');
+                renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+            }
+        });
+        sidebarViewProfileLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            closeSidebar();
+            if (loggedInUser && loggedInUser.email) {
+                populateProfileDetailsModal();
+                openModal('profile-details-modal');
+            } else {
+                showGlobalNotification('Please register to view your profile.', 'error');
+                openModal('register-modal');
+                renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+            }
+        });
+        window.addEventListener('click', (event) => {
+            if (!userProfileDiv.contains(event.target) && !profileDropdown.contains(event.target)) { profileDropdown.classList.remove('show'); dropdownMenuItems.style.display = 'none'; dropdownLoader.classList.add('hidden'); }
+            const regularModals = document.querySelectorAll('.modal:not(.modal-bottom-sheet)');
+            regularModals.forEach(modal => { if (!modal.classList.contains('hidden') && event.target === modal) { closeModal(modal.id); } });
+            const bottomSheetModals = document.querySelectorAll('.modal-bottom-sheet');
+            bottomSheetModals.forEach(modal => { if (!modal.classList.contains('hidden') && modal.classList.contains('show') && event.target === modal) { closeModal(modal.id); } });
+        });
+        notificationButton.addEventListener('click', () => { renderNotifications(sampleNotifications); openModal('notification-modal'); });
+        addAccountLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            profileDropdown.classList.remove('show');
+            dropdownMenuItems.style.display = 'none';
+            if (users.filter(u => !u.isAnonymous).length < ACCOUNT_LIMIT) {
+                openModal('register-modal');
+                registerAvatarInput.value = '';
+                renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+            } else { showGlobalNotification(`Account limit (${ACCOUNT_LIMIT}) reached. Cannot create more accounts.`, 'error'); }
+        });
+        sidebarAddAccountLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            closeSidebar();
+            if (users.filter(u => !u.isAnonymous).length < ACCOUNT_LIMIT) {
+                openModal('register-modal');
+                registerAvatarInput.value = '';
+                renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+            } else { showGlobalNotification(`Account limit (${ACCOUNT_LIMIT}) reached. Cannot create more accounts.`, 'error'); }
+        });
+        window.addEventListener('scroll', () => { if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) { scrollToTopBtn.style.display = 'flex'; } else { scrollToTopBtn.style.display = 'none'; } });
+        scrollToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        searchButton.addEventListener('click', () => {
+            searchContainer.classList.toggle('show');
+            if (searchContainer.classList.contains('show')) {
+                searchInput.focus();
+                if (searchInput.value.trim() !== "") { clearSearchBtn.style.display = 'inline-block'; } else { clearSearchBtn.style.display = 'none'; }
+                performSearch();
+            } else {
+                searchInput.value = '';
+                clearSearchBtn.style.display = 'none';
+                searchLoadingSpinner.style.display = 'none';
+                performSearch();
+            }
+        });
+        modalHeaderHandles.forEach(handleElement => {
+            handleElement.addEventListener('touchstart', (event) => { touchstartY = event.touches[0].clientY; });
+            handleElement.addEventListener('touchend', (event) => {
+                const touchendY = event.changedTouches[0].clientY;
+                const deltaY = touchendY - touchstartY;
+                const swipeThreshold = 50;
+                const modalElement = handleElement.closest('.modal-bottom-sheet');
+                if (modalElement && deltaY > swipeThreshold) { closeModal(modalElement.id); }
+            });
+        });
+        const allModalCloseButtons = document.querySelectorAll('.modal-close-button');
+        allModalCloseButtons.forEach(button => { const modalId = button.dataset.modalId; if (modalId) { button.addEventListener('click', () => closeModal(modalId)); } });
+        if (postDetailsCloseBtn) postDetailsCloseBtn.addEventListener('click', () => closeModal('post-details-modal'));
+        if (settingsCloseBtn) settingsCloseBtn.addEventListener('click', () => closeModal('settings-modal'));
+        if (historyCloseBtn) historyCloseBtn.addEventListener('click', () => closeModal('history-modal'));
+        if (notificationCloseBtn) notificationCloseBtn.addEventListener('click', () => closeModal('notification-modal'));
+        if (profileDetailsCloseBtn) profileDetailsCloseBtn.addEventListener('click', () => closeModal('profile-details-modal'));
+        welcomeBackEnterBtn.addEventListener('click', () => {
+            welcomeBackModal.classList.remove('show');
+            setTimeout(() => {
+                welcomeBackModal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
+                localStorage.setItem('lastActivityTime', Date.now());
+                loadUserProfile();
+                mainContentDiv.style.display = 'block';
+            }, 500);
+        });
+
+        /**
+         * Orchestrates the application startup sequence.
+         * Handles loading screen, welcome back screen, and initial content display.
+         * Now uses Firebase `onAuthStateChanged` as the primary authentication gate.
+         */
+        async function startAppSequence() {
+            loadingOverlay.style.display = 'flex';
+            mainContentDiv.style.display = 'none';
+            welcomeBackModal.classList.add('hidden'); // Ensure welcome back is hidden initially
+
+            // Set initial loading screen avatar/username based on current loggedInUser or guest defaults
+            const initialUser = loggedInUser || { username: 'Guest', avatar: avatarImages[0] };
+            loadingAvatarImg.src = initialUser.avatar;
+            loadingUsernameSpan.textContent = initialUser.username;
+
+            // This flag helps ensure hideLoadingScreenAndShowMainContent is called only once
+            let appStarted = false;
+
+            const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+                if (appStarted) return; // Prevent multiple executions if state changes rapidly
+
+                if (firebaseUser) {
+                    console.log("Firebase user detected:", firebaseUser.uid, firebaseUser.isAnonymous ? "(Anonymous)" : "(Registered)");
+
+                    if (!firebaseUser.isAnonymous) {
+                        let localUser = users.find(u => u.uid === firebaseUser.uid || u.email === firebaseUser.email);
+                        if (!localUser) {
+                            // This case handles if Firebase user exists but local storage was cleared
+                            // Or if user signed up on another device.
+                            // We'll create a basic local profile for them.
+                            localUser = {
+                                email: firebaseUser.email,
+                                username: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+                                password: generateRandomPassword(),
+                                avatar: avatarImages[0],
+                                uid: firebaseUser.uid
+                            };
+                            users.push(localUser);
+                            localStorage.setItem("users", JSON.stringify(users));
+                        }
+                        loggedInUser = localUser;
+                        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+                    } else {
+                        loggedInUser = null;
+                        localStorage.removeItem("loggedInUser");
+                    }
+
+                    // Update loading screen with confirmed user details
+                    loadingAvatarImg.src = (loggedInUser && loggedInUser.avatar) ? loggedInUser.avatar : avatarImages[0];
+                    loadingUsernameSpan.textContent = (loggedInUser && loggedInUser.username) ? loggedInUser.username : 'Guest';
+
+
+                    // Proceed to main content display logic
+                    const lastActivityTime = localStorage.getItem('lastActivityTime');
+                    const currentTime = Date.now();
+                    const twoHoursInMs = 2 * 60 * 60 * 1000;
+
+                    // Only show welcome back screen if it's a *registered* user and they were inactive
+                    if (loggedInUser && lastActivityTime && (currentTime - parseInt(lastActivityTime)) > twoHoursInMs) {
+                        loadingOverlay.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                            loadingOverlay.style.opacity = '1';
+                            showWelcomeBackScreen();
+                            appStarted = true; // Mark app as started after welcome screen is shown
+                        }, 500);
+                    } else {
+                        hideLoadingScreenAndShowMainContent();
+                        appStarted = true; // Mark app as started directly
+                    }
+                    unsubscribe(); // Unsubscribe after the first state change is handled
+                } else {
+                    // No Firebase user is signed in. Attempt anonymous sign-in.
+                    try {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously to allow browsing.");
+                        // This will trigger onAuthStateChanged again, which will then proceed.
+                    } catch (error) {
+                        console.error("Error signing in anonymously:", error);
+                        // If anonymous sign-in fails, ensure the loading screen is hidden
+                        // and prompt for registration or show an error.
+                        loadingOverlay.style.display = 'none';
+                        showGlobalNotification("Failed to initialize. Please check your internet connection or try again.", "error");
+                        openModal('register-modal'); // Fallback to registration
+                        renderAvatarOptions(avatarOptionsContainer, registerAvatarInput);
+                        appStarted = true; // Mark app as started, even with an error
+                        unsubscribe(); // Unsubscribe
+                    }
+                }
+            });
+        }
+
+        // --- Initial App Load ---
+        window.onload = async function () { // Make window.onload async
+            // Fallback/default avatar images if avatars.js is not available or fails to load
+            const defaultAvatarImages = [
+                "https://placehold.co/100x100/FF5733/FFFFFF?text=A1",
+                "https://placehold.co/100x100/33FF57/FFFFFF?text=A2",
+                "https://placehold.co/100x100/3357FF/FFFFFF?text=A3",
+                "https://placehold.co/100x100/FF33A1/FFFFFF?text=A4",
+                "https://placehold.co/100x100/A133FF/FFFFFF?text=A5",
+                "https://placehold.co/100x100/FFD433/FFFFFF?text=A6"
+            ];
+            // Attempt to load from avatars.js if available
+            try {
+                const { avatarImages: importedAvatars } = await import('./avatars.js');
+                if (importedAvatars && importedAvatars.length > 0) {
+                    avatarImages = importedAvatars; // Assign to the global avatarImages
+                } else {
+                    avatarImages = defaultAvatarImages;
+                }
+            } catch (e) {
+                console.warn("Could not load avatars.js, using default avatar images.", e);
+                avatarImages = defaultAvatarImages; // Ensure it's set even on error
+            }
+
+            // Ensure loading overlay is visible and main content is hidden initially
+            loadingOverlay.style.display = 'flex';
+            mainContentDiv.style.display = 'none';
+            welcomeBackModal.classList.add('hidden'); // Ensure welcome back modal is hidden at start
+
+            // Load users and loggedInUser from localStorage (they are now persistent)
+            users = JSON.parse(localStorage.getItem("users")) || [];
+            loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+            // Validate loggedInUser data on script load
+            if (loggedInUser && (!loggedInUser.email || !loggedInUser.username || !loggedInUser.password || !loggedInUser.avatar)) {
+                loggedInUser = null;
+                localStorage.removeItem("loggedInUser");
+            }
+
+            // Start the app sequence which handles Firebase authentication and data loading
+            startAppSequence();
+        };
+
+        // Event listeners for random buttons
         randomButton.addEventListener('click', redirectToRandomPost);
         sidebarRandomLink.addEventListener('click', redirectToRandomPost);
     </script>
 </body>
 </html>
-
